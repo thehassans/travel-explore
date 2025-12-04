@@ -38,15 +38,14 @@ export const LanguageProvider = ({ children }) => {
     setLanguage(lang);
   };
 
-  // Currency formatting for Bangladesh
+  // Currency formatting for Bangladesh with ৳ symbol
   const formatCurrency = (amount, currency = 'BDT') => {
     if (currency === 'BDT') {
-      return new Intl.NumberFormat(language === 'bn' ? 'bn-BD' : 'en-BD', {
-        style: 'currency',
-        currency: 'BDT',
+      const formattedNumber = new Intl.NumberFormat(language === 'bn' ? 'bn-BD' : 'en-BD', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
       }).format(amount);
+      return `৳ ${formattedNumber}`;
     }
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
