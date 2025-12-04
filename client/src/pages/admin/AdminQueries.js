@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Mail, Phone, Calendar, Trash2, CheckCircle, Clock, Eye } from 'lucide-react';
+import { Mail, Phone, Calendar, Trash2, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminQueries = () => {
   const [queries, setQueries] = useState([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [selectedQuery, setSelectedQuery] = useState(null);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, User, Package, CreditCard, MapPin, Edit2, Check, X } from 'lucide-react';
+import { Calendar, Package, Edit2, Check, X } from 'lucide-react';
 import axios from 'axios';
 import AdminLayout from '../../components/admin/AdminLayout';
 

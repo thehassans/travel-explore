@@ -7,8 +7,6 @@ import {
   Phone, 
   Mail, 
   MessageCircle,
-  Clock,
-  MapPin,
   ChevronDown,
   Send
 } from 'lucide-react';
@@ -16,7 +14,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
 const SupportPage = () => {
-  const { t } = useTranslation();
+  useTranslation();
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const [openFaq, setOpenFaq] = useState(null);

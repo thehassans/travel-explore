@@ -11,8 +11,7 @@ import {
   X, 
   Sun, 
   Moon, 
-  Globe,
-  ChevronDown
+  Globe
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';

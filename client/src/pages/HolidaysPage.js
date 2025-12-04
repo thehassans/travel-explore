@@ -6,8 +6,7 @@ import { motion } from 'framer-motion';
 import { 
   MapPin, 
   Clock, 
-  Star, 
-  Filter,
+  Star,
   Search,
   SlidersHorizontal
 } from 'lucide-react';

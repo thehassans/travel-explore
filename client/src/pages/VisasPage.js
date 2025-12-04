@@ -5,15 +5,14 @@ import { motion } from 'framer-motion';
 import { 
   FileCheck, 
   Clock, 
-  CheckCircle, 
-  Globe,
+  CheckCircle,
   ArrowRight
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
 const VisasPage = () => {
-  const { t } = useTranslation();
+  useTranslation();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState(null);

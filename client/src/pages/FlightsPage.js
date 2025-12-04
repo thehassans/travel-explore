@@ -10,8 +10,7 @@ import {
   Users, 
   Search,
   ArrowRight,
-  Clock,
-  Luggage
+  Clock
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';

@@ -3,12 +3,9 @@ import { motion } from 'framer-motion';
 import { 
   MessageSquare, 
   Calendar, 
-  DollarSign, 
-  Package,
+  DollarSign,
   TrendingUp,
-  Users,
-  Clock,
-  CheckCircle
+  Clock
 } from 'lucide-react';
 import axios from 'axios';
 import AdminLayout from '../../components/admin/AdminLayout';
