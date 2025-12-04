@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { 
@@ -12,7 +12,12 @@ import {
   ArrowRightLeft,
   ChevronDown,
   Minus,
-  Plus
+  Plus,
+  Sparkles,
+  Star,
+  Globe,
+  Shield,
+  Clock
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -28,6 +33,21 @@ const HeroBanner = () => {
   const [returnDate, setReturnDate] = useState(null);
   const [showPassengers, setShowPassengers] = useState(false);
   const [passengers, setPassengers] = useState({ adults: 1, children: 0 });
+  const [currentBg, setCurrentBg] = useState(0);
+
+  const backgrounds = [
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920',
+    'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920',
+    'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1920',
+    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920',
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBg((prev) => (prev + 1) % backgrounds.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const popularOrigins = [
     { code: 'DAC', name: 'Dhaka', name_bn: 'ঢাকা' },
@@ -46,7 +66,6 @@ const HeroBanner = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log({ origin, destination, departDate, returnDate, passengers });
-    // Navigate to search results
   };
 
   const swapLocations = () => {
@@ -66,35 +85,86 @@ const HeroBanner = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920)'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/30 to-accent-900/30" />
-      </div>
+      {/* Animated Background Slideshow */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentBg}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${backgrounds[currentBg]})` }}
+        />
+      </AnimatePresence>
+      
+      {/* Ultra Premium Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-pink-900/40" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black/50" />
+      
+      {/* Animated Particles */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-white/30 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -100, 0],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+        />
+      ))}
 
-      {/* Animated Background Elements */}
+      {/* Floating Icons */}
       <motion.div
-        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute top-1/4 left-10 w-20 h-20 opacity-20"
+        animate={{ y: [0, -30, 0], rotate: [0, 10, 0], x: [0, 20, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-[5%] opacity-20"
       >
-        <Plane className="w-full h-full text-white" />
+        <Plane className="w-24 h-24 text-white" />
       </motion.div>
       <motion.div
-        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-        className="absolute top-1/3 right-20 w-16 h-16 opacity-20"
+        animate={{ y: [0, 30, 0], rotate: [0, -15, 0] }}
+        transition={{ duration: 7, repeat: Infinity, delay: 1, ease: "easeInOut" }}
+        className="absolute top-1/3 right-[10%] opacity-15"
       >
-        <Plane className="w-full h-full text-white transform -rotate-45" />
+        <Globe className="w-20 h-20 text-cyan-300" />
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, -20, 0], scale: [1, 1.2, 1] }}
+        transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+        className="absolute bottom-1/3 left-[15%] opacity-20"
+      >
+        <Sparkles className="w-16 h-16 text-yellow-300" />
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        {/* Premium Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex justify-center mb-8"
+        >
+          <span className="inline-flex items-center px-6 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 backdrop-blur-sm">
+            <Star className="w-4 h-4 text-amber-400 mr-2 fill-current" />
+            <span className="text-amber-300 text-sm font-medium">
+              {language === 'bn' ? 'বাংলাদেশের #১ ট্রাভেল এজেন্সি' : "Bangladesh's #1 Travel Agency"}
+            </span>
+            <Star className="w-4 h-4 text-amber-400 ml-2 fill-current" />
+          </span>
+        </motion.div>
+
         {/* Hero Text */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -103,20 +173,26 @@ const HeroBanner = () => {
           className="text-center mb-12"
         >
           <motion.h1 
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight"
+            className="text-4xl sm:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white mb-6 leading-tight drop-shadow-2xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            {t('banner.title')}
+            {language === 'bn' ? 'আপনার স্বপ্নের যাত্রা' : 'Your Dream Journey'}
+            <br />
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text">
+              {language === 'bn' ? 'এখানে শুরু হয়' : 'Starts Here'}
+            </span>
           </motion.h1>
           <motion.p 
-            className="text-xl sm:text-2xl text-white/80 max-w-3xl mx-auto"
+            className="text-xl sm:text-2xl text-white/80 max-w-3xl mx-auto font-light"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            {t('banner.subtitle')}
+            {language === 'bn' 
+              ? 'বিশ্বের সেরা গন্তব্যগুলো অন্বেষণ করুন প্রিমিয়াম সার্ভিস এবং সেরা মূল্যে'
+              : 'Explore world-class destinations with premium service & unbeatable prices'}
           </motion.p>
         </motion.div>
 
@@ -318,44 +394,56 @@ const HeroBanner = () => {
             </div>
 
             {/* Search Button */}
-            <div className="mt-6 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-12 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center space-x-2"
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)" }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative px-16 py-5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white font-bold rounded-2xl shadow-2xl transition-all flex items-center space-x-3 overflow-hidden"
               >
-                <Search className="w-5 h-5" />
-                <span className="text-lg">{t('banner.search')}</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Search className="w-6 h-6 relative z-10" />
+                <span className="text-xl relative z-10">{t('banner.search')}</span>
+                <Sparkles className="w-5 h-5 relative z-10 opacity-70" />
               </motion.button>
             </div>
           </form>
         </motion.div>
 
-        {/* Quick Stats */}
+        {/* Ultra Premium Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6"
+          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6"
         >
           {[
-            { number: '50K+', label: 'Happy Travelers', label_bn: 'সুখী ভ্রমণকারী' },
-            { number: '100+', label: 'Destinations', label_bn: 'গন্তব্য' },
-            { number: '24/7', label: 'Support', label_bn: 'সহায়তা' },
-            { number: '99%', label: 'Satisfaction', label_bn: 'সন্তুষ্টি' },
-          ].map((stat, index) => (
+            { number: '50K+', label: 'Happy Travelers', label_bn: 'সুখী ভ্রমণকারী', icon: Users, gradient: 'from-cyan-500 to-blue-500' },
+            { number: '100+', label: 'Destinations', label_bn: 'গন্তব্য', icon: Globe, gradient: 'from-purple-500 to-pink-500' },
+            { number: '24/7', label: 'Support', label_bn: 'সহায়তা', icon: Clock, gradient: 'from-green-500 to-emerald-500' },
+            { number: '99%', label: 'Satisfaction', label_bn: 'সন্তুষ্টি', icon: Shield, gradient: 'from-amber-500 to-orange-500' },
+          ].map((stat, index) => {
+            const Icon = stat.icon;
+            return (
             <motion.div
               key={index}
-              whileHover={{ y: -5 }}
-              className="text-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20"
+              whileHover={{ y: -8, scale: 1.02 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 + index * 0.1 }}
+              className="group relative text-center p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden"
             >
-              <div className="text-3xl font-bold text-white mb-1">{stat.number}</div>
-              <div className="text-white/70 text-sm">
+              <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity`} />
+              <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center`}>
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-4xl font-black text-white mb-1 drop-shadow-lg">{stat.number}</div>
+              <div className="text-white/70 text-sm font-medium">
                 {language === 'bn' ? stat.label_bn : stat.label}
               </div>
             </motion.div>
-          ))}
+          );
+          })}
         </motion.div>
       </div>
 

@@ -118,24 +118,35 @@ const PopularPackages = () => {
   };
 
   return (
-    <section className={`py-20 ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-slate-900' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+      {/* Background Decorations */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Ultra Premium Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary-500/10 text-primary-500 text-sm font-medium mb-4">
+          <motion.span 
+            initial={{ scale: 0.9 }}
+            whileInView={{ scale: 1 }}
+            className="inline-flex items-center px-6 py-2 rounded-full bg-gradient-to-r from-primary-500/10 to-purple-500/10 border border-primary-500/20 text-primary-500 text-sm font-semibold mb-6"
+          >
             <Sparkles className="w-4 h-4 mr-2" />
-            {t('common.popular')}
-          </span>
-          <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {t('section.popularPackages')}
+            {language === 'bn' ? 'সেরা প্যাকেজ' : 'Top Picks'}
+            <Sparkles className="w-4 h-4 ml-2" />
+          </motion.span>
+          <h2 className={`text-4xl sm:text-5xl font-black mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {language === 'bn' ? 'জনপ্রিয় প্যাকেজসমূহ' : 'Popular Packages'}
           </h2>
-          <p className={`text-lg max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            {t('section.popularPackagesDesc')}
+          <p className={`text-xl max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            {language === 'bn' 
+              ? 'আমাদের সবচেয়ে পছন্দের গন্তব্যগুলো অন্বেষণ করুন'
+              : 'Discover our most loved destinations handpicked for you'}
           </p>
         </motion.div>
 
@@ -164,71 +175,83 @@ const PopularPackages = () => {
               <motion.div
                 key={pkg.id}
                 variants={itemVariants}
-                whileHover={{ y: -8 }}
-                className={`group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
-                  isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white'
+                whileHover={{ y: -12, scale: 1.02 }}
+                className={`group relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ${
+                  isDark ? 'bg-slate-800/80 border border-slate-700/50' : 'bg-white'
                 }`}
               >
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-transparent to-purple-500/0 group-hover:from-primary-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
+                
                 {/* Image */}
-                <div className="relative h-56 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                   <img
                     src={pkg.image_url}
                     alt={language === 'bn' ? pkg.title_bn : pkg.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* Badges */}
                   <div className="absolute top-4 left-4 flex gap-2">
                     {pkg.is_popular && (
-                      <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-semibold rounded-full flex items-center">
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full flex items-center shadow-lg">
                         <Star className="w-3 h-3 mr-1 fill-current" />
-                        {t('common.popular')}
+                        {language === 'bn' ? 'জনপ্রিয়' : 'HOT'}
                       </span>
                     )}
                     {pkg.is_featured && (
-                      <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-xs font-semibold rounded-full">
-                        {t('common.featured')}
+                      <span className="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
+                        {language === 'bn' ? 'বিশেষ' : 'FEATURED'}
                       </span>
                     )}
                   </div>
 
                   {/* Price Tag */}
                   <div className="absolute bottom-4 right-4">
-                    <div className="px-4 py-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-xl shadow-lg">
-                      <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {t('common.from')}
+                    <div className="px-5 py-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20">
+                      <span className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {language === 'bn' ? 'শুরু' : 'From'}
                       </span>
-                      <div className="text-xl font-bold text-primary-500">
+                      <div className="text-2xl font-black bg-gradient-to-r from-primary-500 to-purple-500 bg-clip-text text-transparent">
                         {formatCurrency(pkg.price)}
                       </div>
+                    </div>
+                  </div>
+                  
+                  {/* Destination on Image */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="flex items-center text-white/90 text-sm font-medium">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      {pkg.destination}
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className={`text-xl font-bold mb-2 line-clamp-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className="relative p-6">
+                  <h3 className={`text-xl font-bold mb-3 line-clamp-1 group-hover:text-primary-500 transition-colors ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {language === 'bn' ? pkg.title_bn : pkg.title}
                   </h3>
                   
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-4 mb-5">
                     <div className={`flex items-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      <MapPin className="w-4 h-4 mr-1 text-primary-500" />
-                      {pkg.destination}
-                    </div>
-                    <div className={`flex items-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      <Clock className="w-4 h-4 mr-1 text-secondary-500" />
+                      <Clock className="w-4 h-4 mr-1.5 text-primary-500" />
                       {pkg.duration}
+                    </div>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-amber-400 fill-current" />
+                      ))}
                     </div>
                   </div>
 
                   <Link
                     to={`/holidays/${pkg.id}`}
-                    className="flex items-center justify-center w-full py-3 rounded-xl bg-primary-500/10 text-primary-500 font-semibold hover:bg-primary-500 hover:text-white transition-all group/btn"
+                    className="flex items-center justify-center w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-500 to-purple-500 text-white font-bold hover:from-primary-600 hover:to-purple-600 transition-all shadow-lg hover:shadow-xl group/btn"
                   >
-                    {t('common.viewDetails')}
-                    <ArrowRight className="w-4 h-4 ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
+                    {language === 'bn' ? 'বিস্তারিত দেখুন' : 'Explore Now'}
+                    <ArrowRight className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform" />
                   </Link>
                 </div>
               </motion.div>
@@ -238,17 +261,18 @@ const PopularPackages = () => {
 
         {/* See All Button */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-16"
         >
           <Link
             to="/holidays"
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-lg hover:shadow-xl"
+            className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-2xl hover:shadow-2xl hover:shadow-primary-500/30 transition-all duration-300 relative overflow-hidden"
           >
-            {t('common.seeAll')}
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <span className="absolute inset-0 bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <span className="relative">{language === 'bn' ? 'সব প্যাকেজ দেখুন' : 'View All Packages'}</span>
+            <ArrowRight className="relative w-6 h-6 ml-3 transform group-hover:translate-x-2 transition-transform" />
           </Link>
         </motion.div>
       </div>
