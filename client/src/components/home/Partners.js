@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Handshake } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 const Partners = () => {
@@ -73,7 +73,7 @@ const Partners = () => {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-accent-500/10 text-accent-500 text-sm font-medium mb-4">
-            <Handshake className="w-4 h-4 mr-2" />
+            <Heart className="w-4 h-4 mr-2" />
             Trusted
           </span>
           <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
