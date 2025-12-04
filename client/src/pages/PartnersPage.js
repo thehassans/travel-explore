@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Handshake } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -36,7 +36,7 @@ const PartnersPage = () => {
       <section className="relative pt-32 pb-16 bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500">
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative max-w-7xl mx-auto px-4 text-center text-white">
-          <Handshake className="w-16 h-16 mx-auto mb-6 opacity-80" />
+          <Users className="w-16 h-16 mx-auto mb-6 opacity-80" />
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-bold mb-4">
             {language === 'bn' ? 'আমাদের অংশীদার' : 'Our Partners'}
           </motion.h1>
