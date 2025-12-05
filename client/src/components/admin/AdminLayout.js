@@ -23,7 +23,8 @@ import {
 import { useAdmin } from '../../context/AdminContext';
 
 const AdminLayout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('adminTheme');
     return saved ? saved === 'dark' : false; // Light mode as default
@@ -34,6 +35,21 @@ const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAdmin();
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile && !sidebarOpen) {
+        setSidebarOpen(true);
+      }
+    };
+    
+    handleResize(); // Check on mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [sidebarOpen]);
 
   useEffect(() => {
     localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
@@ -100,10 +116,22 @@ const AdminLayout = ({ children }) => {
 
   return (
     <div className={`min-h-screen flex ${isDark ? 'bg-slate-900' : 'bg-gray-100'}`}>
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <motion.aside
         initial={false}
-        animate={{ width: sidebarOpen ? 280 : 80 }}
+        animate={{ 
+          width: isMobile ? 280 : (sidebarOpen ? 280 : 80),
+          x: isMobile ? (sidebarOpen ? 0 : -280) : 0
+        }}
+        transition={{ duration: 0.3 }}
         className={`fixed left-0 top-0 h-full border-r z-50 flex flex-col ${
           isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
         }`}
@@ -221,10 +249,36 @@ const AdminLayout = ({ children }) => {
 
       {/* Main Content */}
       <main 
-        className="flex-1 transition-all"
-        style={{ marginLeft: sidebarOpen ? 280 : 80 }}
+        className="flex-1 transition-all min-h-screen"
+        style={{ marginLeft: isMobile ? 0 : (sidebarOpen ? 280 : 80) }}
       >
-        <div className="p-8">
+        {/* Mobile Header */}
+        <div className={`lg:hidden sticky top-0 z-30 px-4 py-3 flex items-center justify-between ${
+          isDark ? 'bg-slate-800 border-b border-slate-700' : 'bg-white border-b border-gray-200'
+        }`}>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className={`p-2 rounded-lg ${isDark ? 'text-gray-400 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'}`}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+              <Plane className="w-4 h-4 text-white transform -rotate-45" />
+            </div>
+            <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t.admin}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className={`p-2 rounded-lg ${isDark ? 'text-yellow-400' : 'text-gray-600'}`}
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        <div className="p-4 sm:p-6 lg:p-8">
           {children}
         </div>
       </main>

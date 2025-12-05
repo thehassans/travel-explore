@@ -281,4 +281,45 @@ body.dark .card-premium:hover {
   background: var(--primary) !important;
 }
 
+.react-datepicker-popper {
+  z-index: 100 !important;
+}
+
+/* Responsive DatePicker */
+@media (max-width: 640px) {
+  .react-datepicker {
+    font-size: 0.85rem !important;
+  }
+  .react-datepicker__day {
+    width: 2rem !important;
+    line-height: 2rem !important;
+  }
+  .react-datepicker__day-name {
+    width: 2rem !important;
+  }
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Admin Panel Responsive */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    position: fixed;
+    z-index: 50;
+  }
+}
+
+/* Premium Card Responsive */
+@media (max-width: 768px) {
+  .premium-card {
+    padding: 1rem;
+  }
+}
+
 /* Gradient toggle placeholder - requires component-level implementation */

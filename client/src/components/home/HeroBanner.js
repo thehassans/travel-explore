@@ -230,26 +230,28 @@ const HeroBanner = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
+          className="max-w-6xl mx-auto"
         >
           <form 
             onSubmit={handleSearch}
             className={`${
               isDark ? 'bg-slate-900/90' : 'bg-white/95'
-            } backdrop-blur-xl rounded-3xl p-6 lg:p-8 shadow-2xl border ${
+            } backdrop-blur-xl rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border ${
               isDark ? 'border-slate-700/50' : 'border-white/50'
             }`}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-4 items-end">
+            {/* Row 1: Origin, Swap, Destination */}
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-3 sm:gap-4 mb-4">
               {/* Origin */}
-              <div className="lg:col-span-3 relative">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <MapPin className="w-4 h-4 inline mr-1 text-primary-500" />
+              <div className="md:col-span-3 relative">
+                <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <MapPin className="w-4 h-4 mr-1.5 text-primary-500" />
                   {t('banner.origin')}
                 </label>
                 <select
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
-                  className={`w-full px-4 py-3.5 rounded-xl border-2 ${
+                  className={`w-full px-4 py-3 rounded-xl border-2 text-sm sm:text-base ${
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
@@ -262,11 +264,11 @@ const HeroBanner = () => {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-11 w-5 h-5 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-4 bottom-3 w-5 h-5 text-gray-400 pointer-events-none" />
               </div>
 
               {/* Swap Button */}
-              <div className="lg:col-span-1 flex items-end justify-center pb-3">
+              <div className="md:col-span-1 flex items-end justify-center pb-1">
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.1, rotate: 180 }}
@@ -279,15 +281,15 @@ const HeroBanner = () => {
               </div>
 
               {/* Destination */}
-              <div className="lg:col-span-3 relative">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <MapPin className="w-4 h-4 inline mr-1 text-secondary-500" />
+              <div className="md:col-span-3 relative">
+                <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <MapPin className="w-4 h-4 mr-1.5 text-secondary-500" />
                   {t('banner.destination')}
                 </label>
                 <select
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className={`w-full px-4 py-3.5 rounded-xl border-2 ${
+                  className={`w-full px-4 py-3 rounded-xl border-2 text-sm sm:text-base ${
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
@@ -300,21 +302,25 @@ const HeroBanner = () => {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-11 w-5 h-5 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-4 bottom-3 w-5 h-5 text-gray-400 pointer-events-none" />
               </div>
+            </div>
 
+            {/* Row 2: Dates and Passengers */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
               {/* Depart Date */}
-              <div className="lg:col-span-2">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <Calendar className="w-4 h-4 inline mr-1 text-primary-500" />
-                  {t('banner.departDate')}
+              <div className="col-span-1">
+                <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <Calendar className="w-4 h-4 mr-1.5 text-primary-500" />
+                  <span className="hidden sm:inline">{t('banner.departDate')}</span>
+                  <span className="sm:hidden">{language === 'bn' ? 'যাত্রা' : 'Depart'}</span>
                 </label>
                 <DatePicker
                   selected={departDate}
                   onChange={setDepartDate}
                   minDate={new Date()}
                   placeholderText={t('banner.selectDate')}
-                  className={`w-full px-4 py-3.5 rounded-xl border-2 ${
+                  className={`w-full px-3 sm:px-4 py-3 rounded-xl border-2 text-sm sm:text-base ${
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
@@ -324,17 +330,18 @@ const HeroBanner = () => {
               </div>
 
               {/* Return Date */}
-              <div className="lg:col-span-2">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <Calendar className="w-4 h-4 inline mr-1 text-secondary-500" />
-                  {t('banner.returnDate')}
+              <div className="col-span-1">
+                <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <Calendar className="w-4 h-4 mr-1.5 text-secondary-500" />
+                  <span className="hidden sm:inline">{t('banner.returnDate')}</span>
+                  <span className="sm:hidden">{language === 'bn' ? 'ফেরত' : 'Return'}</span>
                 </label>
                 <DatePicker
                   selected={returnDate}
                   onChange={setReturnDate}
                   minDate={departDate || new Date()}
                   placeholderText={t('banner.selectDate')}
-                  className={`w-full px-4 py-3.5 rounded-xl border-2 ${
+                  className={`w-full px-3 sm:px-4 py-3 rounded-xl border-2 text-sm sm:text-base ${
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
@@ -344,7 +351,7 @@ const HeroBanner = () => {
               </div>
 
               {/* Passengers */}
-              <div className="lg:col-span-2 xl:col-span-1 relative">
+              <div className="col-span-1 relative">
                 <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <Users className="w-4 h-4 mr-1.5 text-cyan-500" />
                   {t('banner.passengers')}
@@ -449,21 +456,21 @@ const HeroBanner = () => {
             </div>
 
             {/* Search Button */}
-            <div className="mt-8 flex justify-center">
+            <div className="flex justify-center">
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)" }}
-                whileTap={{ scale: 0.95 }}
-                className={`group relative px-16 py-5 text-white font-bold rounded-2xl shadow-2xl transition-all flex items-center space-x-3 overflow-hidden ${
+                whileHover={{ scale: 1.03, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)" }}
+                whileTap={{ scale: 0.97 }}
+                className={`group relative w-full sm:w-auto px-8 sm:px-16 py-4 sm:py-5 text-white font-bold rounded-2xl shadow-2xl transition-all flex items-center justify-center space-x-2 sm:space-x-3 overflow-hidden ${
                   useGradients 
                     ? 'bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500' 
                     : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 {useGradients && <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                <Search className="w-6 h-6 relative z-10" />
-                <span className="text-xl relative z-10">{t('banner.search')}</span>
-                <Sparkles className="w-5 h-5 relative z-10 opacity-70" />
+                <Search className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" />
+                <span className="text-lg sm:text-xl relative z-10">{t('banner.search')}</span>
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 opacity-70" />
               </motion.button>
             </div>
           </form>
