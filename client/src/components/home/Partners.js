@@ -9,21 +9,21 @@ const Partners = () => {
   const { language } = useLanguage();
 
   const bankPartners = [
-    { name: 'BRAC Bank', logo: 'https://placehold.co/150x60/0ea5e9/ffffff?text=BRAC+Bank&font=roboto' },
-    { name: 'Dutch Bangla Bank', logo: 'https://placehold.co/150x60/22c55e/ffffff?text=DBBL&font=roboto' },
-    { name: 'City Bank', logo: 'https://placehold.co/150x60/8b5cf6/ffffff?text=City+Bank&font=roboto' },
-    { name: 'Eastern Bank', logo: 'https://placehold.co/150x60/f97316/ffffff?text=EBL&font=roboto' },
-    { name: 'bKash', logo: 'https://placehold.co/150x60/e2136e/ffffff?text=bKash&font=roboto' },
-    { name: 'Nagad', logo: 'https://placehold.co/150x60/f26522/ffffff?text=Nagad&font=roboto' },
+    { name: 'BRAC Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/69/BRAC_Bank_logo.svg/200px-BRAC_Bank_logo.svg.png' },
+    { name: 'Dutch Bangla Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Dutch-Bangla_Bank_logo.svg/200px-Dutch-Bangla_Bank_logo.svg.png' },
+    { name: 'City Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/67/City_Bank_Logo.svg/200px-City_Bank_Logo.svg.png' },
+    { name: 'Eastern Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/15/Eastern_Bank_Limited_logo.svg/200px-Eastern_Bank_Limited_logo.svg.png' },
+    { name: 'bKash', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Bkash_Logo.svg/200px-Bkash_Logo.svg.png' },
+    { name: 'Nagad', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Nagad_logo.svg/200px-Nagad_logo.svg.png' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman Bangladesh', logo: 'https://placehold.co/150x60/006747/ffffff?text=Biman&font=roboto' },
-    { name: 'Emirates', logo: 'https://placehold.co/150x60/d71921/ffffff?text=Emirates&font=roboto' },
-    { name: 'Singapore Airlines', logo: 'https://placehold.co/150x60/0b2545/ffffff?text=Singapore&font=roboto' },
-    { name: 'Qatar Airways', logo: 'https://placehold.co/150x60/5c0931/ffffff?text=Qatar&font=roboto' },
-    { name: 'Thai Airways', logo: 'https://placehold.co/150x60/6b21a8/ffffff?text=Thai&font=roboto' },
-    { name: 'Malaysia Airlines', logo: 'https://placehold.co/150x60/01295f/ffffff?text=Malaysia&font=roboto' },
+    { name: 'Biman Bangladesh', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2e/Biman_Bangladesh_Airlines_Logo.svg/200px-Biman_Bangladesh_Airlines_Logo.svg.png' },
+    { name: 'Emirates', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/200px-Emirates_logo.svg.png' },
+    { name: 'Singapore Airlines', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Singapore_Airlines_Logo_2.svg/200px-Singapore_Airlines_Logo_2.svg.png' },
+    { name: 'Qatar Airways', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Qatar_Airways_Logo.svg/200px-Qatar_Airways_Logo.svg.png' },
+    { name: 'Thai Airways', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Thai_Airways_logo.svg/200px-Thai_Airways_logo.svg.png' },
+    { name: 'Malaysia Airlines', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Malaysia_Airlines_Logo.svg/200px-Malaysia_Airlines_Logo.svg.png' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
@@ -59,8 +59,15 @@ const Partners = () => {
             <img
               src={partner.logo}
               alt={partner.name}
-              className="h-14 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100"
+              className="h-12 w-auto max-w-[140px] object-contain transition-all duration-500 hover:scale-110"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
             />
+            <div className="hidden h-12 w-[140px] items-center justify-center text-sm font-semibold text-gray-500">
+              {partner.name}
+            </div>
           </motion.div>
         ))}
       </motion.div>
