@@ -309,7 +309,7 @@ const HeroBanner = () => {
             {/* Row 2: Dates and Passengers */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
               {/* Depart Date */}
-              <div className="col-span-1">
+              <div className="col-span-1 relative">
                 <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <Calendar className="w-4 h-4 mr-1.5 text-primary-500" />
                   <span className="hidden sm:inline">{t('banner.departDate')}</span>
@@ -324,13 +324,18 @@ const HeroBanner = () => {
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
-                  } focus:outline-none transition-colors`}
+                  } focus:outline-none transition-colors cursor-pointer`}
                   dateFormat="dd MMM yyyy"
+                  popperPlacement="bottom-start"
+                  popperModifiers={[
+                    { name: 'offset', options: { offset: [0, 8] } },
+                    { name: 'preventOverflow', options: { rootBoundary: 'viewport', padding: 8 } }
+                  ]}
                 />
               </div>
 
               {/* Return Date */}
-              <div className="col-span-1">
+              <div className="col-span-1 relative">
                 <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <Calendar className="w-4 h-4 mr-1.5 text-secondary-500" />
                   <span className="hidden sm:inline">{t('banner.returnDate')}</span>
@@ -345,8 +350,13 @@ const HeroBanner = () => {
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
-                  } focus:outline-none transition-colors`}
+                  } focus:outline-none transition-colors cursor-pointer`}
                   dateFormat="dd MMM yyyy"
+                  popperPlacement="bottom-start"
+                  popperModifiers={[
+                    { name: 'offset', options: { offset: [0, 8] } },
+                    { name: 'preventOverflow', options: { rootBoundary: 'viewport', padding: 8 } }
+                  ]}
                 />
               </div>
 
