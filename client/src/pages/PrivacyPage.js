@@ -2,8 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, Database, Cookie, Mail, Phone, Globe } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 
 const PrivacyPage = () => {
   const { isDark } = useTheme();
@@ -68,7 +66,6 @@ const PrivacyPage = () => {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
-      <Navbar />
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
@@ -231,8 +228,6 @@ const PrivacyPage = () => {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

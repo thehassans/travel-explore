@@ -2,8 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, MapPin, Clock, Users, Heart, Plane, Globe, Star, ArrowRight, Mail } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 
 const CareersPage = () => {
   const { isDark } = useTheme();
@@ -48,7 +46,6 @@ const CareersPage = () => {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
-      <Navbar />
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
@@ -215,8 +212,6 @@ const CareersPage = () => {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };
