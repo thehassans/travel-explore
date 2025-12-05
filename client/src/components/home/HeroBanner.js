@@ -185,12 +185,12 @@ const HeroBanner = () => {
           transition={{ duration: 0.6 }}
           className="flex justify-center mb-8"
         >
-          <span className="inline-flex items-center px-6 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 backdrop-blur-sm">
-            <Star className="w-4 h-4 text-amber-400 mr-2 fill-current" />
-            <span className="text-amber-300 text-sm font-medium">
+          <span className={`inline-flex items-center px-6 py-2 rounded-full backdrop-blur-sm border ${useGradients ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-500/30' : 'bg-white/10 border-white/20'}`}>
+            <Star className={`w-4 h-4 mr-2 fill-current ${useGradients ? 'text-amber-400' : 'text-white'}`} />
+            <span className={`text-sm font-medium ${useGradients ? 'text-amber-300' : 'text-white'}`}>
               {language === 'bn' ? 'বাংলাদেশের #১ ট্রাভেল এজেন্সি' : "Bangladesh's #1 Travel Agency"}
             </span>
-            <Star className="w-4 h-4 text-amber-400 ml-2 fill-current" />
+            <Star className={`w-4 h-4 ml-2 fill-current ${useGradients ? 'text-amber-400' : 'text-white'}`} />
           </span>
         </motion.div>
 
@@ -202,14 +202,14 @@ const HeroBanner = () => {
           className="text-center mb-12"
         >
           <motion.h1 
-            className="text-4xl sm:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white mb-6 leading-tight drop-shadow-2xl"
+            className={`text-4xl sm:text-5xl lg:text-7xl font-black mb-6 leading-tight ${useGradients ? 'text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-2xl' : 'text-white'}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
             {language === 'bn' ? 'আপনার স্বপ্নের যাত্রা' : 'Your Dream Journey'}
             <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text">
+            <span className={useGradients ? 'bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent' : 'text-white/90'}>
               {language === 'bn' ? 'এখানে শুরু হয়' : 'Starts Here'}
             </span>
           </motion.h1>
@@ -507,10 +507,10 @@ const HeroBanner = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 + index * 0.1 }}
-              className="group relative text-center p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden"
+              className={`group relative text-center p-6 rounded-3xl backdrop-blur-md border transition-all duration-300 overflow-hidden ${useGradients ? 'bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity`} />
-              <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center`}>
+              {useGradients && <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity`} />}
+              <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center ${useGradients ? `bg-gradient-to-br ${stat.gradient}` : 'bg-white/20'}`}>
                 <Icon className="w-6 h-6 text-white" />
               </div>
               <div className="text-4xl font-black text-white mb-1 drop-shadow-lg">{stat.number}</div>

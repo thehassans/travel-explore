@@ -95,7 +95,7 @@ const WhyChooseUs = () => {
           <motion.span 
             initial={{ scale: 0.9 }}
             whileInView={{ scale: 1 }}
-            className="inline-flex items-center px-6 py-2.5 rounded-full bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-500 text-sm font-semibold mb-6"
+            className={`inline-flex items-center px-6 py-2.5 rounded-full text-sm font-semibold mb-6 ${useGradients ? 'bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-500' : 'bg-slate-900 text-white border-0'}`}
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             {language === 'bn' ? 'আমাদের সুবিধা' : 'Our Benefits'}
@@ -182,7 +182,7 @@ const WhyChooseUs = () => {
               transition={{ delay: 0.2 + index * 0.1 }}
               className="text-center"
             >
-              <div className={`text-4xl lg:text-5xl font-black bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent`}>
+              <div className={`text-4xl lg:text-5xl font-black ${useGradients ? 'bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent' : isDark ? 'text-white' : 'text-slate-900'}`}>
                 {stat.number}
               </div>
               <div className={`text-sm font-medium mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>

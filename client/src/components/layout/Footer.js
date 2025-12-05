@@ -57,11 +57,13 @@ const Footer = () => {
     <footer className={`relative overflow-hidden ${
       isDark ? 'bg-slate-900' : 'bg-gray-900'
     }`}>
-      {/* Decorative Background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500 rounded-full filter blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500 rounded-full filter blur-3xl" />
-      </div>
+      {/* Decorative Background - only show with gradients */}
+      {useGradients && (
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500 rounded-full filter blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500 rounded-full filter blur-3xl" />
+        </div>
+      )}
 
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 pt-16 pb-8">
         {/* Newsletter Section */}
@@ -98,12 +100,12 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center space-x-3 mb-6">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+              <div className={`w-12 h-12 flex items-center justify-center transition-all duration-300 ${
                 useGradients 
-                  ? 'bg-gradient-to-br from-primary-500 to-accent-500' 
-                  : 'bg-primary-500'
+                  ? 'rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500' 
+                  : 'rounded-xl bg-white'
               }`}>
-                <Plane className="w-6 h-6 text-white transform -rotate-45" />
+                <Plane className={`w-6 h-6 transform -rotate-45 ${useGradients ? 'text-white' : 'text-slate-900'}`} />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Explore Holidays</h2>

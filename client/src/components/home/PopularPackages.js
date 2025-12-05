@@ -120,7 +120,7 @@ const PopularPackages = () => {
   };
 
   return (
-    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-slate-900' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-slate-900' : useGradients ? 'bg-gradient-to-b from-gray-50 to-white' : 'bg-slate-50'}`}>
       {/* Background Decorations */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
@@ -136,7 +136,7 @@ const PopularPackages = () => {
           <motion.span 
             initial={{ scale: 0.9 }}
             whileInView={{ scale: 1 }}
-            className="inline-flex items-center px-6 py-2 rounded-full bg-gradient-to-r from-primary-500/10 to-purple-500/10 border border-primary-500/20 text-primary-500 text-sm font-semibold mb-6"
+            className={`inline-flex items-center px-6 py-2 rounded-full text-sm font-semibold mb-6 ${useGradients ? 'bg-gradient-to-r from-primary-500/10 to-purple-500/10 border border-primary-500/20 text-primary-500' : 'bg-slate-900 text-white border-0'}`}
           >
             <Sparkles className="w-4 h-4 mr-2" />
             {language === 'bn' ? 'সেরা প্যাকেজ' : 'Top Picks'}
@@ -183,7 +183,7 @@ const PopularPackages = () => {
                 }`}
               >
                 {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-transparent to-purple-500/0 group-hover:from-primary-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
+                {useGradients && <div className="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-transparent to-purple-500/0 group-hover:from-primary-500/10 group-hover:to-purple-500/10 transition-all duration-500" />}
                 
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
@@ -192,18 +192,18 @@ const PopularPackages = () => {
                     alt={language === 'bn' ? pkg.title_bn : pkg.title}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className={`absolute inset-0 ${useGradients ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent' : 'bg-black/40'}`} />
                   
                   {/* Badges */}
                   <div className="absolute top-4 left-4 flex gap-2">
                     {pkg.is_popular && (
-                      <span className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full flex items-center shadow-lg">
+                      <span className={`px-4 py-1.5 text-white text-xs font-bold rounded-full flex items-center shadow-lg ${useGradients ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-slate-900'}`}>
                         <Star className="w-3 h-3 mr-1 fill-current" />
                         {language === 'bn' ? 'জনপ্রিয়' : 'HOT'}
                       </span>
                     )}
                     {pkg.is_featured && (
-                      <span className="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
+                      <span className={`px-4 py-1.5 text-white text-xs font-bold rounded-full shadow-lg ${useGradients ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-slate-700'}`}>
                         {language === 'bn' ? 'বিশেষ' : 'FEATURED'}
                       </span>
                     )}
@@ -215,7 +215,7 @@ const PopularPackages = () => {
                       <span className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                         {language === 'bn' ? 'শুরু' : 'From'}
                       </span>
-                      <div className="text-2xl font-black bg-gradient-to-r from-primary-500 to-purple-500 bg-clip-text text-transparent">
+                      <div className={`text-2xl font-black ${useGradients ? 'bg-gradient-to-r from-primary-500 to-purple-500 bg-clip-text text-transparent' : 'text-slate-900'}`}>
                         {formatCurrency(pkg.price)}
                       </div>
                     </div>
@@ -250,7 +250,7 @@ const PopularPackages = () => {
 
                   <Link
                     to={`/holidays/${pkg.id}`}
-                    className="flex items-center justify-center w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-500 to-purple-500 text-white font-bold hover:from-primary-600 hover:to-purple-600 transition-all shadow-lg hover:shadow-xl group/btn"
+                    className={`flex items-center justify-center w-full py-3.5 rounded-xl text-white font-bold transition-all shadow-lg hover:shadow-xl group/btn ${useGradients ? 'bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600' : 'bg-slate-900 hover:bg-slate-800'}`}
                   >
                     {language === 'bn' ? 'বিস্তারিত দেখুন' : 'Explore Now'}
                     <ArrowRight className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform" />
@@ -270,9 +270,9 @@ const PopularPackages = () => {
         >
           <Link
             to="/holidays"
-            className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-2xl hover:shadow-2xl hover:shadow-primary-500/30 transition-all duration-300 relative overflow-hidden"
+            className={`group inline-flex items-center px-10 py-5 text-white font-bold text-lg rounded-2xl transition-all duration-300 relative overflow-hidden ${useGradients ? 'bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 hover:shadow-2xl hover:shadow-primary-500/30' : 'bg-slate-900 hover:bg-slate-800 shadow-lg hover:shadow-xl'}`}
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {useGradients && <span className="absolute inset-0 bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
             <span className="relative">{language === 'bn' ? 'সব প্যাকেজ দেখুন' : 'View All Packages'}</span>
             <ArrowRight className="relative w-6 h-6 ml-3 transform group-hover:translate-x-2 transition-transform" />
           </Link>

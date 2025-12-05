@@ -77,7 +77,7 @@ const Header = () => {
           <Link to="/" className="flex items-center space-x-3 group">
             <motion.div 
               whileHover={{ rotate: 10 }}
-              className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg"
+              className={`w-12 h-12 flex items-center justify-center shadow-lg ${useGradients ? 'rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500' : 'rounded-xl bg-slate-900'}`}
             >
               <Plane className="w-6 h-6 text-white transform -rotate-45" />
             </motion.div>
@@ -193,7 +193,7 @@ const Header = () => {
                       : 'bg-white/10 text-white hover:bg-white/20'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-purple-500 flex items-center justify-center overflow-hidden">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${useGradients ? 'bg-gradient-to-br from-primary-500 to-purple-500' : 'bg-slate-900'}`}>
                     {user?.avatar ? (
                       <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                     ) : (
