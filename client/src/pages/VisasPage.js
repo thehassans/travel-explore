@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   FileCheck, 
@@ -13,6 +14,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const VisasPage = () => {
   useTranslation();
+  const navigate = useNavigate();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -171,7 +173,13 @@ const VisasPage = () => {
                   </motion.div>
                 )}
 
-                <button className="w-full mt-4 py-3 bg-primary-500/10 text-primary-500 font-medium rounded-xl hover:bg-primary-500 hover:text-white transition-all flex items-center justify-center">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/visa-apply/${visa.country.toLowerCase()}`);
+                  }}
+                  className="w-full mt-4 py-3 bg-primary-500/10 text-primary-500 font-medium rounded-xl hover:bg-primary-500 hover:text-white transition-all flex items-center justify-center"
+                >
                   {language === 'bn' ? 'আবেদন করুন' : 'Apply Now'}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </button>

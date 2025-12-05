@@ -61,7 +61,7 @@ const Footer = () => {
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500 rounded-full filter blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 pt-16 pb-8">
         {/* Newsletter Section */}
         <div className="mb-16 p-8 rounded-3xl bg-gradient-to-r from-primary-500 to-accent-500 text-white">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -198,15 +198,31 @@ const Footer = () => {
 
         {/* Payment Partners */}
         <div className="border-t border-gray-800 pt-8 mb-8">
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            <span className="text-gray-500 text-sm">Payment Partners:</span>
-            {['BRAC Bank', 'DBBL', 'City Bank', 'EBL', 'bKash', 'Nagad'].map((partner, index) => (
-              <div
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <span className="text-gray-500 text-sm mr-2">Payment Partners:</span>
+            {[
+              { name: 'BRAC Bank', logo: 'https://logo.clearbit.com/bracbank.com' },
+              { name: 'Dutch Bangla', logo: 'https://logo.clearbit.com/dutchbanglabank.com' },
+              { name: 'City Bank', logo: 'https://logo.clearbit.com/thecitybank.com' },
+              { name: 'EBL', logo: 'https://logo.clearbit.com/ebl.com.bd' },
+              { name: 'bKash', logo: 'https://logo.clearbit.com/bkash.com' },
+              { name: 'Nagad', logo: 'https://logo.clearbit.com/nagad.com.bd' }
+            ].map((partner, index) => (
+              <motion.div
                 key={index}
-                className="px-4 py-2 bg-white/5 rounded-lg text-gray-400 text-sm hover:bg-white/10 transition-colors"
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="w-12 h-12 bg-white rounded-xl p-2 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                title={partner.name}
               >
-                {partner}
-              </div>
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name}
+                  className="w-8 h-8 object-contain"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </motion.div>
             ))}
           </div>
         </div>
