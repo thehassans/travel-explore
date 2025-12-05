@@ -14,11 +14,11 @@ const ServicesPage = () => {
     { icon: Plane, title: 'Flight Booking', title_bn: 'ফ্লাইট বুকিং', desc: 'Domestic & international flights at best prices', path: '/flights', color: 'from-blue-500 to-cyan-500' },
     { icon: Palmtree, title: 'Holiday Packages', title_bn: 'হলিডে প্যাকেজ', desc: 'Curated vacation packages worldwide', path: '/holidays', color: 'from-green-500 to-emerald-500' },
     { icon: FileCheck, title: 'Visa Services', title_bn: 'ভিসা সেবা', desc: 'Hassle-free visa processing', path: '/visas', color: 'from-purple-500 to-indigo-500' },
-    { icon: Building2, title: 'Hotel Booking', title_bn: 'হোটেল বুকিং', desc: 'Premium hotels and resorts', path: '/services', color: 'from-orange-500 to-red-500' },
+    { icon: Building2, title: 'Hotel Booking', title_bn: 'হোটেল বুকিং', desc: 'Premium hotels and resorts', path: '/services/hotels', color: 'from-orange-500 to-red-500' },
     { icon: Users, title: 'Group Tours', title_bn: 'গ্রুপ ট্যুর', desc: 'Exciting group travel experiences', path: '/group-tours', color: 'from-pink-500 to-rose-500' },
-    { icon: Shield, title: 'Travel Insurance', title_bn: 'ভ্রমণ বীমা', desc: 'Comprehensive coverage', path: '/services', color: 'from-teal-500 to-cyan-500' },
-    { icon: Car, title: 'Car Rental', title_bn: 'গাড়ি ভাড়া', desc: 'Comfortable transportation', path: '/services', color: 'from-amber-500 to-yellow-500' },
-    { icon: Compass, title: 'Tour Guide', title_bn: 'ট্যুর গাইড', desc: 'Expert local guides', path: '/services', color: 'from-indigo-500 to-purple-500' }
+    { icon: Shield, title: 'Travel Insurance', title_bn: 'ভ্রমণ বীমা', desc: 'Comprehensive coverage', path: '/services/insurance', color: 'from-teal-500 to-cyan-500' },
+    { icon: Car, title: 'Car Rental', title_bn: 'গাড়ি ভাড়া', desc: 'Comfortable transportation', path: '/services/car-rental', color: 'from-amber-500 to-yellow-500' },
+    { icon: Compass, title: 'Tour Guide', title_bn: 'ট্যুর গাইড', desc: 'Expert local guides', path: '/services/tour-guide', color: 'from-indigo-500 to-purple-500' }
   ];
 
   return (
