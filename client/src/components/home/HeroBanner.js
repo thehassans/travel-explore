@@ -330,66 +330,92 @@ const HeroBanner = () => {
                   } focus:outline-none transition-colors text-left flex items-center justify-between`}
                 >
                   <span>{passengers.adults + passengers.children}</span>
-                  <ChevronDown className="w-5 h-5 text-gray-400" />
+                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showPassengers ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* Passengers Dropdown */}
-                {showPassengers && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`absolute top-full left-0 right-0 mt-2 p-4 rounded-xl shadow-xl z-50 ${
-                      isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'
-                    }`}
-                  >
-                    {/* Adults */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
-                        {t('banner.adults')}
-                      </span>
-                      <div className="flex items-center space-x-3">
-                        <button
-                          type="button"
-                          onClick={() => updatePassengers('adults', 'subtract')}
-                          className="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="w-8 text-center font-semibold">{passengers.adults}</span>
-                        <button
-                          type="button"
-                          onClick={() => updatePassengers('adults', 'add')}
-                          className="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
+                {/* Passengers Dropdown - Fixed Alignment */}
+                <AnimatePresence>
+                  {showPassengers && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className={`absolute top-full right-0 mt-2 p-5 rounded-2xl shadow-2xl z-50 min-w-[220px] ${
+                        isDark ? 'bg-slate-800 border border-slate-600' : 'bg-white border border-gray-100'
+                      }`}
+                    >
+                      {/* Adults */}
+                      <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200 dark:border-slate-700">
+                        <div>
+                          <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                            {t('banner.adults')}
+                          </span>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>12+ years</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <motion.button
+                            type="button"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => updatePassengers('adults', 'subtract')}
+                            className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+                              isDark ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-100 hover:bg-primary-100 text-gray-700'
+                            }`}
+                          >
+                            <Minus className="w-4 h-4" />
+                          </motion.button>
+                          <span className={`w-8 text-center font-bold text-lg ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                            {passengers.adults}
+                          </span>
+                          <motion.button
+                            type="button"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => updatePassengers('adults', 'add')}
+                            className="w-9 h-9 rounded-full bg-primary-500 hover:bg-primary-600 text-white flex items-center justify-center transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </motion.button>
+                        </div>
                       </div>
-                    </div>
-                    {/* Children */}
-                    <div className="flex items-center justify-between">
-                      <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
-                        {t('banner.children')}
-                      </span>
-                      <div className="flex items-center space-x-3">
-                        <button
-                          type="button"
-                          onClick={() => updatePassengers('children', 'subtract')}
-                          className="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="w-8 text-center font-semibold">{passengers.children}</span>
-                        <button
-                          type="button"
-                          onClick={() => updatePassengers('children', 'add')}
-                          className="w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
+                      {/* Children */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                            {t('banner.children')}
+                          </span>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>2-11 years</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <motion.button
+                            type="button"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => updatePassengers('children', 'subtract')}
+                            className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+                              isDark ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-100 hover:bg-primary-100 text-gray-700'
+                            }`}
+                          >
+                            <Minus className="w-4 h-4" />
+                          </motion.button>
+                          <span className={`w-8 text-center font-bold text-lg ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                            {passengers.children}
+                          </span>
+                          <motion.button
+                            type="button"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => updatePassengers('children', 'add')}
+                            className="w-9 h-9 rounded-full bg-primary-500 hover:bg-primary-600 text-white flex items-center justify-center transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </motion.button>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 

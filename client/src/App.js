@@ -21,6 +21,7 @@ import LandPackagesPage from './pages/LandPackagesPage';
 import GroupToursPage from './pages/GroupToursPage';
 import ServicesPage from './pages/ServicesPage';
 import PartnersPage from './pages/PartnersPage';
+import PackageDetailPage from './pages/PackageDetailPage';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -60,6 +61,8 @@ function App() {
             <Route path="/group-tours" element={<GroupToursPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/partners" element={<PartnersPage />} />
+            <Route path="/holidays/:id" element={<PackageDetailPage />} />
+            <Route path="/package/:id" element={<PackageDetailPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLogin />} />
