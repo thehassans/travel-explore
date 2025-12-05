@@ -390,15 +390,29 @@ const AdminHolidays = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-white">Holiday Packages</h1>
-            <p className="text-gray-400 mt-1">Manage your travel packages and destinations</p>
+            <p className="text-gray-400 mt-1">Manage your travel packages and destinations ({packages.length} packages)</p>
           </div>
-          <button
-            onClick={() => { setEditingPackage(emptyPackage); setShowEditor(true); setActiveEditorTab('basic'); }}
-            className="px-6 py-3 bg-gradient-to-r from-primary-500 to-purple-500 text-white font-semibold rounded-xl flex items-center gap-2"
-          >
-            <Plus className="w-5 h-5" />
-            Add Package
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                if (window.confirm('Reset to default packages? This will add all 10 destinations.')) {
+                  localStorage.removeItem('holidayPackages');
+                  window.location.reload();
+                }
+              }}
+              className="px-4 py-3 bg-slate-700 text-gray-300 font-medium rounded-xl flex items-center gap-2 hover:bg-slate-600"
+            >
+              <Filter className="w-4 h-4" />
+              Reset Defaults
+            </button>
+            <button
+              onClick={() => { setEditingPackage(emptyPackage); setShowEditor(true); setActiveEditorTab('basic'); }}
+              className="px-6 py-3 bg-gradient-to-r from-primary-500 to-purple-500 text-white font-semibold rounded-xl flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Add Package
+            </button>
+          </div>
         </div>
 
         {/* Filters */}

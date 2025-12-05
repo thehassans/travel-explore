@@ -33,6 +33,9 @@ const defaultSettings = {
   secondaryColor: '#8b5cf6',
   accentColor: '#06b6d4',
   
+  // UI Settings
+  useGradients: true,
+  
   // Footer
   footerText: 'Experience the world with Bangladesh\'s most trusted travel agency.',
   copyrightText: '© 2024 Explore Holidays. All rights reserved.',
