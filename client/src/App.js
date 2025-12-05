@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTheme } from './context/ThemeContext';
@@ -44,38 +44,6 @@ function App() {
   const { isDark } = useTheme();
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const [useGradients, setUseGradients] = useState(true);
-
-  useEffect(() => {
-    // Check gradient setting from localStorage
-    const checkGradient = () => {
-      const settings = localStorage.getItem('siteSettings');
-      if (settings) {
-        const parsed = JSON.parse(settings);
-        setUseGradients(parsed.useGradients !== false);
-      }
-    };
-    checkGradient();
-    
-    // Listen for storage changes
-    window.addEventListener('storage', checkGradient);
-    // Also check periodically for same-tab updates
-    const interval = setInterval(checkGradient, 1000);
-    
-    return () => {
-      window.removeEventListener('storage', checkGradient);
-      clearInterval(interval);
-    };
-  }, []);
-
-  // Apply gradient class to body
-  useEffect(() => {
-    if (useGradients) {
-      document.body.classList.remove('no-gradients');
-    } else {
-      document.body.classList.add('no-gradients');
-    }
-  }, [useGradients]);
 
   return (
     <AuthProvider>

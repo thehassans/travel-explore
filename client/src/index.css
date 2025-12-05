@@ -281,24 +281,4 @@ body.dark .card-premium:hover {
   background: var(--primary) !important;
 }
 
-/* No Gradients Mode - Minimal changes for clean look */
-body.no-gradients .gradient-primary,
-body.no-gradients .gradient-warm,
-body.no-gradients .gradient-hero {
-  background: #0ea5e9 !important;
-}
-
-/* Only affect buttons with gradient backgrounds */
-body.no-gradients button.bg-gradient-to-r,
-body.no-gradients a.bg-gradient-to-r {
-  background: #6366f1 !important;
-}
-
-/* Badges keep their distinct colors */
-body.no-gradients .badge-popular {
-  background: #f97316 !important;
-}
-
-body.no-gradients .badge-featured {
-  background: #8b5cf6 !important;
-}
+/* Gradient toggle placeholder - requires component-level implementation */
