@@ -30,23 +30,49 @@ const AdminAIAgent = () => {
     trainAgent, 
     trainingLogs, 
     agents,
-    currentAgent 
+    currentAgent,
+    clearLogs,
+    saveApiKey,
+    checkConnection
   } = useAIAgent();
   
   const [newApiKey, setNewApiKey] = useState(apiKey);
   const [showApiKey, setShowApiKey] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
   const [trainingResult, setTrainingResult] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState(null);
 
   const handleTrain = async () => {
     if (!newApiKey.trim()) return;
     
     setIsTraining(true);
     setTrainingResult(null);
+    setConnectionStatus(null);
     
     const result = await trainAgent(newApiKey);
     setTrainingResult(result);
     setIsTraining(false);
+  };
+
+  const handleSave = () => {
+    if (!newApiKey.trim()) return;
+    saveApiKey(newApiKey);
+    setTrainingResult({ success: true, message: 'API key saved successfully!' });
+  };
+
+  const handleCheckConnection = async () => {
+    setIsChecking(true);
+    setConnectionStatus(null);
+    const result = await checkConnection();
+    setConnectionStatus(result);
+    setIsChecking(false);
+  };
+
+  const handleClearLogs = () => {
+    clearLogs();
+    setTrainingResult(null);
+    setConnectionStatus(null);
   };
 
   const getLogIcon = (type) => {
@@ -166,29 +192,96 @@ const AdminAIAgent = () => {
                   </p>
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleTrain}
-                  disabled={isTraining || !newApiKey.trim()}
-                  className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
-                    isTraining || !newApiKey.trim()
-                      ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:shadow-lg hover:shadow-purple-500/30'
-                  }`}
-                >
-                  {isTraining ? (
-                    <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      Training Agent...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5" />
-                      Train AI Agent
-                    </>
-                  )}
-                </motion.button>
+                {/* Action Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* Save Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleSave}
+                    disabled={!newApiKey.trim()}
+                    className={`py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                      !newApiKey.trim()
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:shadow-lg hover:shadow-green-500/30'
+                    }`}
+                  >
+                    <Save className="w-5 h-5" />
+                    Save Key
+                  </motion.button>
+
+                  {/* Check Connection Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleCheckConnection}
+                    disabled={isChecking || !apiKey}
+                    className={`py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                      isChecking || !apiKey
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white hover:shadow-lg hover:shadow-blue-500/30'
+                    }`}
+                  >
+                    {isChecking ? (
+                      <>
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        Checking...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-5 h-5" />
+                        Check Connection
+                      </>
+                    )}
+                  </motion.button>
+
+                  {/* Train Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleTrain}
+                    disabled={isTraining || !newApiKey.trim()}
+                    className={`py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                      isTraining || !newApiKey.trim()
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:shadow-lg hover:shadow-purple-500/30'
+                    }`}
+                  >
+                    {isTraining ? (
+                      <>
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        Training...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-5 h-5" />
+                        Train Agent
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+
+                {/* Connection Status */}
+                {connectionStatus && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-4 rounded-xl flex items-center gap-3 ${
+                      connectionStatus.success 
+                        ? 'bg-green-500/10 border border-green-500/20' 
+                        : 'bg-red-500/10 border border-red-500/20'
+                    }`}
+                  >
+                    {connectionStatus.success ? (
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    )}
+                    <p className={connectionStatus.success ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}>
+                      {connectionStatus.success ? '✓ API Connected Successfully!' : connectionStatus.message}
+                    </p>
+                  </motion.div>
+                )}
 
                 {/* Training Result */}
                 {trainingResult && (
@@ -231,9 +324,22 @@ const AdminAIAgent = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Recent agent training activity</p>
                   </div>
                 </div>
-                <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300">
-                  {trainingLogs.length} logs
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300">
+                    {trainingLogs.length} logs
+                  </span>
+                  {trainingLogs.length > 0 && (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleClearLogs}
+                      className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      Clear
+                    </motion.button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-3 max-h-96 overflow-y-auto">

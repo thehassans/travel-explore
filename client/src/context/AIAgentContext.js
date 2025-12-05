@@ -194,6 +194,51 @@ export const AIAgentProvider = ({ children }) => {
     rotateAgent(); // Assign new agent on clear
   }, [rotateAgent]);
 
+  // Clear training logs
+  const clearLogs = useCallback(() => {
+    setTrainingLogs([]);
+    localStorage.removeItem('aiTrainingLogs');
+  }, []);
+
+  // Save API key without training
+  const saveApiKey = useCallback((key) => {
+    setApiKey(key);
+    localStorage.setItem('geminiApiKey', key);
+    addTrainingLog({
+      type: 'info',
+      message: 'API key saved',
+      details: 'Key saved to storage'
+    });
+  }, [addTrainingLog]);
+
+  // Check if API is connected
+  const checkConnection = useCallback(async () => {
+    if (!apiKey) {
+      return { success: false, message: 'No API key saved' };
+    }
+    try {
+      const response = await fetch('/api/ai-agent/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey })
+      });
+      const data = await response.json();
+      addTrainingLog({
+        type: data.success ? 'success' : 'error',
+        message: data.success ? 'Connection verified' : 'Connection failed',
+        details: data.message
+      });
+      return data;
+    } catch (error) {
+      addTrainingLog({
+        type: 'error',
+        message: 'Connection check failed',
+        details: error.message
+      });
+      return { success: false, message: error.message };
+    }
+  }, [apiKey, addTrainingLog]);
+
   const value = {
     isEnabled,
     setIsEnabled,
@@ -207,6 +252,9 @@ export const AIAgentProvider = ({ children }) => {
     toggleAgent,
     trainingLogs,
     clearHistory,
+    clearLogs,
+    saveApiKey,
+    checkConnection,
     agents
   };
 
