@@ -64,12 +64,12 @@ const AIChatWidget = () => {
   const simulateHumanTyping = async (responseText) => {
     setIsAgentTyping(true);
     
-    // Calculate typing time based on word count (~1 second per word)
+    // Calculate typing time based on word count (~2 seconds per word)
     const wordCount = responseText.split(/\s+/).length;
-    const typingTime = Math.min(Math.max(wordCount * 800, 2000), 8000); // Min 2s, max 8s
+    const typingTime = Math.min(Math.max(wordCount * 2000, 3000), 15000); // Min 3s, max 15s
     
-    // Add random variation
-    const randomDelay = typingTime + (Math.random() * 1500);
+    // Add random variation for human-like feel
+    const randomDelay = typingTime + (Math.random() * 2000);
     
     await new Promise(resolve => setTimeout(resolve, randomDelay));
     
