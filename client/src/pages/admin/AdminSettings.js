@@ -248,17 +248,17 @@ const AdminSettings = () => {
             {/* Branding Tab */}
             {activeTab === 'branding' && (
               <div className="space-y-6">
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     <Image className="w-5 h-5 text-primary-500" />
                     Logo & Favicon
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Logo Upload */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-3">Site Logo</label>
+                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Site Logo</label>
                       <div className="flex items-center gap-4">
-                        <div className="w-32 h-32 rounded-2xl bg-slate-700 border-2 border-dashed border-slate-500 flex items-center justify-center overflow-hidden">
+                        <div className={`w-32 h-32 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden ${isDark ? 'bg-slate-700 border-slate-500' : 'bg-gray-50 border-gray-300'}`}>
                           {settings.logo ? (
                             <img src={settings.logo} alt="Logo" className="w-full h-full object-contain p-2" />
                           ) : (
@@ -295,9 +295,9 @@ const AdminSettings = () => {
 
                     {/* Favicon Upload */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-3">Favicon</label>
+                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Favicon</label>
                       <div className="flex items-center gap-4">
-                        <div className="w-20 h-20 rounded-xl bg-slate-700 border-2 border-dashed border-slate-500 flex items-center justify-center overflow-hidden">
+                        <div className={`w-20 h-20 rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden ${isDark ? 'bg-slate-700 border-slate-500' : 'bg-gray-50 border-gray-300'}`}>
                           {settings.favicon ? (
                             <img src={settings.favicon} alt="Favicon" className="w-full h-full object-contain p-2" />
                           ) : (
@@ -338,57 +338,57 @@ const AdminSettings = () => {
 
             {/* Contact Tab */}
             {activeTab === 'contact' && (
-              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   <Phone className="w-5 h-5 text-primary-500" />
                   Contact Information
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Phone</label>
                     <div className="relative">
                       <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="text"
                         value={settings.phone}
                         onChange={(e) => setSettings(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                        className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="email"
                         value={settings.email}
                         onChange={(e) => setSettings(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                        className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Support Email</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Support Email</label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="email"
                         value={settings.supportEmail}
                         onChange={(e) => setSettings(prev => ({ ...prev, supportEmail: e.target.value }))}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                        className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Address</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Address</label>
                     <div className="relative">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="text"
                         value={settings.address}
                         onChange={(e) => setSettings(prev => ({ ...prev, address: e.target.value }))}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                        className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                   </div>
@@ -399,79 +399,79 @@ const AdminSettings = () => {
             {/* Social & Footer Tab */}
             {activeTab === 'social' && (
               <div className="space-y-6">
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6">Social Media Links</h2>
+                <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h2 className={`text-xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Social Media Links</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Facebook</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Facebook</label>
                       <div className="relative">
                         <Facebook className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
                         <input
                           type="url"
                           value={settings.facebook}
                           onChange={(e) => setSettings(prev => ({ ...prev, facebook: e.target.value }))}
-                          className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Instagram</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Instagram</label>
                       <div className="relative">
                         <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-pink-500" />
                         <input
                           type="url"
                           value={settings.instagram}
                           onChange={(e) => setSettings(prev => ({ ...prev, instagram: e.target.value }))}
-                          className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Twitter</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Twitter</label>
                       <div className="relative">
                         <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-sky-500" />
                         <input
                           type="url"
                           value={settings.twitter}
                           onChange={(e) => setSettings(prev => ({ ...prev, twitter: e.target.value }))}
-                          className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">YouTube</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>YouTube</label>
                       <div className="relative">
                         <Youtube className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
                         <input
                           type="url"
                           value={settings.youtube}
                           onChange={(e) => setSettings(prev => ({ ...prev, youtube: e.target.value }))}
-                          className="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6">Footer Settings</h2>
+                <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h2 className={`text-xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Footer Settings</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Footer Description</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Footer Description</label>
                       <textarea
                         value={settings.footerText}
                         onChange={(e) => setSettings(prev => ({ ...prev, footerText: e.target.value }))}
                         rows={3}
-                        className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white resize-none"
+                        className={`w-full px-4 py-3 rounded-xl border resize-none ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Copyright Text</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Copyright Text</label>
                       <input
                         type="text"
                         value={settings.copyrightText}
                         onChange={(e) => setSettings(prev => ({ ...prev, copyrightText: e.target.value }))}
-                        className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                        className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                       />
                     </div>
                   </div>
@@ -482,8 +482,8 @@ const AdminSettings = () => {
             {/* Theme Tab */}
             {activeTab === 'theme' && (
               <div className="space-y-6">
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     <Palette className="w-5 h-5 text-primary-500" />
                     Color Presets
                   </h2>
@@ -499,8 +499,8 @@ const AdminSettings = () => {
                         }))}
                         className={`p-4 rounded-xl border-2 transition-all ${
                           settings.primaryColor === preset.primary
-                            ? 'border-white bg-slate-700'
-                            : 'border-slate-600 hover:border-slate-500'
+                            ? isDark ? 'border-white bg-slate-700' : 'border-primary-500 bg-primary-50'
+                            : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
                         <div className="flex gap-1 mb-2">
@@ -508,17 +508,17 @@ const AdminSettings = () => {
                           <div className="w-6 h-6 rounded-full" style={{ backgroundColor: preset.secondary }} />
                           <div className="w-6 h-6 rounded-full" style={{ backgroundColor: preset.accent }} />
                         </div>
-                        <span className="text-sm text-gray-300">{preset.name}</span>
+                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{preset.name}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6">Custom Colors</h2>
+                <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                  <h2 className={`text-xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Custom Colors</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Primary Color</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Primary Color</label>
                       <div className="flex gap-3">
                         <input
                           type="color"
@@ -530,12 +530,12 @@ const AdminSettings = () => {
                           type="text"
                           value={settings.primaryColor}
                           onChange={(e) => setSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
-                          className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Secondary Color</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Secondary Color</label>
                       <div className="flex gap-3">
                         <input
                           type="color"
@@ -547,12 +547,12 @@ const AdminSettings = () => {
                           type="text"
                           value={settings.secondaryColor}
                           onChange={(e) => setSettings(prev => ({ ...prev, secondaryColor: e.target.value }))}
-                          className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Accent Color</label>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Accent Color</label>
                       <div className="flex gap-3">
                         <input
                           type="color"
@@ -564,15 +564,15 @@ const AdminSettings = () => {
                           type="text"
                           value={settings.accentColor}
                           onChange={(e) => setSettings(prev => ({ ...prev, accentColor: e.target.value }))}
-                          className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Preview */}
-                  <div className="mt-8 p-6 rounded-xl bg-slate-900 border border-slate-700">
-                    <h3 className="text-sm font-medium text-gray-400 mb-4">Preview</h3>
+                  <div className={`mt-8 p-6 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-gray-50 border-gray-200'}`}>
+                    <h3 className={`text-sm font-medium mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Preview</h3>
                     <div className="flex flex-wrap gap-3">
                       <button className="px-4 py-2 rounded-lg text-white" style={{ backgroundColor: settings.primaryColor }}>
                         Primary Button
@@ -588,29 +588,29 @@ const AdminSettings = () => {
                 </div>
 
                 {/* Premium Gradient Toggle */}
-                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-slate-700 shadow-2xl">
+                <div className={`rounded-3xl p-8 border shadow-2xl ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 rounded-2xl bg-primary-500 flex items-center justify-center shadow-lg">
                       <Palette className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-white">UI Style Settings</h2>
-                      <p className="text-gray-400 text-sm">Control the visual style of your website</p>
+                      <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>UI Style Settings</h2>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Control the visual style of your website</p>
                     </div>
                   </div>
 
                   {/* Premium Toggle Card */}
                   <div className={`relative p-6 rounded-2xl transition-all duration-500 ${
                     settings.useGradients 
-                      ? 'bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 border border-purple-500/30' 
-                      : 'bg-slate-700/50 border border-slate-600'
+                      ? isDark ? 'bg-purple-900/30 border border-purple-500/30' : 'bg-purple-50 border border-purple-200'
+                      : isDark ? 'bg-slate-700/50 border border-slate-600' : 'bg-gray-100 border border-gray-200'
                   }`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transition-all ${
                           settings.useGradients 
-                            ? 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500' 
-                            : 'bg-slate-600'
+                            ? 'bg-primary-500' 
+                            : isDark ? 'bg-slate-600' : 'bg-gray-300'
                         }`}>
                           {settings.useGradients ? (
                             <Sparkles className="w-8 h-8 text-white" />
@@ -619,10 +619,10 @@ const AdminSettings = () => {
                           )}
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-white">
+                          <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                             {settings.useGradients ? 'Gradient Mode' : 'Solid Mode'}
                           </h3>
-                          <p className="text-gray-400">
+                          <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
                             {settings.useGradients 
                               ? 'Beautiful gradients across buttons & sections' 
                               : 'Clean solid colors for minimal look'}
@@ -635,15 +635,15 @@ const AdminSettings = () => {
                         onClick={() => setSettings(prev => ({ ...prev, useGradients: !prev.useGradients }))}
                         className={`relative w-20 h-10 rounded-full transition-all duration-300 shadow-inner ${
                           settings.useGradients 
-                            ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500' 
-                            : 'bg-slate-600'
+                            ? 'bg-primary-500' 
+                            : isDark ? 'bg-slate-600' : 'bg-gray-300'
                         }`}
                       >
                         <span className={`absolute top-1 w-8 h-8 bg-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
                           settings.useGradients ? 'translate-x-11' : 'translate-x-1'
                         }`}>
                           {settings.useGradients ? (
-                            <span className="text-purple-500 text-xs font-bold">ON</span>
+                            <span className="text-primary-500 text-xs font-bold">ON</span>
                           ) : (
                             <span className="text-gray-400 text-xs font-bold">OFF</span>
                           )}
@@ -653,7 +653,7 @@ const AdminSettings = () => {
                   </div>
 
                   {/* Preview Section */}
-                  <div className="mt-6 p-5 bg-slate-900/50 rounded-2xl border border-slate-700">
+                  <div className={`mt-6 p-5 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-700' : 'bg-gray-50 border-gray-200'}`}>
                     <p className="text-sm text-gray-400 mb-4 font-medium">Live Preview:</p>
                     <div className="flex flex-wrap gap-3">
                       <button className={`px-6 py-3 rounded-xl text-white font-semibold transition-all ${

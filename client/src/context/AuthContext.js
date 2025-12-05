@@ -87,111 +87,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = () => {
-    return new Promise((resolve) => {
-      // Use Google Identity Services
-      const GOOGLE_CLIENT_ID = '441695171634-vqkl1v2n9s3qk8k4q1p6h8j2m5n0o1r3.apps.googleusercontent.com';
-      
-      // Load Google Identity Services script if not loaded
-      if (!window.google) {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        script.onload = () => initGoogleSignIn(resolve);
-        document.body.appendChild(script);
-      } else {
-        initGoogleSignIn(resolve);
-      }
-
-      function initGoogleSignIn(resolvePromise) {
-        try {
-          window.google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: (response) => handleGoogleCallback(response, resolvePromise),
-            auto_select: false,
-          });
-          
-          // Show the One Tap prompt or popup
-          window.google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              // Fallback: use popup mode
-              window.google.accounts.oauth2.initTokenClient({
-                client_id: GOOGLE_CLIENT_ID,
-                scope: 'email profile',
-                callback: (tokenResponse) => {
-                  if (tokenResponse.access_token) {
-                    // Fetch user info with the access token
-                    fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                      headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                    })
-                    .then(res => res.json())
-                    .then(userInfo => {
-                      const googleUser = {
-                        id: 'google_' + userInfo.sub,
-                        name: userInfo.name,
-                        email: userInfo.email,
-                        avatar: userInfo.picture,
-                        provider: 'google',
-                        createdAt: new Date().toISOString()
-                      };
-                      saveGoogleUser(googleUser, resolvePromise);
-                    })
-                    .catch(() => resolvePromise({ success: false, error: 'Failed to get user info' }));
-                  }
-                },
-              }).requestAccessToken();
-            }
-          });
-        } catch (error) {
-          resolvePromise({ success: false, error: error.message });
-        }
-      }
-
-      function handleGoogleCallback(response, resolvePromise) {
-        try {
-          // Decode JWT token from credential
-          const payload = JSON.parse(atob(response.credential.split('.')[1]));
-          const googleUser = {
-            id: 'google_' + payload.sub,
-            name: payload.name,
-            email: payload.email,
-            avatar: payload.picture,
-            provider: 'google',
-            createdAt: new Date().toISOString()
-          };
-          saveGoogleUser(googleUser, resolvePromise);
-        } catch (error) {
-          resolvePromise({ success: false, error: error.message });
-        }
-      }
-
-      function saveGoogleUser(googleUser, resolvePromise) {
-        // Store in registered users
-        const mockUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const existingIndex = mockUsers.findIndex(u => u.email === googleUser.email);
-        if (existingIndex >= 0) {
-          mockUsers[existingIndex] = { ...mockUsers[existingIndex], ...googleUser };
-        } else {
-          mockUsers.push(googleUser);
-        }
-        localStorage.setItem('registeredUsers', JSON.stringify(mockUsers));
-
-        const userData = {
-          id: googleUser.id,
-          name: googleUser.name,
-          email: googleUser.email,
-          avatar: googleUser.avatar,
-          provider: 'google'
-        };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        
-        resolvePromise({ success: true });
-      }
-    });
-  };
-
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -206,7 +101,6 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     signup,
-    loginWithGoogle,
     logout,
     getAllUsers,
     isAuthenticated: !!user
