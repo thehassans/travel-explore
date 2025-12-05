@@ -34,8 +34,8 @@ const AIChatWidget = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const greeting = language === 'bn'
-        ? `আসসালামু আলাইকুম! 👋 আমি ${currentAgent.name}। Explore Holidays-এ আপনাকে স্বাগতম! আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?`
-        : `Hello! 👋 I'm ${currentAgent.name_en}. Welcome to Explore Holidays! How can I help you today?`;
+        ? `আসসালামু আলাইকুম! আমি ${currentAgent.name}। Explore Holidays-এ আপনাকে স্বাগতম। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?`
+        : `Hello! I'm ${currentAgent.name_en}. Welcome to Explore Holidays. How can I help you today?`;
       
       setMessages([{
         id: Date.now(),
@@ -64,7 +64,18 @@ const AIChatWidget = () => {
     setDisplayedText('');
     
     for (let i = 0; i <= text.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 20 + Math.random() * 30)); // Random typing speed
+      // Human-like typing: slower with random pauses
+      let delay = 30 + Math.random() * 50; // Base typing speed
+      
+      // Add longer pauses after punctuation (like humans do)
+      const lastChar = text[i - 1];
+      if (lastChar === '.' || lastChar === '!' || lastChar === '?') {
+        delay += 200 + Math.random() * 300; // Pause after sentences
+      } else if (lastChar === ',') {
+        delay += 100 + Math.random() * 150; // Shorter pause after commas
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, delay));
       setDisplayedText(text.slice(0, i));
     }
     
@@ -345,8 +356,8 @@ const AIChatWidget = () => {
                   </div>
                   <p className={`text-center text-xs mt-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                     {language === 'bn' 
-                      ? `${currentAgent.name} দ্বারা চালিত • AI সহায়তা`
-                      : `Powered by ${currentAgent.name_en} • AI Support`}
+                      ? `${currentAgent.name} - Explore Holidays`
+                      : `${currentAgent.name_en} - Explore Holidays`}
                   </p>
                 </div>
               </>
