@@ -47,6 +47,7 @@ app.use('/api/services', require('./routes/services'));
 app.use('/api/seo', require('./routes/seo'));
 app.use('/api/content', require('./routes/content'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/ai-agent', require('./routes/aiagent'));
 
 // SEO Meta endpoint
 app.get('/api/meta', (req, res) => {
