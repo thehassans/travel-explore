@@ -10,7 +10,8 @@ export const useGradient = () => {
       gradientClass: (gradient, solid) => gradient,
       getButtonClass: () => '',
       getCardClass: () => '',
-      getSectionClass: () => ''
+      getSectionClass: () => '',
+      premium: {}
     };
   }
   return context;
@@ -27,7 +28,6 @@ export const GradientProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Listen for changes - faster polling for instant response
     const checkGradient = () => {
       const settings = localStorage.getItem('siteSettings');
       if (settings) {
@@ -37,7 +37,6 @@ export const GradientProvider = ({ children }) => {
       }
     };
 
-    // Check more frequently for instant updates
     const interval = setInterval(checkGradient, 100);
     window.addEventListener('storage', checkGradient);
 
@@ -52,66 +51,117 @@ export const GradientProvider = ({ children }) => {
     return useGradients ? gradientClasses : solidClasses;
   }, [useGradients]);
 
-  // Premium button classes with animations
-  const getButtonClass = useCallback((variant = 'primary') => {
-    const baseClass = 'transform transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-xl';
-    
-    const variants = {
+  // ULTRA PREMIUM PROFESSIONAL THEME (when gradients off)
+  // Monochromatic, clean, minimal with subtle elegance
+  const premium = {
+    // Primary button - sleek black/dark
+    button: {
       primary: useGradients 
-        ? `${baseClass} bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 hover:shadow-blue-500/30`
-        : `${baseClass} bg-blue-600 hover:bg-blue-700`,
+        ? 'bg-gradient-to-r from-primary-500 to-purple-500 text-white shadow-lg hover:shadow-xl hover:shadow-primary-500/25'
+        : 'bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:shadow-lg border border-slate-700',
       secondary: useGradients
-        ? `${baseClass} bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 hover:shadow-purple-500/30`
-        : `${baseClass} bg-purple-600 hover:bg-purple-700`,
+        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+        : 'bg-white text-slate-900 shadow-sm hover:shadow-md border-2 border-slate-900 hover:bg-slate-50',
+      outline: useGradients
+        ? 'border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white'
+        : 'border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white',
       accent: useGradients
-        ? `${baseClass} bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:shadow-orange-500/30`
-        : `${baseClass} bg-orange-600 hover:bg-orange-700`,
-      success: useGradients
-        ? `${baseClass} bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:shadow-green-500/30`
-        : `${baseClass} bg-green-600 hover:bg-green-700`,
-    };
-    
-    return variants[variant] || variants.primary;
-  }, [useGradients]);
-
-  // Premium card classes with animations
-  const getCardClass = useCallback((isDark = false) => {
-    const baseClass = 'transform transition-all duration-500 hover:-translate-y-2';
-    
-    if (useGradients) {
-      return isDark
-        ? `${baseClass} bg-slate-800/80 hover:bg-slate-800 border border-slate-700/50 hover:border-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/10`
-        : `${baseClass} bg-white hover:shadow-2xl hover:shadow-blue-500/10 border border-gray-100 hover:border-blue-200`;
-    }
-    return isDark
-      ? `${baseClass} bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-slate-600 hover:shadow-xl`
-      : `${baseClass} bg-white hover:shadow-xl border border-gray-200 hover:border-gray-300`;
-  }, [useGradients]);
-
-  // Premium section background classes
-  const getSectionClass = useCallback((variant = 'primary') => {
-    const variants = {
-      primary: useGradients
-        ? 'bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600'
-        : 'bg-blue-600',
-      secondary: useGradients
-        ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600'
-        : 'bg-purple-600',
+        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+        : 'bg-slate-800 text-white hover:bg-slate-700',
+    },
+    // Card styles - clean, minimal shadows
+    card: {
+      base: useGradients
+        ? 'bg-white border border-gray-100 shadow-lg hover:shadow-xl hover:shadow-primary-500/10 hover:border-primary-200'
+        : 'bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300',
+      dark: useGradients
+        ? 'bg-slate-800 border border-slate-700 shadow-lg hover:shadow-xl hover:shadow-purple-500/10'
+        : 'bg-slate-900 border border-slate-800 shadow-sm hover:shadow-md hover:border-slate-700',
+      featured: useGradients
+        ? 'bg-gradient-to-br from-primary-50 to-purple-50 border-2 border-primary-200'
+        : 'bg-slate-50 border-2 border-slate-900',
+    },
+    // Section backgrounds
+    section: {
+      hero: useGradients
+        ? 'bg-gradient-to-br from-primary-600 via-purple-600 to-pink-600'
+        : 'bg-slate-900',
+      light: useGradients
+        ? 'bg-gradient-to-br from-primary-50 via-white to-purple-50'
+        : 'bg-slate-50',
       dark: useGradients
         ? 'bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900'
-        : 'bg-slate-900',
-    };
-    
-    return variants[variant] || variants.primary;
+        : 'bg-slate-950',
+    },
+    // Text styles
+    text: {
+      heading: useGradients
+        ? 'bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent'
+        : 'text-slate-900',
+      accent: useGradients
+        ? 'text-primary-500'
+        : 'text-slate-700',
+      muted: useGradients
+        ? 'text-gray-500'
+        : 'text-slate-500',
+    },
+    // Badge/tag styles
+    badge: {
+      primary: useGradients
+        ? 'bg-gradient-to-r from-primary-500 to-purple-500 text-white'
+        : 'bg-slate-900 text-white',
+      secondary: useGradients
+        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+        : 'bg-slate-700 text-white',
+      outline: useGradients
+        ? 'border-2 border-primary-500 text-primary-500'
+        : 'border-2 border-slate-900 text-slate-900',
+    },
+    // Icon containers
+    icon: {
+      primary: useGradients
+        ? 'bg-gradient-to-br from-primary-500 to-purple-500 text-white shadow-lg'
+        : 'bg-slate-900 text-white shadow-md',
+      light: useGradients
+        ? 'bg-gradient-to-br from-primary-100 to-purple-100 text-primary-600'
+        : 'bg-slate-100 text-slate-700',
+    },
+    // Input styles
+    input: {
+      base: useGradients
+        ? 'border-2 border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
+        : 'border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10',
+    },
+    // Dividers
+    divider: useGradients
+      ? 'border-gray-200'
+      : 'border-slate-200',
+    // Navbar
+    navbar: {
+      bg: useGradients
+        ? 'bg-white/80 backdrop-blur-xl border-b border-gray-100'
+        : 'bg-white border-b-2 border-slate-100',
+      bgDark: useGradients
+        ? 'bg-slate-900/80 backdrop-blur-xl border-b border-slate-800'
+        : 'bg-slate-950 border-b-2 border-slate-800',
+    },
+  };
+
+  // Legacy support
+  const getButtonClass = useCallback((variant = 'primary') => {
+    return premium.button[variant] || premium.button.primary;
   }, [useGradients]);
 
-  // Premium icon container classes
-  const getIconClass = useCallback((gradient = 'from-cyan-500 to-blue-500') => {
-    const baseClass = 'transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3';
-    
-    return useGradients
-      ? `${baseClass} bg-gradient-to-br ${gradient} shadow-lg`
-      : `${baseClass} bg-primary-500 shadow-md`;
+  const getCardClass = useCallback((isDark = false) => {
+    return isDark ? premium.card.dark : premium.card.base;
+  }, [useGradients]);
+
+  const getSectionClass = useCallback((variant = 'hero') => {
+    return premium.section[variant] || premium.section.hero;
+  }, [useGradients]);
+
+  const getIconClass = useCallback(() => {
+    return premium.icon.primary;
   }, [useGradients]);
 
   return (
@@ -122,7 +172,8 @@ export const GradientProvider = ({ children }) => {
       getButtonClass,
       getCardClass,
       getSectionClass,
-      getIconClass
+      getIconClass,
+      premium
     }}>
       {children}
     </GradientContext.Provider>

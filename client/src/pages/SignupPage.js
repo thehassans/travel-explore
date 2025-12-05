@@ -17,11 +17,13 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { useGradient } from '../context/GradientContext';
 
 const SignupPage = () => {
-  const { isDark, useGradients } = useTheme();
+  const { isDark } = useTheme();
   const { language } = useLanguage();
   const { signup } = useAuth();
+  const { useGradients, premium } = useGradient();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/';
@@ -67,25 +69,43 @@ const SignupPage = () => {
         <title>{language === 'bn' ? 'সাইন আপ' : 'Sign Up'} | Explore Holidays</title>
       </Helmet>
 
-      <div className={`min-h-screen flex items-center justify-center py-12 px-4 ${isDark ? 'bg-slate-900' : useGradients ? 'bg-gradient-to-br from-primary-50 via-white to-purple-50' : 'bg-gray-50'}`}>
-        {/* Background Decorations */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute bottom-20 left-10 w-40 h-40 bg-primary-500/10 rounded-full blur-3xl"
-          />
-        </div>
+      <div className={`min-h-screen flex items-center justify-center py-12 px-4 ${
+        isDark 
+          ? 'bg-slate-950' 
+          : useGradients 
+            ? 'bg-gradient-to-br from-primary-50 via-white to-purple-50' 
+            : 'bg-slate-50'
+      }`}>
+        {/* Background Decorations - only show with gradients */}
+        {useGradients && (
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+              transition={{ duration: 8, repeat: Infinity }}
+              className="absolute top-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
+              transition={{ duration: 10, repeat: Infinity }}
+              className="absolute bottom-20 left-10 w-40 h-40 bg-primary-500/10 rounded-full blur-3xl"
+            />
+          </div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`relative w-full max-w-md p-8 rounded-3xl shadow-2xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+          className={`relative w-full max-w-md p-8 ${
+            useGradients 
+              ? 'rounded-3xl shadow-2xl' 
+              : 'rounded-2xl shadow-lg border-2'
+          } ${
+            isDark 
+              ? 'bg-slate-900 border-slate-800' 
+              : useGradients 
+                ? 'bg-white' 
+                : 'bg-white border-slate-200'
+          }`}
         >
           {/* Logo */}
           <div className="text-center mb-8">
@@ -93,14 +113,20 @@ const SignupPage = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', duration: 0.5 }}
-              className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${useGradients ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-primary-500'}`}
+              className={`w-16 h-16 mx-auto mb-4 flex items-center justify-center ${
+                useGradients 
+                  ? 'rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg' 
+                  : 'rounded-xl bg-slate-900 shadow-md'
+              }`}
             >
               <Plane className="w-8 h-8 text-white" />
             </motion.div>
-            <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={`text-2xl font-bold tracking-tight ${
+              isDark ? 'text-white' : useGradients ? 'text-gray-900' : 'text-slate-900'
+            }`}>
               {language === 'bn' ? 'অ্যাকাউন্ট তৈরি করুন' : 'Create Account'}
             </h1>
-            <p className={`mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               {language === 'bn' ? 'আপনার ভ্রমণ শুরু করুন' : 'Start your journey today'}
             </p>
           </div>
@@ -246,7 +272,11 @@ const SignupPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={loading}
-              className={`w-full py-4 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2 mt-6 ${useGradients ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-primary-500 hover:bg-primary-600'}`}
+              className={`w-full py-4 font-bold rounded-xl transition-all flex items-center justify-center gap-2 mt-6 ${
+                useGradients 
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl hover:shadow-purple-500/25' 
+                  : 'bg-slate-900 text-white hover:bg-slate-800 shadow-md hover:shadow-lg'
+              }`}
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -260,9 +290,16 @@ const SignupPage = () => {
           </form>
 
           {/* Login Link */}
-          <p className={`mt-8 text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <p className={`mt-8 text-center ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             {language === 'bn' ? 'অ্যাকাউন্ট আছে?' : 'Already have an account?'}{' '}
-            <Link to="/login" className="text-primary-500 hover:text-primary-600 font-semibold">
+            <Link 
+              to="/login" 
+              className={`font-semibold ${
+                useGradients 
+                  ? 'text-primary-500 hover:text-primary-600' 
+                  : 'text-slate-900 hover:text-slate-700 underline underline-offset-2'
+              }`}
+            >
               {language === 'bn' ? 'লগইন করুন' : 'Sign In'}
             </Link>
           </p>
