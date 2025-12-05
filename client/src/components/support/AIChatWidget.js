@@ -119,9 +119,9 @@ const AIChatWidget = () => {
     const userMessage = inputValue.trim();
     setInputValue('');
     
-    // Try to extract name from first message
+    // Try to extract name from first message (English only)
     if (isFirstMessage) {
-      const nameMatch = userMessage.match(/(?:i am|i'm|my name is|this is|আমি|আমার নাম)\s+([a-zA-Zা-ঁ]+)/i);
+      const nameMatch = userMessage.match(/(?:i am|i'm|my name is|this is)\s+([a-zA-Z]+)/i);
       if (nameMatch) {
         setUserName(nameMatch[1]);
       }
