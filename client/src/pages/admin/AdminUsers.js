@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Users, 
   Search, 
   Mail, 
   Calendar,
-  MoreVertical,
   UserCheck,
-  UserX,
-  Trash2,
-  ArrowLeft,
-  LayoutDashboard,
-  MessageSquare,
-  CreditCard,
-  Settings,
-  LogOut,
   Phone
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminUsers = () => {
   const { isDark } = useTheme();
   const { getAllUsers } = useAuth();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     loadUsers();
@@ -51,66 +41,10 @@ const AdminUsers = () => {
     });
   };
 
-  const sidebarItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
-    { icon: MessageSquare, label: 'Queries', path: '/admin/queries' },
-    { icon: CreditCard, label: 'Bookings', path: '/admin/bookings' },
-    { icon: Users, label: 'Users', path: '/admin/users', active: true },
-    { icon: Settings, label: 'Settings', path: '/admin/settings' },
-  ];
-
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-100'}`}>
-      {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 bottom-0 w-64 ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-xl z-40`}>
-        <div className="p-6">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-purple-500 flex items-center justify-center">
-              <span className="text-white font-bold">EH</span>
-            </div>
-            <span className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Admin Panel</span>
-          </Link>
-        </div>
-
-        <nav className="px-4 space-y-1">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  item.active
-                    ? 'bg-primary-500 text-white'
-                    : isDark
-                      ? 'text-gray-400 hover:bg-slate-700 hover:text-white'
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <Link
-            to="/"
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-              isDark ? 'text-gray-400 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'
-            } transition-all`}
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Back to Site</span>
-          </Link>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="ml-64 p-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    <AdminLayout>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
               Registered Users
@@ -316,8 +250,7 @@ const AdminUsers = () => {
             </div>
           </motion.div>
         </div>
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

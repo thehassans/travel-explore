@@ -9,7 +9,6 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X,
   Plane,
   ChevronRight,
   Users,
@@ -19,7 +18,9 @@ import {
   Moon,
   Globe,
   ClipboardList,
-  Bot
+  Bot,
+  PanelLeftClose,
+  PanelLeft
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -163,40 +164,20 @@ const AdminLayout = ({ children }) => {
               </motion.div>
             )}
           </Link>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className={`p-2 rounded-lg transition-colors ${
-              isDark ? 'bg-slate-700 text-gray-400 hover:text-white hover:bg-slate-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSidebarOpen(false)}
+            className={`p-2.5 rounded-xl transition-all ${
+              isDark 
+                ? 'bg-gradient-to-r from-slate-700 to-slate-600 text-gray-300 hover:text-white shadow-lg shadow-slate-900/50' 
+                : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 hover:text-gray-900 shadow-md'
             }`}
+            title="Close Sidebar"
           >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            <PanelLeftClose className="w-5 h-5" />
+          </motion.button>
         </div>
-
-        {/* Theme & Language Toggle */}
-        {sidebarOpen && (
-          <div className={`px-4 py-3 border-b flex items-center justify-center gap-2 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className={`p-2 rounded-lg transition-colors ${
-                isDark ? 'bg-slate-700 text-yellow-400' : 'bg-gray-100 text-gray-600'
-              }`}
-              title={isDark ? 'Light Mode' : 'Dark Mode'}
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isDark ? 'bg-slate-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-              }`}
-              title="Toggle Language"
-            >
-              <Globe className="w-4 h-4 inline mr-1" />
-              {language === 'en' ? 'বাং' : 'EN'}
-            </button>
-          </div>
-        )}
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -263,29 +244,68 @@ const AdminLayout = ({ children }) => {
         className="flex-1 transition-all min-h-screen"
         style={{ marginLeft: sidebarOpen ? 280 : 0 }}
       >
-        {/* Header with menu button */}
+        {/* Header with controls */}
         <div className={`sticky top-0 z-30 px-4 py-3 flex items-center justify-between ${
           isDark ? 'bg-slate-800 border-b border-slate-700' : 'bg-white border-b border-gray-200'
         }`}>
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className={`p-2 rounded-lg ${isDark ? 'text-gray-400 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'} ${sidebarOpen ? 'lg:hidden' : ''}`}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <div className="flex items-center gap-2 lg:hidden">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-              <Plane className="w-4 h-4 text-white transform -rotate-45" />
-            </div>
-            <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t.admin}</span>
+          {/* Left side - Toggle button */}
+          <div className="flex items-center gap-3">
+            {!sidebarOpen && (
+              <motion.button
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSidebarOpen(true)}
+                className={`p-2.5 rounded-xl transition-all ${
+                  isDark 
+                    ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg shadow-primary-500/30' 
+                    : 'bg-gradient-to-r from-primary-500 to-purple-500 text-white shadow-lg shadow-primary-500/30'
+                }`}
+                title="Open Sidebar"
+              >
+                <PanelLeft className="w-5 h-5" />
+              </motion.button>
+            )}
+            {!sidebarOpen && (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+                  <Plane className="w-4 h-4 text-white transform -rotate-45" />
+                </div>
+                <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t.admin}</span>
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-1">
-            <button
+          
+          {/* Right side - Theme & Language */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+              className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${
+                isDark 
+                  ? 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:text-white' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+              }`}
+              title="Toggle Language"
+            >
+              <Globe className="w-4 h-4" />
+              {language === 'en' ? 'বাং' : 'EN'}
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, rotate: 15 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setIsDark(!isDark)}
-              className={`p-2 rounded-lg ${isDark ? 'text-yellow-400' : 'text-gray-600'}`}
+              className={`p-2.5 rounded-xl transition-all ${
+                isDark 
+                  ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 hover:from-yellow-500/30 hover:to-orange-500/30' 
+                  : 'bg-gradient-to-r from-slate-100 to-slate-200 text-slate-600 hover:from-slate-200 hover:to-slate-300'
+              }`}
+              title={isDark ? 'Light Mode' : 'Dark Mode'}
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
+            </motion.button>
           </div>
         </div>
 
