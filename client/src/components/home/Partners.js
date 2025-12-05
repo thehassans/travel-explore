@@ -9,21 +9,21 @@ const Partners = () => {
   const { language } = useLanguage();
 
   const bankPartners = [
-    { name: 'BRAC Bank', logo: 'https://logo.clearbit.com/bracbank.com' },
-    { name: 'Dutch Bangla Bank', logo: 'https://logo.clearbit.com/dutchbanglabank.com' },
-    { name: 'City Bank', logo: 'https://logo.clearbit.com/thecitybank.com' },
-    { name: 'Eastern Bank', logo: 'https://logo.clearbit.com/ebl.com.bd' },
-    { name: 'bKash', logo: 'https://logo.clearbit.com/bkash.com' },
-    { name: 'Nagad', logo: 'https://logo.clearbit.com/nagad.com.bd' },
+    { name: 'BRAC Bank', logo: 'https://www.bracbank.com/images/bracbanklogo.png' },
+    { name: 'Dutch Bangla Bank', logo: 'https://www.dutchbanglabank.com/img/logo.png' },
+    { name: 'City Bank', logo: 'https://www.thecitybank.com/themes/flavor/assets/images/logo.svg' },
+    { name: 'Eastern Bank', logo: 'https://www.ebl.com.bd/images/ebl-logo.png' },
+    { name: 'bKash', logo: 'https://www.bkash.com/sites/all/themes/flavor/logo.png' },
+    { name: 'Nagad', logo: 'https://nagad.com.bd/wp-content/uploads/2021/03/Nagad-Logo.png' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman Bangladesh', logo: 'https://logo.clearbit.com/bfrmnl.biman-airlines.com' },
-    { name: 'Emirates', logo: 'https://logo.clearbit.com/emirates.com' },
-    { name: 'Singapore Airlines', logo: 'https://logo.clearbit.com/singaporeair.com' },
-    { name: 'Qatar Airways', logo: 'https://logo.clearbit.com/qatarairways.com' },
-    { name: 'Thai Airways', logo: 'https://logo.clearbit.com/thaiairways.com' },
-    { name: 'Malaysia Airlines', logo: 'https://logo.clearbit.com/malaysiaairlines.com' },
+    { name: 'Biman Bangladesh', logo: 'https://www.bfrmnl.biman-airlines.com/images/logo.png' },
+    { name: 'Emirates', logo: 'https://c.ekstatic.net/ecl/logos/companies/emirates-horizontal-colour-w1920x600.png' },
+    { name: 'Singapore Airlines', logo: 'https://www.singaporeair.com/saar5/images/common/logo-singaporeairlines.png' },
+    { name: 'Qatar Airways', logo: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal/h-qatar-logo.png' },
+    { name: 'Thai Airways', logo: 'https://www.thaiairways.com/images/logo/thai-logo.png' },
+    { name: 'Malaysia Airlines', logo: 'https://www.malaysiaairlines.com/content/dam/mas/logo/mas-logo.png' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
