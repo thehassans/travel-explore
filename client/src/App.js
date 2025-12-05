@@ -35,6 +35,8 @@ import AdminBookings from './pages/admin/AdminBookings';
 import AdminPricing from './pages/admin/AdminPricing';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminHolidays from './pages/admin/AdminHolidays';
+import AdminVisas from './pages/admin/AdminVisas';
 
 function App() {
   const { isDark } = useTheme();
@@ -83,6 +85,8 @@ function App() {
               <Route path="/admin/pricing" element={<AdminPricing />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/holidays" element={<AdminHolidays />} />
+              <Route path="/admin/visas" element={<AdminVisas />} />
             </Routes>
           </main>
           

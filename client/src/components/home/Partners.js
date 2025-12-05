@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Plane, Building2, Sparkles } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -8,24 +8,41 @@ const Partners = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
 
-  // Partner data with icons/initials for premium display
-  const bankPartners = [
-    { name: 'BRAC Bank', initials: 'BB', color: '#00529b', gradient: 'from-blue-600 to-blue-800' },
-    { name: 'Dutch Bangla', initials: 'DBBL', color: '#004d2b', gradient: 'from-green-700 to-green-900' },
-    { name: 'City Bank', initials: 'CB', color: '#003366', gradient: 'from-indigo-600 to-indigo-800' },
-    { name: 'Eastern Bank', initials: 'EBL', color: '#f47920', gradient: 'from-orange-500 to-orange-700' },
-    { name: 'bKash', initials: 'bK', color: '#e2136e', gradient: 'from-pink-500 to-pink-700' },
-    { name: 'Nagad', initials: 'N', color: '#ee7023', gradient: 'from-orange-400 to-red-500' },
+  // Default partners with gradients for fallback
+  const defaultBanks = [
+    { id: 1, name: 'BRAC Bank', logo: '', initials: 'BB', gradient: 'from-blue-600 to-blue-800', active: true },
+    { id: 2, name: 'Dutch Bangla', logo: '', initials: 'DBBL', gradient: 'from-green-700 to-green-900', active: true },
+    { id: 3, name: 'City Bank', logo: '', initials: 'CB', gradient: 'from-indigo-600 to-indigo-800', active: true },
+    { id: 4, name: 'Eastern Bank', logo: '', initials: 'EBL', gradient: 'from-orange-500 to-orange-700', active: true },
+    { id: 5, name: 'bKash', logo: '', initials: 'bK', gradient: 'from-pink-500 to-pink-700', active: true },
+    { id: 6, name: 'Nagad', logo: '', initials: 'N', gradient: 'from-orange-400 to-red-500', active: true },
   ];
 
-  const airlinePartners = [
-    { name: 'Biman Bangladesh', initials: 'BG', color: '#006747', gradient: 'from-emerald-600 to-emerald-800' },
-    { name: 'Emirates', initials: 'EK', color: '#d71921', gradient: 'from-red-500 to-red-700' },
-    { name: 'Singapore Airlines', initials: 'SQ', color: '#1a3b73', gradient: 'from-blue-700 to-blue-900' },
-    { name: 'Qatar Airways', initials: 'QR', color: '#5c0931', gradient: 'from-purple-800 to-purple-950' },
-    { name: 'Thai Airways', initials: 'TG', color: '#4b2d84', gradient: 'from-violet-600 to-violet-800' },
-    { name: 'Malaysia Airlines', initials: 'MH', color: '#c5112e', gradient: 'from-red-600 to-red-800' },
+  const defaultAirlines = [
+    { id: 1, name: 'Biman Bangladesh', logo: '', initials: 'BG', gradient: 'from-emerald-600 to-emerald-800', active: true },
+    { id: 2, name: 'Emirates', logo: '', initials: 'EK', gradient: 'from-red-500 to-red-700', active: true },
+    { id: 3, name: 'Singapore Airlines', logo: '', initials: 'SQ', gradient: 'from-blue-700 to-blue-900', active: true },
+    { id: 4, name: 'Qatar Airways', logo: '', initials: 'QR', gradient: 'from-purple-800 to-purple-950', active: true },
+    { id: 5, name: 'Thai Airways', logo: '', initials: 'TG', gradient: 'from-violet-600 to-violet-800', active: true },
+    { id: 6, name: 'Malaysia Airlines', logo: '', initials: 'MH', gradient: 'from-red-600 to-red-800', active: true },
   ];
+
+  const [partners, setPartners] = useState({ banks: defaultBanks, airlines: defaultAirlines });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('sitePartners');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge with defaults to ensure gradients exist
+      setPartners({
+        banks: parsed.banks?.map((p, i) => ({ ...defaultBanks[i], ...p, gradient: defaultBanks[i]?.gradient || 'from-gray-600 to-gray-800', initials: p.name?.substring(0, 2).toUpperCase() })) || defaultBanks,
+        airlines: parsed.airlines?.map((p, i) => ({ ...defaultAirlines[i], ...p, gradient: defaultAirlines[i]?.gradient || 'from-gray-600 to-gray-800', initials: p.name?.substring(0, 2).toUpperCase() })) || defaultAirlines
+      });
+    }
+  }, []);
+
+  const bankPartners = partners.banks.filter(p => p.active);
+  const airlinePartners = partners.airlines.filter(p => p.active);
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
     <div className="relative overflow-hidden py-4">
@@ -57,9 +74,23 @@ const Partners = () => {
                 : 'bg-white hover:shadow-xl border border-gray-100'
             } shadow-lg min-w-[180px] flex items-center gap-3`}
           >
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${partner.gradient} flex items-center justify-center shadow-lg`}>
-              <span className="text-white font-bold text-sm">{partner.initials}</span>
-            </div>
+            {partner.logo ? (
+              <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-lg">
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name} 
+                  className="w-10 h-10 object-contain"
+                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                />
+                <div className={`hidden w-full h-full rounded-xl bg-gradient-to-br ${partner.gradient || 'from-gray-600 to-gray-800'} items-center justify-center`}>
+                  <span className="text-white font-bold text-sm">{partner.initials}</span>
+                </div>
+              </div>
+            ) : (
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${partner.gradient || 'from-gray-600 to-gray-800'} flex items-center justify-center shadow-lg`}>
+                <span className="text-white font-bold text-sm">{partner.initials}</span>
+              </div>
+            )}
             <div className="flex flex-col">
               <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-800'}`}>
                 {partner.name}

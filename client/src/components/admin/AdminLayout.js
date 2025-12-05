@@ -11,7 +11,10 @@ import {
   Menu,
   X,
   Plane,
-  ChevronRight
+  ChevronRight,
+  Users,
+  FileCheck,
+  Palmtree
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -25,6 +28,9 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/admin/queries', label: 'Queries', icon: MessageSquare },
     { path: '/admin/bookings', label: 'Bookings', icon: Calendar },
+    { path: '/admin/holidays', label: 'Holidays', icon: Palmtree },
+    { path: '/admin/visas', label: 'Visas', icon: FileCheck },
+    { path: '/admin/users', label: 'Users', icon: Users },
     { path: '/admin/pricing', label: 'Pricing', icon: Package },
     { path: '/admin/settings', label: 'Settings', icon: Settings },
   ];
