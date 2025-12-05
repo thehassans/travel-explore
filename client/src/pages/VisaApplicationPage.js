@@ -10,6 +10,8 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { useBooking } from '../context/BookingContext';
+import { useGradient } from '../context/GradientContext';
 
 const VisaApplicationPage = () => {
   const { country } = useParams();
@@ -17,6 +19,8 @@ const VisaApplicationPage = () => {
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const { user, isAuthenticated } = useAuth();
+  const { addBooking } = useBooking();
+  const { useGradients } = useGradient();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -164,6 +168,22 @@ const VisaApplicationPage = () => {
       appliedAt: new Date().toISOString()
     });
     localStorage.setItem('visaApplications', JSON.stringify(applications));
+
+    // Save to user bookings context
+    addBooking({
+      type: 'visa',
+      title: `${visa.visaType} - ${visa.country}`,
+      destination: visa.country,
+      date: formData.travelDate || new Date().toISOString(),
+      travelers: 1,
+      amount: visa.price,
+      image: null,
+      details: {
+        ...formData,
+        visa: visa,
+        applicationId: applications[applications.length - 1].id
+      }
+    });
     
     setIsSubmitting(false);
     setSubmitted(true);

@@ -5,6 +5,7 @@ import { useTheme } from './context/ThemeContext';
 import { AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
 import { GradientProvider } from './context/GradientContext';
+import { BookingProvider } from './context/BookingContext';
 
 // Layout Components
 import Header from './components/layout/Header';
@@ -32,6 +33,7 @@ import FlightSearchResults from './pages/FlightSearchResults';
 import FlightBooking from './pages/FlightBooking';
 import CareersPage from './pages/CareersPage';
 import PrivacyPage from './pages/PrivacyPage';
+import MyBookingsPage from './pages/MyBookingsPage';
 
 // Auth Components
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -55,8 +57,9 @@ function App() {
 
   return (
     <AuthProvider>
-      <AdminProvider>
-        <GradientProvider>
+      <BookingProvider>
+        <AdminProvider>
+          <GradientProvider>
           <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
             <ScrollToTop />
             <Helmet>
@@ -92,6 +95,7 @@ function App() {
               {/* Auth Routes */}
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/my-bookings" element={<ProtectedRoute><MyBookingsPage /></ProtectedRoute>} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLogin />} />
@@ -109,8 +113,9 @@ function App() {
           
             {!isAdminRoute && <Footer />}
           </div>
-        </GradientProvider>
-      </AdminProvider>
+          </GradientProvider>
+        </AdminProvider>
+      </BookingProvider>
     </AuthProvider>
   );
 }

@@ -16,7 +16,8 @@ import {
   LogOut,
   Settings,
   ChevronDown,
-  Compass
+  Compass,
+  Ticket
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -224,7 +225,18 @@ const Header = () => {
                       </div>
                       <div className="py-2">
                         <Link
+                          to="/my-bookings"
+                          onClick={() => setShowUserMenu(false)}
+                          className={`flex items-center gap-3 px-4 py-2.5 ${
+                            isDark ? 'text-gray-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-50'
+                          } transition-colors`}
+                        >
+                          <Ticket className="w-4 h-4" />
+                          {language === 'bn' ? 'আমার বুকিং' : 'My Bookings'}
+                        </Link>
+                        <Link
                           to="/profile"
+                          onClick={() => setShowUserMenu(false)}
                           className={`flex items-center gap-3 px-4 py-2.5 ${
                             isDark ? 'text-gray-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-50'
                           } transition-colors`}
@@ -234,6 +246,7 @@ const Header = () => {
                         </Link>
                         <Link
                           to="/settings"
+                          onClick={() => setShowUserMenu(false)}
                           className={`flex items-center gap-3 px-4 py-2.5 ${
                             isDark ? 'text-gray-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-50'
                           } transition-colors`}

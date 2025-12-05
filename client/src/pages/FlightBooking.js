@@ -23,6 +23,7 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useGradient } from '../context/GradientContext';
+import { useBooking } from '../context/BookingContext';
 
 const FlightBooking = () => {
   const { id } = useParams();
@@ -31,6 +32,7 @@ const FlightBooking = () => {
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const { useGradients } = useGradient();
+  const { addBooking } = useBooking();
   
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -129,6 +131,18 @@ const FlightBooking = () => {
     const existingBookings = JSON.parse(localStorage.getItem('flightBookings') || '[]');
     existingBookings.push(booking);
     localStorage.setItem('flightBookings', JSON.stringify(existingBookings));
+
+    // Save to user bookings context
+    addBooking({
+      type: 'flight',
+      title: `${flightData.airline} - ${flightData.origin} to ${flightData.destination}`,
+      destination: flightData.destination,
+      date: searchParams.departDate || new Date().toISOString(),
+      travelers: totalPassengers,
+      amount: flightData.price * totalPassengers,
+      image: flightData.airlineLogo,
+      details: booking
+    });
 
     // Simulate API call
     setTimeout(() => {

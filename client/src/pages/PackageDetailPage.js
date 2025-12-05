@@ -27,6 +27,8 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { useBooking } from '../context/BookingContext';
+import { useGradient } from '../context/GradientContext';
 
 const PackageDetailPage = () => {
   const { id } = useParams();
@@ -34,6 +36,8 @@ const PackageDetailPage = () => {
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const { user, isAuthenticated } = useAuth();
+  const { addBooking } = useBooking();
+  const { useGradients } = useGradient();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -387,6 +391,18 @@ const PackageDetailPage = () => {
     
     // Save to localStorage
     localStorage.setItem('holidayBookings', JSON.stringify(existingBookings));
+
+    // Save to user bookings context
+    addBooking({
+      type: 'package',
+      title: language === 'bn' ? pkg.title_bn : pkg.title,
+      destination: pkg.destination,
+      date: bookingData.travelDate,
+      travelers: bookingData.travelers,
+      amount: totalAmount,
+      image: pkg.images?.[0] || pkg.image_url,
+      details: newBooking
+    });
 
     // Show success message
     setBookingSuccess(true);
