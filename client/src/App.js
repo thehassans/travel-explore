@@ -31,6 +31,9 @@ import VisaApplicationPage from './pages/VisaApplicationPage';
 import FlightSearchResults from './pages/FlightSearchResults';
 import FlightBooking from './pages/FlightBooking';
 
+// Auth Components
+import ProtectedRoute from './components/auth/ProtectedRoute';
+
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -68,10 +71,10 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/flights" element={<FlightsPage />} />
               <Route path="/flights/search" element={<FlightSearchResults />} />
-              <Route path="/flights/book/:id" element={<FlightBooking />} />
+              <Route path="/flights/book/:id" element={<ProtectedRoute><FlightBooking /></ProtectedRoute>} />
               <Route path="/holidays" element={<HolidaysPage />} />
               <Route path="/visas" element={<VisasPage />} />
-              <Route path="/visa-apply/:country" element={<VisaApplicationPage />} />
+              <Route path="/visa-apply/:country" element={<ProtectedRoute><VisaApplicationPage /></ProtectedRoute>} />
               <Route path="/support" element={<SupportPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
