@@ -5,6 +5,21 @@ import axios from 'axios';
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminBookings = () => {
+  // Theme state
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('adminTheme');
+    return saved ? saved === 'dark' : false;
+  });
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const saved = localStorage.getItem('adminTheme');
+      setIsDark(saved === 'dark');
+    };
+    const interval = setInterval(checkTheme, 500);
+    return () => clearInterval(interval);
+  }, []);
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
@@ -62,8 +77,8 @@ const AdminBookings = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-white">Bookings</h1>
-          <p className="text-gray-400 mt-1">View and manage all customer bookings</p>
+          <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Bookings</h1>
+          <p className={`mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>View and manage all customer bookings</p>
         </div>
 
         {loading ? (
@@ -71,13 +86,13 @@ const AdminBookings = () => {
             <div className="animate-spin w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full" />
           </div>
         ) : (
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+          <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-slate-700/50">
+                <thead className={isDark ? 'bg-slate-700/50' : 'bg-gray-50'}>
                   <tr>
-                    <th className="text-left p-4 text-gray-400 font-medium">Booking ID</th>
-                    <th className="text-left p-4 text-gray-400 font-medium">Customer</th>
+                    <th className={`text-left p-4 font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Booking ID</th>
+                    <th className={`text-left p-4 font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Customer</th>
                     <th className="text-left p-4 text-gray-400 font-medium">Package</th>
                     <th className="text-left p-4 text-gray-400 font-medium">Travel Date</th>
                     <th className="text-left p-4 text-gray-400 font-medium">Amount</th>
