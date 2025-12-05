@@ -64,12 +64,12 @@ const AIChatWidget = () => {
   const simulateHumanTyping = async (responseText) => {
     setIsAgentTyping(true);
     
-    // Calculate typing time based on word count (~2 seconds per word)
+    // Calculate typing time based on word count (~2.5 seconds per word)
     const wordCount = responseText.split(/\s+/).length;
-    const typingTime = Math.min(Math.max(wordCount * 2000, 3000), 15000); // Min 3s, max 15s
+    const typingTime = Math.min(Math.max(wordCount * 2500, 4000), 20000); // Min 4s, max 20s
     
     // Add random variation for human-like feel
-    const randomDelay = typingTime + (Math.random() * 2000);
+    const randomDelay = typingTime + (Math.random() * 3000);
     
     await new Promise(resolve => setTimeout(resolve, randomDelay));
     
@@ -230,7 +230,7 @@ const AIChatWidget = () => {
               <div className="flex-1 min-w-0">
                 <h3 className="text-white font-bold text-base truncate">{currentAgent.name}</h3>
                 <p className="text-white/80 text-sm flex items-center gap-1.5">
-                  {isTyping || isAgentTyping ? (
+                  {(isTyping || isAgentTyping) && (
                     <>
                       <span className="flex gap-0.5">
                         <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -239,11 +239,6 @@ const AIChatWidget = () => {
                       </span>
                       <span className="ml-1 text-xs">{language === 'bn' ? 'টাইপ করছে...' : 'typing...'}</span>
                     </>
-                  ) : (
-                    <span className="text-xs flex items-center gap-1">
-                      <span className="w-2 h-2 bg-green-400 rounded-full" />
-                      {language === 'bn' ? 'অনলাইন' : 'Online'}
-                    </span>
                   )}
                 </p>
               </div>
@@ -352,39 +347,10 @@ const AIChatWidget = () => {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Quick Actions */}
-                <div className={`px-4 py-2.5 flex gap-2 overflow-x-auto border-t ${
-                  isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'
-                }`}>
-                  {(language === 'bn' ? [
-                    'ফ্লাইট বুকিং',
-                    'ভিসা সেবা',
-                    'প্যাকেজ',
-                    'যোগাযোগ'
-                  ] : [
-                    'Flight Booking',
-                    'Visa Services',
-                    'Packages',
-                    'Contact'
-                  ]).map((action) => (
-                    <button
-                      key={action}
-                      onClick={() => setInputValue(action)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
-                        isDark 
-                          ? 'bg-slate-800 text-gray-300 hover:bg-slate-700 border border-slate-700'
-                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
-                      }`}
-                    >
-                      {action}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Input Area - Premium Design */}
-                <div className={`p-4 border-t ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'}`}>
-                  <div className={`flex items-center gap-3 p-2 rounded-2xl ${
-                    isDark ? 'bg-slate-800' : 'bg-gray-100'
+                {/* Input Area - Ultra Premium Design */}
+                <div className={`p-4 ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
+                  <div className={`flex items-center gap-3 p-3 rounded-2xl border ${
+                    isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-gray-50 border-gray-200'
                   }`}>
                     <input
                       ref={inputRef}
@@ -394,7 +360,7 @@ const AIChatWidget = () => {
                       onKeyPress={handleKeyPress}
                       placeholder={language === 'bn' ? 'মেসেজ লিখুন...' : 'Type a message...'}
                       disabled={isTyping || isAgentTyping}
-                      className={`flex-1 px-3 py-2.5 bg-transparent focus:outline-none text-sm ${
+                      className={`flex-1 px-2 py-2 bg-transparent focus:outline-none text-sm ${
                         isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
                       }`}
                     />
@@ -416,9 +382,6 @@ const AIChatWidget = () => {
                       <Send className="w-5 h-5" />
                     </motion.button>
                   </div>
-                  <p className={`text-center text-[10px] mt-2 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
-                    {currentAgent.name} - Explore Holidays
-                  </p>
                 </div>
               </>
             )}
