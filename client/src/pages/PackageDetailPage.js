@@ -371,7 +371,7 @@ const PackageDetailPage = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="absolute top-6 right-6 flex gap-3">
+          <div className="absolute top-24 right-6 flex gap-3">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -392,7 +392,7 @@ const PackageDetailPage = () => {
           </div>
 
           {/* Badges */}
-          <div className="absolute top-6 left-6 flex gap-2">
+          <div className="absolute top-24 left-6 flex gap-2 z-10">
             {pkg.popular && (
               <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1">
                 <Star className="w-4 h-4 fill-current" /> Popular
