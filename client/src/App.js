@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTheme } from './context/ThemeContext';
 import { AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
+import { GradientProvider } from './context/GradientContext';
 
 // Layout Components
 import Header from './components/layout/Header';
@@ -48,9 +49,10 @@ function App() {
   return (
     <AuthProvider>
       <AdminProvider>
-        <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
-          <ScrollToTop />
-          <Helmet>
+        <GradientProvider>
+          <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
+            <ScrollToTop />
+            <Helmet>
             <title>Explore Holidays | Premium Travel Booking from Bangladesh</title>
             <meta name="description" content="Book flights, holiday packages, visas, and tours from Bangladesh at the best prices. Your trusted travel partner." />
           </Helmet>
@@ -94,8 +96,9 @@ function App() {
             </Routes>
           </main>
           
-          {!isAdminRoute && <Footer />}
-        </div>
+            {!isAdminRoute && <Footer />}
+          </div>
+        </GradientProvider>
       </AdminProvider>
     </AuthProvider>
   );

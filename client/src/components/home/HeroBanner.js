@@ -21,11 +21,13 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 
 const HeroBanner = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { useGradients } = useGradient();
   
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -98,10 +100,10 @@ const HeroBanner = () => {
         />
       </AnimatePresence>
       
-      {/* Ultra Premium Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-pink-900/40" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black/50" />
+      {/* Ultra Premium Overlays */}
+      <div className={`absolute inset-0 ${useGradients ? 'bg-gradient-to-b from-black/70 via-black/50 to-black/80' : 'bg-black/60'}`} />
+      {useGradients && <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-pink-900/40" />}
+      {useGradients && <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black/50" />}
       
       {/* Animated Particles */}
       {[...Array(20)].map((_, i) => (
@@ -425,9 +427,13 @@ const HeroBanner = () => {
                 type="submit"
                 whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)" }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-16 py-5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white font-bold rounded-2xl shadow-2xl transition-all flex items-center space-x-3 overflow-hidden"
+                className={`group relative px-16 py-5 text-white font-bold rounded-2xl shadow-2xl transition-all flex items-center space-x-3 overflow-hidden ${
+                  useGradients 
+                    ? 'bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500' 
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                {useGradients && <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
                 <Search className="w-6 h-6 relative z-10" />
                 <span className="text-xl relative z-10">{t('banner.search')}</span>
                 <Sparkles className="w-5 h-5 relative z-10 opacity-70" />

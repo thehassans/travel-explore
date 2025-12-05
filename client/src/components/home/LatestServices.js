@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 import axios from 'axios';
 
 const iconMap = {
@@ -31,6 +32,7 @@ const LatestServices = () => {
   const navigate = useNavigate();
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { useGradients } = useGradient();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -198,14 +200,16 @@ const LatestServices = () => {
                   }`}
                 >
                   {/* Glow Effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                  {useGradients && <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />}
                   
                   {/* Icon */}
                   <div className="relative mb-6">
-                    <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl`}>
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl ${
+                      useGradients ? `bg-gradient-to-br ${gradient}` : 'bg-primary-500'
+                    }`}>
                       <IconComponent className="w-10 h-10 text-white" />
                     </div>
-                    <div className={`absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br ${gradient} opacity-30 blur-lg`} />
+                    {useGradients && <div className={`absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br ${gradient} opacity-30 blur-lg`} />}
                   </div>
 
                   {/* Content */}
@@ -222,15 +226,17 @@ const LatestServices = () => {
                       e.stopPropagation();
                       navigate(service.path || '/services');
                     }}
-                    className={`inline-flex items-center px-5 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r ${gradient} text-white hover:shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer z-10 relative`}
+                    className={`inline-flex items-center px-5 py-2.5 rounded-xl font-bold text-sm text-white hover:shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer z-10 relative ${
+                      useGradients ? `bg-gradient-to-r ${gradient}` : 'bg-primary-500 hover:bg-primary-600'
+                    }`}
                   >
                     {language === 'bn' ? 'আরও দেখুন' : 'Learn More'}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </button>
 
                   {/* Decorative Elements */}
-                  <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 bg-gradient-to-br ${gradient} rounded-bl-full`} />
-                  <div className={`absolute bottom-0 left-0 w-24 h-24 opacity-5 bg-gradient-to-tr ${gradient} rounded-tr-full`} />
+                  {useGradients && <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 bg-gradient-to-br ${gradient} rounded-bl-full`} />}
+                  {useGradients && <div className={`absolute bottom-0 left-0 w-24 h-24 opacity-5 bg-gradient-to-tr ${gradient} rounded-tr-full`} />}
                 </motion.div>
               );
             })}
@@ -244,8 +250,8 @@ const LatestServices = () => {
           viewport={{ once: true }}
           className="mt-20 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 rounded-3xl" />
-          <div className="absolute inset-0 opacity-10 rounded-3xl" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
+          <div className={`absolute inset-0 rounded-3xl ${useGradients ? 'bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600' : 'bg-blue-600'}`} />
+          {useGradients && <div className="absolute inset-0 opacity-10 rounded-3xl" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />}
           
           <div className="relative p-10 lg:p-16 text-center">
             <motion.div

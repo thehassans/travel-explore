@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Settings, Globe, Mail, Phone, MapPin, Image, Save, Check, Upload, 
   Palette, Type, Facebook, Instagram, Twitter, Youtube, X, Eye, 
-  RefreshCw, Trash2, Plus, Building2, Plane
+  RefreshCw, Trash2, Plus, Building2, Plane, Sparkles
 } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 
@@ -572,48 +572,96 @@ const AdminSettings = () => {
                   </div>
                 </div>
 
-                {/* Gradient Toggle */}
-                <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                  <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                    <Palette className="w-5 h-5 text-primary-500" />
-                    UI Style Settings
-                  </h2>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-slate-700 rounded-xl">
-                      <div>
-                        <h3 className="text-white font-medium">Gradient Mode</h3>
-                        <p className="text-sm text-gray-400">Enable gradient backgrounds and buttons across the site</p>
+                {/* Premium Gradient Toggle */}
+                <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-slate-700 shadow-2xl">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                      <Palette className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">UI Style Settings</h2>
+                      <p className="text-gray-400 text-sm">Control the visual style of your website</p>
+                    </div>
+                  </div>
+
+                  {/* Premium Toggle Card */}
+                  <div className={`relative p-6 rounded-2xl transition-all duration-500 ${
+                    settings.useGradients 
+                      ? 'bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 border border-purple-500/30' 
+                      : 'bg-slate-700/50 border border-slate-600'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transition-all ${
+                          settings.useGradients 
+                            ? 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500' 
+                            : 'bg-slate-600'
+                        }`}>
+                          {settings.useGradients ? (
+                            <Sparkles className="w-8 h-8 text-white" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-lg bg-white" />
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white">
+                            {settings.useGradients ? 'Gradient Mode' : 'Solid Mode'}
+                          </h3>
+                          <p className="text-gray-400">
+                            {settings.useGradients 
+                              ? 'Beautiful gradients across buttons & sections' 
+                              : 'Clean solid colors for minimal look'}
+                          </p>
+                        </div>
                       </div>
+                      
+                      {/* Premium Toggle Switch */}
                       <button
                         onClick={() => setSettings(prev => ({ ...prev, useGradients: !prev.useGradients }))}
-                        className={`relative w-14 h-7 rounded-full transition-colors ${
-                          settings.useGradients ? 'bg-primary-500' : 'bg-slate-600'
+                        className={`relative w-20 h-10 rounded-full transition-all duration-300 shadow-inner ${
+                          settings.useGradients 
+                            ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500' 
+                            : 'bg-slate-600'
                         }`}
                       >
-                        <span className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-transform ${
-                          settings.useGradients ? 'translate-x-8' : 'translate-x-1'
-                        }`} />
+                        <span className={`absolute top-1 w-8 h-8 bg-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+                          settings.useGradients ? 'translate-x-11' : 'translate-x-1'
+                        }`}>
+                          {settings.useGradients ? (
+                            <span className="text-purple-500 text-xs font-bold">ON</span>
+                          ) : (
+                            <span className="text-gray-400 text-xs font-bold">OFF</span>
+                          )}
+                        </span>
                       </button>
                     </div>
-                    
-                    <div className="p-4 bg-slate-900 rounded-xl">
-                      <p className="text-sm text-gray-400 mb-3">Current Style:</p>
-                      <div className="flex gap-3">
-                        {settings.useGradients ? (
-                          <div className="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-primary-500 to-accent-500">
-                            Gradient Enabled ✓
-                          </div>
-                        ) : (
-                          <div className="px-4 py-2 rounded-lg text-white" style={{ backgroundColor: settings.primaryColor }}>
-                            Solid Colors Enabled ✓
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-500 mt-3">
-                        {settings.useGradients 
-                          ? 'Site will use gradient backgrounds on buttons, cards, and sections.'
-                          : 'Site will use solid colors for a cleaner, minimal look.'}
-                      </p>
+                  </div>
+
+                  {/* Preview Section */}
+                  <div className="mt-6 p-5 bg-slate-900/50 rounded-2xl border border-slate-700">
+                    <p className="text-sm text-gray-400 mb-4 font-medium">Live Preview:</p>
+                    <div className="flex flex-wrap gap-3">
+                      <button className={`px-6 py-3 rounded-xl text-white font-semibold transition-all ${
+                        settings.useGradients 
+                          ? 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-lg hover:shadow-cyan-500/25' 
+                          : 'bg-blue-600 hover:bg-blue-700'
+                      }`}>
+                        Primary Button
+                      </button>
+                      <button className={`px-6 py-3 rounded-xl text-white font-semibold transition-all ${
+                        settings.useGradients 
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:shadow-lg hover:shadow-purple-500/25' 
+                          : 'bg-purple-600 hover:bg-purple-700'
+                      }`}>
+                        Secondary Button
+                      </button>
+                      <button className={`px-6 py-3 rounded-xl text-white font-semibold transition-all ${
+                        settings.useGradients 
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg hover:shadow-orange-500/25' 
+                          : 'bg-orange-600 hover:bg-orange-700'
+                      }`}>
+                        Accent Button
+                      </button>
                     </div>
                   </div>
                 </div>
