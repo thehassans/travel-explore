@@ -166,7 +166,7 @@ export const AIAgentProvider = ({ children }) => {
       } else {
         setIsTyping(false);
         // Provide helpful fallback based on common queries
-        const lowerMessage = message.toLowerCase();
+        const lowerMessage = userMessage.toLowerCase();
         if (lowerMessage.includes('package') || lowerMessage.includes('প্যাকেজ')) {
           return language === 'bn' 
             ? 'আমাদের জনপ্রিয় প্যাকেজগুলো হলো: মালদ্বীপ (৮৫,০০০ টাকা থেকে), থাইল্যান্ড (৪৫,০০০ টাকা থেকে), দুবাই (৬৫,০০০ টাকা থেকে), সিঙ্গাপুর (৫২,০০০ টাকা থেকে)। কোন গন্তব্যে যেতে চান?'
