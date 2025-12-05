@@ -9,21 +9,21 @@ const Partners = () => {
   const { language } = useLanguage();
 
   const bankPartners = [
-    { name: 'BRAC Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/69/BRAC_Bank_logo.svg/200px-BRAC_Bank_logo.svg.png' },
-    { name: 'Dutch Bangla Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Dutch-Bangla_Bank_logo.svg/200px-Dutch-Bangla_Bank_logo.svg.png' },
-    { name: 'City Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/67/City_Bank_Logo.svg/200px-City_Bank_Logo.svg.png' },
-    { name: 'Eastern Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/15/Eastern_Bank_Limited_logo.svg/200px-Eastern_Bank_Limited_logo.svg.png' },
-    { name: 'bKash', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Bkash_Logo.svg/200px-Bkash_Logo.svg.png' },
-    { name: 'Nagad', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Nagad_logo.svg/200px-Nagad_logo.svg.png' },
+    { name: 'BRAC Bank', logo: 'https://logo.clearbit.com/bracbank.com' },
+    { name: 'Dutch Bangla Bank', logo: 'https://logo.clearbit.com/dutchbanglabank.com' },
+    { name: 'City Bank', logo: 'https://logo.clearbit.com/thecitybank.com' },
+    { name: 'Eastern Bank', logo: 'https://logo.clearbit.com/ebl.com.bd' },
+    { name: 'bKash', logo: 'https://logo.clearbit.com/bkash.com' },
+    { name: 'Nagad', logo: 'https://logo.clearbit.com/nagad.com.bd' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman Bangladesh', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2e/Biman_Bangladesh_Airlines_Logo.svg/200px-Biman_Bangladesh_Airlines_Logo.svg.png' },
-    { name: 'Emirates', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/200px-Emirates_logo.svg.png' },
-    { name: 'Singapore Airlines', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Singapore_Airlines_Logo_2.svg/200px-Singapore_Airlines_Logo_2.svg.png' },
-    { name: 'Qatar Airways', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Qatar_Airways_Logo.svg/200px-Qatar_Airways_Logo.svg.png' },
-    { name: 'Thai Airways', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Thai_Airways_logo.svg/200px-Thai_Airways_logo.svg.png' },
-    { name: 'Malaysia Airlines', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Malaysia_Airlines_Logo.svg/200px-Malaysia_Airlines_Logo.svg.png' },
+    { name: 'Biman Bangladesh', logo: 'https://logo.clearbit.com/bfrmnl.biman-airlines.com' },
+    { name: 'Emirates', logo: 'https://logo.clearbit.com/emirates.com' },
+    { name: 'Singapore Airlines', logo: 'https://logo.clearbit.com/singaporeair.com' },
+    { name: 'Qatar Airways', logo: 'https://logo.clearbit.com/qatarairways.com' },
+    { name: 'Thai Airways', logo: 'https://logo.clearbit.com/thaiairways.com' },
+    { name: 'Malaysia Airlines', logo: 'https://logo.clearbit.com/malaysiaairlines.com' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
