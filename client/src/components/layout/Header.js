@@ -21,12 +21,14 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useGradient } from '../../context/GradientContext';
 
 const Header = () => {
   const { t } = useTranslation();
   const { isDark, toggleTheme } = useTheme();
   const { language, toggleLanguage } = useLanguage();
   const { user, logout, isAuthenticated } = useAuth();
+  const { useGradients, getButtonClass } = useGradient();
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -267,7 +269,11 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-4 py-2 rounded-xl font-medium bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:shadow-lg transition-all"
+                  className={`px-4 py-2 rounded-xl font-medium text-white hover:shadow-lg transition-all duration-300 hover:scale-105 ${
+                    useGradients 
+                      ? 'bg-gradient-to-r from-primary-500 to-purple-500 hover:shadow-purple-500/30' 
+                      : 'bg-primary-500 hover:bg-primary-600'
+                  }`}
                 >
                   {language === 'bn' ? 'সাইন আপ' : 'Sign Up'}
                 </Link>

@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 
 const Testimonials = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { useGradients } = useGradient();
   const [currentIndex, setCurrentIndex] = useState(0);
   
   // Auto-play testimonials

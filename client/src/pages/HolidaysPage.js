@@ -12,11 +12,13 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useGradient } from '../context/GradientContext';
 
 const HolidaysPage = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
+  const { useGradients, getButtonClass, getCardClass } = useGradient();
   const [packages, setPackages] = useState([]);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');

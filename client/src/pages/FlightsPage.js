@@ -14,11 +14,13 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useGradient } from '../context/GradientContext';
 
 const FlightsPage = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
+  const { useGradients, getButtonClass } = useGradient();
   
   const [searchParams, setSearchParams] = useState({
     origin: '',

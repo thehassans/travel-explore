@@ -16,10 +16,12 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useGradient } from '../../context/GradientContext';
 
 const Footer = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
+  const { useGradients } = useGradient();
 
   const footerLinks = {
     company: [
@@ -63,7 +65,11 @@ const Footer = () => {
 
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 pt-16 pb-8">
         {/* Newsletter Section */}
-        <div className="mb-16 p-8 rounded-3xl bg-gradient-to-r from-primary-500 to-accent-500 text-white">
+        <div className={`mb-16 p-8 rounded-3xl text-white transition-all duration-500 ${
+          useGradients 
+            ? 'bg-gradient-to-r from-primary-500 to-accent-500' 
+            : 'bg-primary-500'
+        }`}>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="text-2xl font-bold mb-2">{t('footer.newsletter')}</h3>
@@ -92,7 +98,11 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                useGradients 
+                  ? 'bg-gradient-to-br from-primary-500 to-accent-500' 
+                  : 'bg-primary-500'
+              }`}>
                 <Plane className="w-6 h-6 text-white transform -rotate-45" />
               </div>
               <div>

@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { Award, Plane, Building2, Sparkles } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 
 const Partners = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { useGradients } = useGradient();
 
   // Default partners with real logo URLs from Clearbit (free API)
   const defaultBanks = [
@@ -106,12 +108,18 @@ const Partners = () => {
   );
 
   return (
-    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-gradient-to-b from-slate-900 to-slate-800' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+    <section className={`py-24 relative overflow-hidden ${
+      isDark 
+        ? (useGradients ? 'bg-gradient-to-b from-slate-900 to-slate-800' : 'bg-slate-900') 
+        : (useGradients ? 'bg-gradient-to-b from-gray-50 to-white' : 'bg-gray-50')
+    }`}>
       {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-96 h-96 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full blur-3xl" />
-      </div>
+      {useGradients && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/3 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/3 w-96 h-96 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full blur-3xl" />
+        </div>
+      )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Ultra Premium Section Header */}

@@ -12,10 +12,12 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 
 const WhyChooseUs = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { useGradients } = useGradient();
 
   const features = [
     {
@@ -69,10 +71,18 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-gradient-to-b from-slate-900 to-slate-800' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+    <section className={`py-24 relative overflow-hidden transition-all duration-500 ${
+      isDark 
+        ? (useGradients ? 'bg-gradient-to-b from-slate-900 to-slate-800' : 'bg-slate-900') 
+        : (useGradients ? 'bg-gradient-to-b from-gray-50 to-white' : 'bg-gray-50')
+    }`}>
       {/* Background Decorations */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-green-500/10 to-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
+      {useGradients && (
+        <>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-green-500/10 to-cyan-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
+        </>
+      )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Ultra Premium Section Header */}
@@ -120,14 +130,16 @@ const WhyChooseUs = () => {
                 }`}
               >
                 {/* Hover Glow */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                {useGradients && <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />}
                 
                 {/* Icon Container */}
                 <div className="relative mb-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ${
+                    useGradients ? `bg-gradient-to-br ${feature.color}` : 'bg-primary-500'
+                  }`}>
                     <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br ${feature.color} opacity-40 blur-md`} />
+                  {useGradients && <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br ${feature.color} opacity-40 blur-md`} />}
                 </div>
 
                 {/* Content */}
@@ -139,8 +151,12 @@ const WhyChooseUs = () => {
                 </p>
 
                 {/* Decorative Elements */}
-                <div className={`absolute top-0 right-0 w-24 h-24 rounded-bl-full bg-gradient-to-br ${feature.color} opacity-5`} />
-                <div className={`absolute bottom-0 left-0 w-16 h-16 rounded-tr-full bg-gradient-to-tr ${feature.color} opacity-5`} />
+                {useGradients && (
+                  <>
+                    <div className={`absolute top-0 right-0 w-24 h-24 rounded-bl-full bg-gradient-to-br ${feature.color} opacity-5`} />
+                    <div className={`absolute bottom-0 left-0 w-16 h-16 rounded-tr-full bg-gradient-to-tr ${feature.color} opacity-5`} />
+                  </>
+                )}
               </motion.div>
             );
           })}

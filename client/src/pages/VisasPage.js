@@ -11,12 +11,14 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useGradient } from '../context/GradientContext';
 
 const VisasPage = () => {
   useTranslation();
   const navigate = useNavigate();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
+  const { useGradients, getButtonClass } = useGradient();
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const visaData = [

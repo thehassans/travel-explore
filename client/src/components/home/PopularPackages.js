@@ -11,12 +11,14 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useGradient } from '../../context/GradientContext';
 import axios from 'axios';
 
 const PopularPackages = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
+  const { useGradients } = useGradient();
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
 
