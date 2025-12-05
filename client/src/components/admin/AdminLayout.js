@@ -73,6 +73,7 @@ const AdminLayout = ({ children }) => {
       pricing: 'Pricing',
       settings: 'Settings',
       aiAgent: 'AI Agent',
+      agentChats: 'Agent Chats',
       logout: 'Logout',
       viewSite: 'View Site',
       admin: 'Admin',
@@ -90,6 +91,7 @@ const AdminLayout = ({ children }) => {
       pricing: 'মূল্য',
       settings: 'সেটিংস',
       aiAgent: 'এআই এজেন্ট',
+      agentChats: 'এজেন্ট চ্যাট',
       logout: 'লগআউট',
       viewSite: 'সাইট দেখুন',
       admin: 'অ্যাডমিন',
@@ -109,6 +111,7 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/visa-queries', label: t.visaQueries, icon: ClipboardList },
     { path: '/admin/users', label: t.users, icon: Users },
     { path: '/admin/ai-agent', label: t.aiAgent, icon: Bot },
+    { path: '/admin/agent-chats', label: t.agentChats, icon: MessageSquare },
     { path: '/admin/settings', label: t.settings, icon: Settings },
   ];
 

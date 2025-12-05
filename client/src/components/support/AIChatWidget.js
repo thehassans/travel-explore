@@ -6,7 +6,8 @@ import {
   Send, 
   Minimize2,
   Check,
-  CheckCheck
+  CheckCheck,
+  Copy
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,7 +18,7 @@ const AIChatWidget = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const { useGradients } = useGradient();
-  const { isEnabled, currentAgent, sendMessage, isTyping, chatSettings } = useAIAgent();
+  const { isEnabled, currentAgent, sendMessage, isTyping, chatSettings, saveChat, generateChatId } = useAIAgent();
   
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -30,37 +31,84 @@ const AIChatWidget = () => {
   const [isFirstMessage, setIsFirstMessage] = useState(true);
   const [chatEnded, setChatEnded] = useState(false);
   const [userName, setUserName] = useState('');
+  const [chatId, setChatId] = useState('');
+  const [chatStartTime, setChatStartTime] = useState(null);
+  const [askedFollowUp, setAskedFollowUp] = useState(false);
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const inactivityTimerRef = useRef(null);
+  const followUpTimerRef = useRef(null);
+  const endChatTimerRef = useRef(null);
   const queueTimerRef = useRef(null);
 
-  // Inactivity timeout (2 minutes default)
-  const INACTIVITY_TIMEOUT = 120000;
+  // Inactivity timeouts
+  const FOLLOW_UP_TIMEOUT = 60000;  // 1 minute
+  const END_CHAT_TIMEOUT = 30000;   // 30 seconds after follow-up
 
-  // Reset inactivity timer
-  const resetInactivityTimer = useCallback(() => {
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
-    if (agentAssigned && !chatEnded) {
-      inactivityTimerRef.current = setTimeout(() => {
-        // End chat due to inactivity
-        const endMsg = language === 'bn'
-          ? `আপনার সময়ের জন্য ধন্যবাদ${userName ? `, ${userName}` : ''}। আবার কোনো প্রশ্ন থাকলে জানাবেন।`
-          : `Thank you for your time${userName ? `, ${userName}` : ''}. Feel free to reach out if you have any questions.`;
+  // Start follow-up timer (asks if user needs more help)
+  const startFollowUpTimer = useCallback(() => {
+    if (followUpTimerRef.current) clearTimeout(followUpTimerRef.current);
+    if (endChatTimerRef.current) clearTimeout(endChatTimerRef.current);
+    
+    if (agentAssigned && !chatEnded && !askedFollowUp) {
+      followUpTimerRef.current = setTimeout(async () => {
+        // Agent asks if there's anything else
+        const followUpMsg = language === 'bn'
+          ? 'আর কিছু কি আমি সাহায্য করতে পারি?'
+          : 'Is there anything else I can help you with?';
+        
+        setIsAgentTyping(true);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setIsAgentTyping(false);
         
         setMessages(prev => [...prev, {
           id: Date.now(),
-          type: 'system',
-          text: endMsg,
-          timestamp: new Date()
+          type: 'agent',
+          text: followUpMsg,
+          timestamp: new Date(),
+          status: 'delivered'
         }]);
-        setChatEnded(true);
-      }, INACTIVITY_TIMEOUT);
+        
+        setAskedFollowUp(true);
+        
+        // Start end chat timer
+        endChatTimerRef.current = setTimeout(() => {
+          endChatDueToInactivity();
+        }, END_CHAT_TIMEOUT);
+        
+      }, FOLLOW_UP_TIMEOUT);
     }
-  }, [agentAssigned, chatEnded, language, userName]);
+  }, [agentAssigned, chatEnded, askedFollowUp, language]);
+
+  // End chat due to inactivity
+  const endChatDueToInactivity = useCallback(() => {
+    const endMsg = language === 'bn'
+      ? `Explore Holidays এ যোগাযোগ করার জন্য ধন্যবাদ${userName ? `, ${userName}` : ''}। আবার কোনো প্রশ্ন থাকলে জানাবেন। আপনার চ্যাট আইডি: ${chatId}`
+      : `Thank you for reaching out to Explore Holidays${userName ? `, ${userName}` : ''}. Feel free to contact us again. Your chat ID: ${chatId}`;
+    
+    setMessages(prev => {
+      const newMessages = [...prev, {
+        id: Date.now(),
+        type: 'system',
+        text: endMsg,
+        timestamp: new Date()
+      }];
+      
+      // Save chat when ending
+      saveChat({
+        chatId,
+        agentName: currentAgent.name,
+        agentAvatar: currentAgent.avatar,
+        messages: newMessages,
+        startedAt: chatStartTime,
+        status: 'completed'
+      });
+      
+      return newMessages;
+    });
+    
+    setChatEnded(true);
+  }, [language, userName, chatId, currentAgent, chatStartTime, saveChat]);
 
   // Scroll to bottom
   useEffect(() => {
@@ -77,7 +125,8 @@ const AIChatWidget = () => {
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+      if (followUpTimerRef.current) clearTimeout(followUpTimerRef.current);
+      if (endChatTimerRef.current) clearTimeout(endChatTimerRef.current);
       if (queueTimerRef.current) clearTimeout(queueTimerRef.current);
     };
   }, []);
@@ -109,8 +158,8 @@ const AIChatWidget = () => {
       status: 'delivered'
     }]);
     
-    // Reset inactivity timer after agent responds
-    resetInactivityTimer();
+    // Start follow-up timer after agent responds
+    startFollowUpTimer();
   };
 
   const handleSend = async () => {
@@ -119,12 +168,21 @@ const AIChatWidget = () => {
     const userMessage = inputValue.trim();
     setInputValue('');
     
+    // Clear any pending timers when user sends message
+    if (followUpTimerRef.current) clearTimeout(followUpTimerRef.current);
+    if (endChatTimerRef.current) clearTimeout(endChatTimerRef.current);
+    setAskedFollowUp(false);
+    
     // Try to extract name from first message (English only)
     if (isFirstMessage) {
       const nameMatch = userMessage.match(/(?:i am|i'm|my name is|this is)\s+([a-zA-Z]+)/i);
       if (nameMatch) {
         setUserName(nameMatch[1]);
       }
+      // Generate chat ID
+      const newChatId = generateChatId();
+      setChatId(newChatId);
+      setChatStartTime(new Date().toISOString());
     }
 
     // Add user message with sent status
@@ -200,7 +258,6 @@ const AIChatWidget = () => {
       
     } else {
       // Normal message flow - agent already assigned
-      resetInactivityTimer();
       const response = await sendMessage(userMessage, language);
       await simulateHumanTyping(response);
     }
@@ -214,6 +271,18 @@ const AIChatWidget = () => {
   };
 
   const handleClose = () => {
+    // Save chat if there are messages and agent was assigned
+    if (messages.length > 0 && agentAssigned && !chatEnded) {
+      saveChat({
+        chatId,
+        agentName: currentAgent.name,
+        agentAvatar: currentAgent.avatar,
+        messages,
+        startedAt: chatStartTime,
+        status: 'closed_by_user'
+      });
+    }
+    
     setIsOpen(false);
     setIsMinimized(false);
     // Reset all states for next time
@@ -221,8 +290,12 @@ const AIChatWidget = () => {
     setIsFirstMessage(true);
     setChatEnded(false);
     setUserName('');
+    setChatId('');
+    setChatStartTime(null);
+    setAskedFollowUp(false);
     setMessages([]);
-    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    if (followUpTimerRef.current) clearTimeout(followUpTimerRef.current);
+    if (endChatTimerRef.current) clearTimeout(endChatTimerRef.current);
     if (queueTimerRef.current) clearTimeout(queueTimerRef.current);
   };
 

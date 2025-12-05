@@ -56,6 +56,7 @@ import AdminVisas from './pages/admin/AdminVisas';
 import AdminVisaQueries from './pages/admin/AdminVisaQueries';
 import AdminFlightBookings from './pages/admin/AdminFlightBookings';
 import AdminAIAgent from './pages/admin/AdminAIAgent';
+import AdminAgentChats from './pages/admin/AdminAgentChats';
 
 function App() {
   const { isDark } = useTheme();
@@ -121,6 +122,7 @@ function App() {
               <Route path="/admin/visa-queries" element={<AdminVisaQueries />} />
               <Route path="/admin/flight-bookings" element={<AdminFlightBookings />} />
               <Route path="/admin/ai-agent" element={<AdminAIAgent />} />
+              <Route path="/admin/agent-chats" element={<AdminAgentChats />} />
             </Routes>
           </main>
           
