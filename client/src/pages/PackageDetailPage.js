@@ -436,23 +436,22 @@ const PackageDetailPage = () => {
             </motion.button>
           </div>
 
-          {/* Badges */}
-          <div className="absolute top-24 left-6 flex gap-2 z-10">
-            {pkg.popular && (
-              <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1">
-                <Star className="w-4 h-4 fill-current" /> Popular
-              </span>
-            )}
-            {pkg.featured && (
-              <span className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-semibold">
-                Featured
-              </span>
-            )}
-          </div>
-
-          {/* Title Overlay */}
-          <div className="absolute bottom-24 left-0 right-0 px-6">
+          {/* Title Overlay with Badges */}
+          <div className="absolute bottom-24 left-0 right-0 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
+              {/* Badges - Aligned with content */}
+              <div className="flex gap-2 mb-4">
+                {pkg.popular && (
+                  <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1 shadow-lg">
+                    <Star className="w-4 h-4 fill-current" /> Popular
+                  </span>
+                )}
+                {pkg.featured && (
+                  <span className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-semibold shadow-lg">
+                    Featured
+                  </span>
+                )}
+              </div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -486,28 +485,28 @@ const PackageDetailPage = () => {
 
         {/* Content Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+          {/* Thumbnail Gallery - Full width aligned row */}
+          <div className="flex gap-2 mb-6">
+            {pkg.images.map((img, idx) => (
+              <motion.button
+                key={idx}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedImage(idx)}
+                className={`w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shadow-lg ${
+                  selectedImage === idx 
+                    ? 'border-primary-500 ring-2 ring-primary-500/50' 
+                    : isDark ? 'border-slate-600 bg-slate-800' : 'border-white bg-white'
+                }`}
+              >
+                <img src={img} alt="" className="w-full h-full object-cover" />
+              </motion.button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2">
-              {/* Thumbnail Gallery - Aligned with pricing card */}
-              <div className="flex gap-2 mb-6 justify-end lg:justify-start">
-                {pkg.images.map((img, idx) => (
-                  <motion.button
-                    key={idx}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shadow-lg ${
-                      selectedImage === idx 
-                        ? 'border-primary-500 ring-2 ring-primary-500/50' 
-                        : isDark ? 'border-slate-600' : 'border-gray-200'
-                    }`}
-                  >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                  </motion.button>
-                ))}
-              </div>
-
               {/* Tabs */}
               <div className={`rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-xl p-2 mb-8`}>
                 <div className="flex overflow-x-auto">
