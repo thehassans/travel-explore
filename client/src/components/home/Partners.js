@@ -8,23 +8,23 @@ const Partners = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
 
-  // Using local SVG logos (always works)
+  // Partner data with icons/initials for premium display
   const bankPartners = [
-    { name: 'BRAC Bank', logo: '/logos/brac-bank.svg', color: '#00529b' },
-    { name: 'Dutch Bangla', logo: '/logos/dbbl.svg', color: '#004d2b' },
-    { name: 'City Bank', logo: '/logos/city-bank.svg', color: '#003366' },
-    { name: 'Eastern Bank', logo: '/logos/ebl.svg', color: '#f47920' },
-    { name: 'bKash', logo: '/logos/bkash.svg', color: '#e2136e' },
-    { name: 'Nagad', logo: '/logos/nagad.svg', color: '#ee7023' },
+    { name: 'BRAC Bank', initials: 'BB', color: '#00529b', gradient: 'from-blue-600 to-blue-800' },
+    { name: 'Dutch Bangla', initials: 'DBBL', color: '#004d2b', gradient: 'from-green-700 to-green-900' },
+    { name: 'City Bank', initials: 'CB', color: '#003366', gradient: 'from-indigo-600 to-indigo-800' },
+    { name: 'Eastern Bank', initials: 'EBL', color: '#f47920', gradient: 'from-orange-500 to-orange-700' },
+    { name: 'bKash', initials: 'bK', color: '#e2136e', gradient: 'from-pink-500 to-pink-700' },
+    { name: 'Nagad', initials: 'N', color: '#ee7023', gradient: 'from-orange-400 to-red-500' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman', logo: '/logos/biman.svg', color: '#006747' },
-    { name: 'Emirates', logo: '/logos/emirates.svg', color: '#d71921' },
-    { name: 'Singapore', logo: '/logos/singapore.svg', color: '#1a3b73' },
-    { name: 'Qatar', logo: '/logos/qatar.svg', color: '#5c0931' },
-    { name: 'Thai', logo: '/logos/thai.svg', color: '#4b2d84' },
-    { name: 'Malaysia', logo: '/logos/malaysia.svg', color: '#c5112e' },
+    { name: 'Biman Bangladesh', initials: 'BG', color: '#006747', gradient: 'from-emerald-600 to-emerald-800' },
+    { name: 'Emirates', initials: 'EK', color: '#d71921', gradient: 'from-red-500 to-red-700' },
+    { name: 'Singapore Airlines', initials: 'SQ', color: '#1a3b73', gradient: 'from-blue-700 to-blue-900' },
+    { name: 'Qatar Airways', initials: 'QR', color: '#5c0931', gradient: 'from-purple-800 to-purple-950' },
+    { name: 'Thai Airways', initials: 'TG', color: '#4b2d84', gradient: 'from-violet-600 to-violet-800' },
+    { name: 'Malaysia Airlines', initials: 'MH', color: '#c5112e', gradient: 'from-red-600 to-red-800' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
@@ -51,26 +51,22 @@ const Partners = () => {
           <motion.div
             key={index}
             whileHover={{ scale: 1.05, y: -5 }}
-            className={`flex-shrink-0 px-8 py-5 rounded-2xl transition-all duration-300 ${
+            className={`flex-shrink-0 px-6 py-4 rounded-2xl transition-all duration-300 ${
               isDark 
                 ? 'bg-slate-800/80 hover:bg-slate-700 border border-slate-700/50' 
                 : 'bg-white hover:shadow-xl border border-gray-100'
-            } shadow-lg min-w-[160px] flex items-center justify-center`}
+            } shadow-lg min-w-[180px] flex items-center gap-3`}
           >
-            <img
-              src={partner.logo}
-              alt={partner.name}
-              className="h-10 w-auto max-w-[130px] object-contain transition-all duration-500"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-            <div 
-              className="hidden h-10 items-center justify-center px-4 py-2 rounded-lg font-bold text-white text-sm"
-              style={{ backgroundColor: partner.color || '#6366f1' }}
-            >
-              {partner.name}
+            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${partner.gradient} flex items-center justify-center shadow-lg`}>
+              <span className="text-white font-bold text-sm">{partner.initials}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                {partner.name}
+              </span>
+              <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                Partner
+              </span>
             </div>
           </motion.div>
         ))}

@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext';
 // Layout Components
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import ScrollToTop from './components/layout/ScrollToTop';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -44,6 +45,7 @@ function App() {
     <AuthProvider>
       <AdminProvider>
         <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
+          <ScrollToTop />
           <Helmet>
             <title>Explore Holidays | Premium Travel Booking from Bangladesh</title>
             <meta name="description" content="Book flights, holiday packages, visas, and tours from Bangladesh at the best prices. Your trusted travel partner." />

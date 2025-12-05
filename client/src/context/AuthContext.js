@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (name, email, password) => {
+  const signup = async (name, email, password, phone = '') => {
     try {
       const mockUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       
@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }) => {
         id: Date.now().toString(),
         name,
         email,
+        phone,
         password,
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff`,
         provider: 'email',

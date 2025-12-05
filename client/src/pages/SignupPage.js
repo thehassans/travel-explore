@@ -11,7 +11,8 @@ import {
   User,
   Plane,
   Sparkles,
-  Check
+  Check,
+  Phone
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -23,7 +24,7 @@ const SignupPage = () => {
   const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,7 +49,7 @@ const SignupPage = () => {
     }
 
     setLoading(true);
-    const result = await signup(formData.name, formData.email, formData.password);
+    const result = await signup(formData.name, formData.email, formData.password, formData.phone);
     
     if (result.success) {
       navigate('/');
@@ -191,6 +192,27 @@ const SignupPage = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="you@example.com"
+                  className={`w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 ${
+                    isDark 
+                      ? 'bg-slate-700/50 border-slate-600 text-white placeholder-gray-500' 
+                      : 'bg-gray-50 border-gray-200 placeholder-gray-400'
+                  } focus:border-primary-500 focus:outline-none transition-colors`}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {language === 'bn' ? 'ফোন নম্বর' : 'Phone Number'}
+              </label>
+              <div className="relative">
+                <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+880 1XXX-XXXXXX"
                   className={`w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 ${
                     isDark 
                       ? 'bg-slate-700/50 border-slate-600 text-white placeholder-gray-500' 

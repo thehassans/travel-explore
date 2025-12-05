@@ -210,7 +210,7 @@ const HeroBanner = () => {
               isDark ? 'border-slate-700/50' : 'border-white/50'
             }`}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-4 items-end">
               {/* Origin */}
               <div className="lg:col-span-3 relative">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -315,7 +315,7 @@ const HeroBanner = () => {
               </div>
 
               {/* Passengers */}
-              <div className="lg:col-span-1 relative">
+              <div className="lg:col-span-2 xl:col-span-1 relative">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <Users className="w-4 h-4 inline mr-1 text-primary-500" />
                   {t('banner.passengers')}
@@ -323,14 +323,14 @@ const HeroBanner = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassengers(!showPassengers)}
-                  className={`w-full px-4 py-3.5 rounded-xl border-2 ${
+                  className={`w-full h-[50px] px-4 rounded-xl border-2 ${
                     isDark 
                       ? 'bg-slate-800 border-slate-700 text-white focus:border-primary-500' 
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
                   } focus:outline-none transition-colors text-left flex items-center justify-between`}
                 >
-                  <span>{passengers.adults + passengers.children}</span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showPassengers ? 'rotate-180' : ''}`} />
+                  <span className="font-medium">{passengers.adults + passengers.children} Pax</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showPassengers ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Passengers Dropdown - Fixed Alignment */}

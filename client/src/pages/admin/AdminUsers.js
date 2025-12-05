@@ -15,7 +15,8 @@ import {
   MessageSquare,
   CreditCard,
   Settings,
-  LogOut
+  LogOut,
+  Phone
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -165,6 +166,9 @@ const AdminUsers = () => {
                     Email
                   </th>
                   <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Phone
+                  </th>
+                  <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     Provider
                   </th>
                   <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -203,6 +207,12 @@ const AdminUsers = () => {
                       <div className="flex items-center gap-2">
                         <Mail className={`w-4 h-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>{user.email}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <Phone className={`w-4 h-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>{user.phone || 'N/A'}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">

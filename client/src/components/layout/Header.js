@@ -198,9 +198,9 @@ const Header = () => {
                       <User className="w-4 h-4 text-white" />
                     )}
                   </div>
-                  <span className="font-medium max-w-[100px] truncate">
+                  <span className="font-medium max-w-[150px] truncate">
                     <Compass className="w-3 h-3 inline mr-1" />
-                    Explorer {user?.name?.split(' ')[0]}
+                    Explorer {user?.name}
                   </span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </motion.button>
