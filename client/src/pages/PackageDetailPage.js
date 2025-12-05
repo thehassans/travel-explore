@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MapPin, 
   Clock, 
@@ -20,18 +20,30 @@ import {
   Award,
   Phone,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  X,
+  CheckCircle
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const PackageDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
+  const { user, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingData, setBookingData] = useState({
+    travelers: 1,
+    travelDate: '',
+    specialRequests: ''
+  });
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Sample package data - in real app, fetch from API based on id
   const packageData = {
@@ -333,6 +345,54 @@ const PackageDetailPage = () => {
     { id: 'history', label: 'About Destination', label_bn: 'গন্তব্য সম্পর্কে' },
   ];
 
+  // Handle booking submission
+  const handleBooking = () => {
+    if (!bookingData.travelDate) {
+      alert('Please select a travel date');
+      return;
+    }
+
+    const totalAmount = pkg.price * bookingData.travelers;
+    
+    const newBooking = {
+      id: Date.now(),
+      packageId: id,
+      packageTitle: pkg.title,
+      destination: pkg.destination,
+      customerName: user?.name || 'Guest',
+      customerEmail: user?.email || '',
+      customerPhone: user?.phone || '',
+      travelers: bookingData.travelers,
+      travelDate: bookingData.travelDate,
+      specialRequests: bookingData.specialRequests,
+      pricePerPerson: pkg.price,
+      totalAmount: totalAmount,
+      status: 'pending',
+      paymentStatus: 'unpaid',
+      bookedAt: new Date().toISOString(),
+      package: pkg.title
+    };
+
+    // Get existing bookings from localStorage
+    const existingBookings = JSON.parse(localStorage.getItem('holidayBookings') || '[]');
+    
+    // Add new booking
+    existingBookings.push(newBooking);
+    
+    // Save to localStorage
+    localStorage.setItem('holidayBookings', JSON.stringify(existingBookings));
+
+    // Show success message
+    setBookingSuccess(true);
+    
+    // Close modal after delay
+    setTimeout(() => {
+      setShowBookingModal(false);
+      setBookingSuccess(false);
+      setBookingData({ travelers: 1, travelDate: '', specialRequests: '' });
+    }, 3000);
+  };
+
   return (
     <>
       <Helmet>
@@ -353,22 +413,7 @@ const PackageDetailPage = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           
-          {/* Thumbnail Gallery */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
-            {pkg.images.map((img, idx) => (
-              <motion.button
-                key={idx}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedImage(idx)}
-                className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
-                  selectedImage === idx ? 'border-white scale-110' : 'border-white/30'
-                }`}
-              >
-                <img src={img} alt="" className="w-full h-full object-cover" />
-              </motion.button>
-            ))}
-          </div>
+          {/* Removed thumbnail gallery from here - moved to content section */}
 
           {/* Action Buttons */}
           <div className="absolute top-24 right-6 flex gap-3">
@@ -444,6 +489,25 @@ const PackageDetailPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2">
+              {/* Thumbnail Gallery - Aligned with pricing card */}
+              <div className="flex gap-2 mb-6 justify-end lg:justify-start">
+                {pkg.images.map((img, idx) => (
+                  <motion.button
+                    key={idx}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shadow-lg ${
+                      selectedImage === idx 
+                        ? 'border-primary-500 ring-2 ring-primary-500/50' 
+                        : isDark ? 'border-slate-600' : 'border-gray-200'
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </motion.button>
+                ))}
+              </div>
+
               {/* Tabs */}
               <div className={`rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-xl p-2 mb-8`}>
                 <div className="flex overflow-x-auto">
@@ -648,6 +712,13 @@ const PackageDetailPage = () => {
 
                 {/* Book Button */}
                 <motion.button
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      navigate('/login', { state: { from: `/holidays/${id}` } });
+                    } else {
+                      setShowBookingModal(true);
+                    }
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
@@ -694,6 +765,139 @@ const PackageDetailPage = () => {
 
         {/* Spacer */}
         <div className="h-20" />
+
+        {/* Booking Modal */}
+        <AnimatePresence>
+          {showBookingModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+              onClick={() => !bookingSuccess && setShowBookingModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className={`w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+                  isDark ? 'bg-slate-800' : 'bg-white'
+                }`}
+              >
+                {bookingSuccess ? (
+                  <div className="p-8 text-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', duration: 0.5 }}
+                      className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500 flex items-center justify-center"
+                    >
+                      <CheckCircle className="w-10 h-10 text-white" />
+                    </motion.div>
+                    <h2 className={`text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Booking Confirmed!
+                    </h2>
+                    <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                      Your booking has been submitted. We'll contact you shortly.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Modal Header */}
+                    <div className="relative h-32 bg-gradient-to-r from-primary-500 to-secondary-500">
+                      <button
+                        onClick={() => setShowBookingModal(false)}
+                        className="absolute top-4 right-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/30"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                      <div className="absolute bottom-4 left-6 text-white">
+                        <h3 className="text-xl font-bold">Book This Package</h3>
+                        <p className="text-white/80 text-sm">{pkg.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Modal Body */}
+                    <div className="p-6 space-y-4">
+                      {/* Price Summary */}
+                      <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
+                        <div className="flex justify-between items-center">
+                          <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>Price per person</span>
+                          <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{formatCurrency(pkg.price)}</span>
+                        </div>
+                        <div className="flex justify-between items-center mt-2">
+                          <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>Total ({bookingData.travelers} travelers)</span>
+                          <span className="font-bold text-primary-500 text-xl">{formatCurrency(pkg.price * bookingData.travelers)}</span>
+                        </div>
+                      </div>
+
+                      {/* Travelers */}
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          Number of Travelers
+                        </label>
+                        <select
+                          value={bookingData.travelers}
+                          onChange={(e) => setBookingData({...bookingData, travelers: parseInt(e.target.value)})}
+                          className={`w-full px-4 py-3 rounded-xl border ${
+                            isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
+                          }`}
+                        >
+                          {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                            <option key={n} value={n}>{n} {n === 1 ? 'Person' : 'People'}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Travel Date */}
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          Travel Date
+                        </label>
+                        <input
+                          type="date"
+                          value={bookingData.travelDate}
+                          onChange={(e) => setBookingData({...bookingData, travelDate: e.target.value})}
+                          min={new Date().toISOString().split('T')[0]}
+                          className={`w-full px-4 py-3 rounded-xl border ${
+                            isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
+                          }`}
+                        />
+                      </div>
+
+                      {/* Special Requests */}
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          Special Requests (Optional)
+                        </label>
+                        <textarea
+                          value={bookingData.specialRequests}
+                          onChange={(e) => setBookingData({...bookingData, specialRequests: e.target.value})}
+                          rows={3}
+                          placeholder="Any special requirements..."
+                          className={`w-full px-4 py-3 rounded-xl border resize-none ${
+                            isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-500'
+                          }`}
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <motion.button
+                        onClick={handleBooking}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white font-bold rounded-xl shadow-lg"
+                      >
+                        Confirm Booking
+                      </motion.button>
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

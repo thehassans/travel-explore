@@ -31,10 +31,14 @@ const AdminBookings = () => {
 
   const fetchBookings = async () => {
     try {
+      // Try API first
       const response = await axios.get('/api/admin/bookings');
       setBookings(response.data.data);
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error('Error fetching from API, using localStorage:', error);
+      // Fallback to localStorage
+      const holidayBookings = JSON.parse(localStorage.getItem('holidayBookings') || '[]');
+      setBookings(holidayBookings);
     } finally {
       setLoading(false);
     }
@@ -48,11 +52,14 @@ const AdminBookings = () => {
   const saveEdit = async (id) => {
     try {
       await axios.put(`/api/admin/bookings/${id}`, editData);
-      setBookings(bookings.map(b => b.id === id ? { ...b, ...editData } : b));
-      setEditingId(null);
     } catch (error) {
-      console.error('Error updating booking:', error);
+      console.error('Error updating via API, updating localStorage:', error);
     }
+    // Always update local state and localStorage
+    const updatedBookings = bookings.map(b => b.id === id ? { ...b, ...editData } : b);
+    setBookings(updatedBookings);
+    localStorage.setItem('holidayBookings', JSON.stringify(updatedBookings));
+    setEditingId(null);
   };
 
   const getStatusColor = (status) => {
