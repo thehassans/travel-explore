@@ -226,15 +226,75 @@ export const AIAgentProvider = ({ children }) => {
     }
   }, [addTrainingLog]);
 
+  // Fallback responses when API is not available
+  const getFallbackResponse = useCallback((userMessage, language) => {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    // Greetings
+    if (lowerMessage.match(/^(hi|hello|hey|হাই|হ্যালো|আসসালামু)/)) {
+      return language === 'bn' 
+        ? 'আসসালামু আলাইকুম! Explore Holidays এ স্বাগতম। ফ্লাইট, হলিডে প্যাকেজ বা ভিসা সংক্রান্ত কোনো সাহায্য লাগবে?'
+        : 'Hello! Welcome to Explore Holidays. How can I help you with flights, holiday packages, or visa services today?';
+    }
+    
+    // Package queries
+    if (lowerMessage.includes('package') || lowerMessage.includes('প্যাকেজ') || lowerMessage.includes('tour') || lowerMessage.includes('ট্যুর')) {
+      return language === 'bn' 
+        ? 'আমাদের জনপ্রিয় প্যাকেজগুলো হলো: মালদ্বীপ (৮৫,০০০ টাকা থেকে), থাইল্যান্ড (৪৫,০০০ টাকা থেকে), দুবাই (৬৫,০০০ টাকা থেকে), সিঙ্গাপুর (৫২,০০০ টাকা থেকে)। কোন গন্তব্যে যেতে চান?'
+        : 'Our popular packages include: Maldives (from 85,000 BDT), Thailand (from 45,000 BDT), Dubai (from 65,000 BDT), Singapore (from 52,000 BDT). Which destination interests you?';
+    }
+    
+    // Visa queries  
+    if (lowerMessage.includes('visa') || lowerMessage.includes('ভিসা')) {
+      return language === 'bn'
+        ? 'আমরা UAE, সিঙ্গাপুর, থাইল্যান্ড, মালয়েশিয়া, তুরস্ক, UK, USA, শেনজেন ভিসা প্রসেস করি। কোন দেশের ভিসা দরকার?'
+        : 'We process visas for UAE, Singapore, Thailand, Malaysia, Turkey, UK, USA, and Schengen. Which country visa do you need?';
+    }
+    
+    // Flight queries
+    if (lowerMessage.includes('flight') || lowerMessage.includes('ফ্লাইট') || lowerMessage.includes('ticket') || lowerMessage.includes('টিকেট')) {
+      return language === 'bn'
+        ? 'আমরা সব প্রধান এয়ারলাইন্সে ফ্লাইট বুক করি - বিমান, US-Bangla, Emirates, Qatar Airways। কোথায় যেতে চান এবং কবে?'
+        : 'We book flights on all major airlines - Biman, US-Bangla, Emirates, Qatar Airways. Where and when would you like to travel?';
+    }
+    
+    // Price queries
+    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('দাম') || lowerMessage.includes('খরচ')) {
+      return language === 'bn'
+        ? 'প্যাকেজের দাম গন্তব্য অনুযায়ী পরিবর্তিত হয়। থাইল্যান্ড ৪৫,০০০ টাকা থেকে, দুবাই ৬৫,০০০ টাকা থেকে, মালদ্বীপ ৮৫,০০০ টাকা থেকে শুরু। কোন গন্তব্যের দাম জানতে চান?'
+        : 'Prices vary by destination. Thailand starts from 45,000 BDT, Dubai from 65,000 BDT, Maldives from 85,000 BDT. Which destination pricing would you like to know?';
+    }
+    
+    // Hotel queries
+    if (lowerMessage.includes('hotel') || lowerMessage.includes('হোটেল') || lowerMessage.includes('stay') || lowerMessage.includes('room')) {
+      return language === 'bn'
+        ? 'আমরা সব বড় হোটেল চেইনে বুকিং করি - Westin, Pan Pacific, Radisson এবং আরো অনেক। কোন শহরে হোটেল খুঁজছেন?'
+        : 'We book at all major hotel chains - Westin, Pan Pacific, Radisson and more. Which city are you looking for a hotel in?';
+    }
+    
+    // Contact queries
+    if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('যোগাযোগ') || lowerMessage.includes('ফোন')) {
+      return language === 'bn'
+        ? 'আমাদের সাথে যোগাযোগ করুন: ফোন: +880 1234-567890, ইমেইল: info@exploreholidays.com, অথবা Gulshan-2, Dhaka তে আমাদের অফিসে আসুন।'
+        : 'Contact us at: Phone: +880 1234-567890, Email: info@exploreholidays.com, or visit our office at Gulshan-2, Dhaka.';
+    }
+    
+    // Default response
+    return language === 'bn' 
+      ? 'আমি Explore Holidays এ কাজ করি। ফ্লাইট বুকিং, হলিডে প্যাকেজ, হোটেল বা ভিসা সেবায় আপনাকে সাহায্য করতে পারি। কিভাবে সাহায্য করতে পারি?'
+      : 'I work at Explore Holidays. I can help you with flight bookings, holiday packages, hotels, or visa services. How can I assist you?';
+  }, []);
+
   // Send message to AI agent via backend
   const sendMessage = useCallback(async (userMessage, language = 'en') => {
-    if (!apiKey || !isEnabled) {
-      return language === 'bn' 
-        ? 'দুঃখিত, আমাদের সাপোর্ট সিস্টেম বর্তমানে অফলাইনে আছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।'
-        : 'Sorry, our support system is currently offline. Please try again later.';
-    }
-
     setIsTyping(true);
+    
+    // If no API key, use fallback responses immediately
+    if (!apiKey) {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate typing delay
+      setIsTyping(false);
+      return getFallbackResponse(userMessage, language);
+    }
 
     try {
       const response = await fetch('/api/ai-agent/chat', {
@@ -266,36 +326,14 @@ export const AIAgentProvider = ({ children }) => {
         return aiResponse;
       } else {
         setIsTyping(false);
-        // Provide helpful fallback based on common queries
-        const lowerMessage = userMessage.toLowerCase();
-        if (lowerMessage.includes('package') || lowerMessage.includes('প্যাকেজ')) {
-          return language === 'bn' 
-            ? 'আমাদের জনপ্রিয় প্যাকেজগুলো হলো: মালদ্বীপ (৮৫,০০০ টাকা থেকে), থাইল্যান্ড (৪৫,০০০ টাকা থেকে), দুবাই (৬৫,০০০ টাকা থেকে), সিঙ্গাপুর (৫২,০০০ টাকা থেকে)। কোন গন্তব্যে যেতে চান?'
-            : 'Our popular packages include: Maldives (from 85,000 BDT), Thailand (from 45,000 BDT), Dubai (from 65,000 BDT), Singapore (from 52,000 BDT). Which destination interests you?';
-        }
-        if (lowerMessage.includes('visa') || lowerMessage.includes('ভিসা')) {
-          return language === 'bn'
-            ? 'আমরা UAE, সিঙ্গাপুর, থাইল্যান্ড, মালয়েশিয়া, তুরস্ক, UK, USA, শেনজেন ভিসা প্রসেস করি। কোন দেশের ভিসা দরকার?'
-            : 'We process visas for UAE, Singapore, Thailand, Malaysia, Turkey, UK, USA, and Schengen. Which country visa do you need?';
-        }
-        if (lowerMessage.includes('flight') || lowerMessage.includes('ফ্লাইট')) {
-          return language === 'bn'
-            ? 'আমরা সব প্রধান এয়ারলাইন্সে ফ্লাইট বুক করি - বিমান, US-Bangla, Emirates, Qatar Airways। কোথায় যেতে চান?'
-            : 'We book flights on all major airlines - Biman, US-Bangla, Emirates, Qatar Airways. Where would you like to go?';
-        }
-        return language === 'bn' 
-          ? 'আমি Explore Holidays এ কাজ করি। ফ্লাইট বুকিং, হলিডে প্যাকেজ, বা ভিসা সেবায় আপনাকে সাহায্য করতে পারি। কিভাবে সাহায্য করতে পারি?'
-          : 'I work at Explore Holidays. I can help you with flight bookings, holiday packages, or visa services. How can I assist you?';
+        return getFallbackResponse(userMessage, language);
       }
     } catch (error) {
       console.error('AI Agent Error:', error);
       setIsTyping(false);
-      // Provide helpful response even on error
-      return language === 'bn' 
-        ? 'আমি Explore Holidays এ কাজ করি। ফ্লাইট, প্যাকেজ বা ভিসা সংক্রান্ত যেকোনো প্রশ্নে সাহায্য করতে পারি। কিভাবে সাহায্য করতে পারি?'
-        : 'I work at Explore Holidays. I can help with flights, packages or visa queries. How can I assist you today?';
+      return getFallbackResponse(userMessage, language);
     }
-  }, [apiKey, isEnabled, currentAgent, chatHistory]);
+  }, [apiKey, currentAgent, chatHistory, getFallbackResponse]);
 
   // Toggle agent on/off
   const toggleAgent = useCallback(() => {
