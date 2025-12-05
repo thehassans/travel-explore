@@ -42,15 +42,19 @@ const AdminLayout = ({ children }) => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
-      if (!mobile && !sidebarOpen) {
-        setSidebarOpen(true);
-      }
     };
     
     handleResize(); // Check on mount
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [sidebarOpen]);
+  }, []);
+  
+  // Open sidebar by default on desktop
+  useEffect(() => {
+    if (!isMobile) {
+      setSidebarOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
@@ -123,9 +127,9 @@ const AdminLayout = ({ children }) => {
   return (
     <div className={`min-h-screen flex ${isDark ? 'bg-slate-900' : 'bg-gray-100'}`}>
       {/* Mobile Overlay */}
-      {sidebarOpen && (
+      {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -134,11 +138,11 @@ const AdminLayout = ({ children }) => {
       <motion.aside
         initial={false}
         animate={{ 
-          width: isMobile ? 280 : (sidebarOpen ? 280 : 80),
-          x: isMobile ? (sidebarOpen ? 0 : -280) : 0
+          width: sidebarOpen ? 280 : 0,
+          x: sidebarOpen ? 0 : -280
         }}
         transition={{ duration: 0.3 }}
-        className={`fixed left-0 top-0 h-full border-r z-50 flex flex-col ${
+        className={`fixed left-0 top-0 h-full border-r z-50 flex flex-col overflow-hidden ${
           isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
         }`}
       >
@@ -257,19 +261,19 @@ const AdminLayout = ({ children }) => {
       {/* Main Content */}
       <main 
         className="flex-1 transition-all min-h-screen"
-        style={{ marginLeft: isMobile ? 0 : (sidebarOpen ? 280 : 80) }}
+        style={{ marginLeft: sidebarOpen ? 280 : 0 }}
       >
-        {/* Mobile Header */}
-        <div className={`lg:hidden sticky top-0 z-30 px-4 py-3 flex items-center justify-between ${
+        {/* Header with menu button */}
+        <div className={`sticky top-0 z-30 px-4 py-3 flex items-center justify-between ${
           isDark ? 'bg-slate-800 border-b border-slate-700' : 'bg-white border-b border-gray-200'
         }`}>
           <button
             onClick={() => setSidebarOpen(true)}
-            className={`p-2 rounded-lg ${isDark ? 'text-gray-400 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'}`}
+            className={`p-2 rounded-lg ${isDark ? 'text-gray-400 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'} ${sidebarOpen ? 'lg:hidden' : ''}`}
           >
             <Menu className="w-6 h-6" />
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 lg:hidden">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
               <Plane className="w-4 h-4 text-white transform -rotate-45" />
             </div>

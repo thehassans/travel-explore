@@ -351,7 +351,7 @@ const AIChatWidget = () => {
               opacity: 1, 
               y: 0, 
               scale: 1,
-              height: isMinimized ? 'auto' : 650
+              height: isMinimized ? 'auto' : 520
             }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
             className={`fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-3rem)] rounded-3xl overflow-hidden flex flex-col ${

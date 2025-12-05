@@ -16,23 +16,25 @@ export const useAIAgent = () => {
   return context;
 };
 
-// 15 Bangla agent names with South Asian profile pictures
+// 15 Bangla agent names with South Asian/Bangladeshi profile pictures
 const agents = [
-  { name: 'রাফি আহমেদ', name_en: 'Rafi Ahmed', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'তানিয়া আক্তার', name_en: 'Tania Akter', avatar: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'সাকিব হাসান', name_en: 'Sakib Hasan', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'নুসরাত জাহান', name_en: 'Nusrat Jahan', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'মাহমুদ হক', name_en: 'Mahmud Hoque', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'ফারিয়া রহমান', name_en: 'Faria Rahman', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'আরিফ চৌধুরী', name_en: 'Arif Chowdhury', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'সুমাইয়া খান', name_en: 'Sumaiya Khan', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'তৌহিদ ইসলাম', name_en: 'Tawhid Islam', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'মিথিলা সরকার', name_en: 'Mithila Sarker', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'রাকিব হোসেন', name_en: 'Rakib Hossain', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'সাবরিনা ইসলাম', name_en: 'Sabrina Islam', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'শাহরিয়ার কবির', name_en: 'Shahriar Kabir', avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=face', gender: 'male' },
-  { name: 'তাসনিম ফেরদৌস', name_en: 'Tasnim Ferdous', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face', gender: 'female' },
-  { name: 'ইমরান হোসাইন', name_en: 'Imran Hossain', avatar: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face', gender: 'male' },
+  // Male agents with South Asian male faces
+  { name: 'রাফি আহমেদ', name_en: 'Rafi Ahmed', avatar: 'https://randomuser.me/api/portraits/men/86.jpg', gender: 'male' },
+  { name: 'সাকিব হাসান', name_en: 'Sakib Hasan', avatar: 'https://randomuser.me/api/portraits/men/87.jpg', gender: 'male' },
+  { name: 'মাহমুদ হক', name_en: 'Mahmud Hoque', avatar: 'https://randomuser.me/api/portraits/men/88.jpg', gender: 'male' },
+  { name: 'আরিফ চৌধুরী', name_en: 'Arif Chowdhury', avatar: 'https://randomuser.me/api/portraits/men/89.jpg', gender: 'male' },
+  { name: 'তৌহিদ ইসলাম', name_en: 'Tawhid Islam', avatar: 'https://randomuser.me/api/portraits/men/90.jpg', gender: 'male' },
+  { name: 'রাকিব হোসেন', name_en: 'Rakib Hossain', avatar: 'https://randomuser.me/api/portraits/men/91.jpg', gender: 'male' },
+  { name: 'শাহরিয়ার কবির', name_en: 'Shahriar Kabir', avatar: 'https://randomuser.me/api/portraits/men/92.jpg', gender: 'male' },
+  { name: 'ইমরান হোসাইন', name_en: 'Imran Hossain', avatar: 'https://randomuser.me/api/portraits/men/93.jpg', gender: 'male' },
+  // Female agents with South Asian female faces
+  { name: 'তানিয়া আক্তার', name_en: 'Tania Akter', avatar: 'https://randomuser.me/api/portraits/women/86.jpg', gender: 'female' },
+  { name: 'নুসরাত জাহান', name_en: 'Nusrat Jahan', avatar: 'https://randomuser.me/api/portraits/women/87.jpg', gender: 'female' },
+  { name: 'ফারিয়া রহমান', name_en: 'Faria Rahman', avatar: 'https://randomuser.me/api/portraits/women/88.jpg', gender: 'female' },
+  { name: 'সুমাইয়া খান', name_en: 'Sumaiya Khan', avatar: 'https://randomuser.me/api/portraits/women/89.jpg', gender: 'female' },
+  { name: 'মিথিলা সরকার', name_en: 'Mithila Sarker', avatar: 'https://randomuser.me/api/portraits/women/90.jpg', gender: 'female' },
+  { name: 'সাবরিনা ইসলাম', name_en: 'Sabrina Islam', avatar: 'https://randomuser.me/api/portraits/women/91.jpg', gender: 'female' },
+  { name: 'তাসনিম ফেরদৌস', name_en: 'Tasnim Ferdous', avatar: 'https://randomuser.me/api/portraits/women/92.jpg', gender: 'female' },
 ];
 
 // Generate unique chat ID

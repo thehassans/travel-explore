@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAIAgent } from '../../context/AIAgentContext';
 import { useTheme } from '../../context/ThemeContext';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminAgentChats = () => {
   const { savedChats, deleteChat, clearAllChats } = useAIAgent();
@@ -74,7 +75,8 @@ const AdminAgentChats = () => {
   };
 
   return (
-    <div className={`min-h-screen p-6 ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
+    <AdminLayout>
+    <div className={`p-6 ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
@@ -384,6 +386,7 @@ const AdminAgentChats = () => {
         </AnimatePresence>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 
