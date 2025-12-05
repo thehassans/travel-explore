@@ -5,12 +5,23 @@ const AIAgentContext = createContext();
 export const useAIAgent = () => {
   const context = useContext(AIAgentContext);
   if (!context) {
+    // Fallback when context is not available - default to enabled
     return { 
-      isEnabled: false, 
+      isEnabled: true, 
       agentName: 'Support',
       agentAvatar: '',
-      sendMessage: () => Promise.resolve(''),
-      isTyping: false
+      sendMessage: () => Promise.resolve('Sorry, please try again later.'),
+      isTyping: false,
+      chatSettings: {
+        queueAssignTime: 12,
+        typingStartDelay: 8,
+        replyTimePerWord: 2.5,
+        followUpTimeout: 60,
+        endChatTimeout: 30
+      },
+      currentAgent: { name: 'Support Agent', name_en: 'Support Agent', avatar: '' },
+      saveChat: () => {},
+      generateChatId: () => `EH-${Date.now()}`
     };
   }
   return context;
@@ -44,15 +55,44 @@ const generateChatId = () => {
   return `EH-${timestamp}-${random}`.toUpperCase();
 };
 
+// Safe localStorage access for mobile compatibility
+const safeGetItem = (key, defaultValue) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : defaultValue;
+  } catch {
+    return defaultValue;
+  }
+};
+
+const safeGetString = (key, defaultValue = '') => {
+  try {
+    return localStorage.getItem(key) || defaultValue;
+  } catch {
+    return defaultValue;
+  }
+};
+
+const safeSetItem = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Silent fail for localStorage issues on mobile
+  }
+};
+
+const safeSetString = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Silent fail for localStorage issues on mobile
+  }
+};
+
 export const AIAgentProvider = ({ children }) => {
-  const [isEnabled, setIsEnabled] = useState(() => {
-    const saved = localStorage.getItem('aiAgentEnabled');
-    return saved ? JSON.parse(saved) : true;
-  });
+  const [isEnabled, setIsEnabled] = useState(() => safeGetItem('aiAgentEnabled', true));
   
-  const [apiKey, setApiKey] = useState(() => {
-    return localStorage.getItem('geminiApiKey') || '';
-  });
+  const [apiKey, setApiKey] = useState(() => safeGetString('geminiApiKey', ''));
   
   const [currentAgent, setCurrentAgent] = useState(() => {
     const randomIndex = Math.floor(Math.random() * agents.length);
@@ -61,28 +101,19 @@ export const AIAgentProvider = ({ children }) => {
   
   const [isTyping, setIsTyping] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
-  const [trainingLogs, setTrainingLogs] = useState(() => {
-    const saved = localStorage.getItem('aiTrainingLogs');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [trainingLogs, setTrainingLogs] = useState(() => safeGetItem('aiTrainingLogs', []));
 
   // Saved chat sessions for admin panel
-  const [savedChats, setSavedChats] = useState(() => {
-    const saved = localStorage.getItem('aiSavedChats');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [savedChats, setSavedChats] = useState(() => safeGetItem('aiSavedChats', []));
 
   // Configurable timing settings (in seconds)
-  const [chatSettings, setChatSettings] = useState(() => {
-    const saved = localStorage.getItem('aiChatSettings');
-    return saved ? JSON.parse(saved) : {
-      queueAssignTime: 12,      // Time before agent is assigned (seconds)
-      typingStartDelay: 8,      // Delay before typing indicator starts (seconds)
-      replyTimePerWord: 2.5,    // Seconds per word for typing reply
-      followUpTimeout: 60,      // Seconds before asking if user needs more help
-      endChatTimeout: 30        // Seconds after follow-up before ending chat
-    };
-  });
+  const [chatSettings, setChatSettings] = useState(() => safeGetItem('aiChatSettings', {
+    queueAssignTime: 12,      // Time before agent is assigned (seconds)
+    typingStartDelay: 8,      // Delay before typing indicator starts (seconds)
+    replyTimePerWord: 2.5,    // Seconds per word for typing reply
+    followUpTimeout: 60,      // Seconds before asking if user needs more help
+    endChatTimeout: 30        // Seconds after follow-up before ending chat
+  }));
 
   // Rotate agent randomly
   const rotateAgent = useCallback(() => {
@@ -90,27 +121,27 @@ export const AIAgentProvider = ({ children }) => {
     setCurrentAgent(agents[randomIndex]);
   }, []);
 
-  // Save settings to localStorage
+  // Save settings to localStorage (with safe access)
   useEffect(() => {
-    localStorage.setItem('aiAgentEnabled', JSON.stringify(isEnabled));
+    safeSetItem('aiAgentEnabled', isEnabled);
   }, [isEnabled]);
 
   useEffect(() => {
     if (apiKey) {
-      localStorage.setItem('geminiApiKey', apiKey);
+      safeSetString('geminiApiKey', apiKey);
     }
   }, [apiKey]);
 
   useEffect(() => {
-    localStorage.setItem('aiTrainingLogs', JSON.stringify(trainingLogs));
+    safeSetItem('aiTrainingLogs', trainingLogs);
   }, [trainingLogs]);
 
   useEffect(() => {
-    localStorage.setItem('aiChatSettings', JSON.stringify(chatSettings));
+    safeSetItem('aiChatSettings', chatSettings);
   }, [chatSettings]);
 
   useEffect(() => {
-    localStorage.setItem('aiSavedChats', JSON.stringify(savedChats));
+    safeSetItem('aiSavedChats', savedChats);
   }, [savedChats]);
 
   // Save a chat session

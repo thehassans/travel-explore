@@ -562,7 +562,6 @@ const AIChatWidget = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder={language === 'bn' ? 'মেসেজ লিখুন...' : 'Type a message...'}
-                        disabled={isTyping || isAgentTyping}
                         className={`flex-1 px-2 py-2 bg-transparent focus:outline-none text-sm ${
                           isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
                         }`}
@@ -571,9 +570,9 @@ const AIChatWidget = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleSend}
-                        disabled={!inputValue.trim() || isTyping || isAgentTyping}
+                        disabled={!inputValue.trim() || isTyping}
                         className={`p-3 rounded-xl transition-all ${
-                          inputValue.trim() && !isTyping && !isAgentTyping
+                          inputValue.trim() && !isTyping
                             ? useGradients
                               ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
                               : 'bg-slate-700 text-white'
