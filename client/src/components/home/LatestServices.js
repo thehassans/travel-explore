@@ -208,7 +208,7 @@ const LatestServices = () => {
                   </div>
 
                   {/* Content */}
-                  <h3 className={`text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:${gradient} transition-all ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <h3 className={`text-2xl font-bold mb-3 transition-all ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {language === 'bn' ? service.title_bn : service.title}
                   </h3>
                   <p className={`mb-6 leading-relaxed text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
