@@ -38,6 +38,7 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminHolidays from './pages/admin/AdminHolidays';
 import AdminVisas from './pages/admin/AdminVisas';
+import AdminVisaQueries from './pages/admin/AdminVisaQueries';
 
 function App() {
   const { isDark } = useTheme();
@@ -89,6 +90,7 @@ function App() {
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/holidays" element={<AdminHolidays />} />
               <Route path="/admin/visas" element={<AdminVisas />} />
+              <Route path="/admin/visa-queries" element={<AdminVisaQueries />} />
             </Routes>
           </main>
           
