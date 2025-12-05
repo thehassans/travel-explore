@@ -419,69 +419,65 @@ const PackageDetailPage = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           
-          {/* Top Bar with Badges and Action Buttons - Aligned with Navbar */}
-          <div className="absolute top-20 left-0 right-0 px-4 sm:px-6 lg:px-8 z-10">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-              {/* Badges - Left aligned with logo */}
-              <div className="flex gap-2">
-                {pkg.popular && (
-                  <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1 shadow-lg">
-                    <Star className="w-4 h-4 fill-current" /> Popular
-                  </span>
-                )}
-                {pkg.featured && (
-                  <span className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-semibold shadow-lg">
-                    Featured
-                  </span>
-                )}
-              </div>
-              
-              {/* Action Buttons - Right aligned with user area */}
-              <div className="flex gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    setIsWishlisted(!isWishlisted);
-                    // Save to localStorage wishlist
-                    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-                    if (!isWishlisted) {
-                      wishlist.push({ id, title: pkg.title, image: pkg.images[0], price: pkg.price });
-                      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                    } else {
-                      const filtered = wishlist.filter(item => item.id !== id);
-                      localStorage.setItem('wishlist', JSON.stringify(filtered));
-                    }
-                  }}
-                  className={`p-3 rounded-full backdrop-blur-md transition-colors ${
-                    isWishlisted ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'
-                  }`}
-                >
-                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    // Share functionality
-                    if (navigator.share) {
-                      navigator.share({
-                        title: pkg.title,
-                        text: `Check out this amazing package: ${pkg.title}`,
-                        url: window.location.href,
-                      });
-                    } else {
-                      // Fallback: copy to clipboard
-                      navigator.clipboard.writeText(window.location.href);
-                      alert('Link copied to clipboard!');
-                    }
-                  }}
-                  className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30"
-                >
-                  <Share2 className="w-5 h-5" />
-                </motion.button>
-              </div>
+          {/* Badges - Below logo area */}
+          <div className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
+            <div className="flex gap-2">
+              {pkg.popular && (
+                <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1 shadow-lg">
+                  <Star className="w-4 h-4 fill-current" /> Popular
+                </span>
+              )}
+              {pkg.featured && (
+                <span className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-semibold shadow-lg">
+                  Featured
+                </span>
+              )}
             </div>
+          </div>
+          
+          {/* Action Buttons - Top right but not too far */}
+          <div className="absolute top-20 right-4 sm:right-6 lg:right-8 z-10 flex gap-2">
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setIsWishlisted(!isWishlisted);
+                const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                if (!isWishlisted) {
+                  wishlist.push({ id, title: pkg.title, image: pkg.images[0], price: pkg.price });
+                  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                } else {
+                  const filtered = wishlist.filter(item => item.id !== id);
+                  localStorage.setItem('wishlist', JSON.stringify(filtered));
+                }
+              }}
+              className={`w-11 h-11 rounded-xl backdrop-blur-md shadow-lg border transition-all flex items-center justify-center ${
+                isWishlisted 
+                  ? 'bg-red-500 text-white border-red-400' 
+                  : 'bg-white/90 text-gray-700 border-white/50 hover:bg-white'
+              }`}
+            >
+              <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: pkg.title,
+                    text: `Check out this amazing package: ${pkg.title}`,
+                    url: window.location.href,
+                  });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied to clipboard!');
+                }
+              }}
+              className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 text-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl transition-all"
+            >
+              <Share2 className="w-5 h-5" />
+            </motion.button>
           </div>
 
           {/* Title Overlay */}
