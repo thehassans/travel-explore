@@ -22,12 +22,14 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useGradient } from '../../context/GradientContext';
+import { useNavigate } from 'react-router-dom';
 
 const HeroBanner = () => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const { useGradients } = useGradient();
+  const navigate = useNavigate();
   
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -52,22 +54,47 @@ const HeroBanner = () => {
   }, []);
 
   const popularOrigins = [
-    { code: 'DAC', name: 'Dhaka', name_bn: 'ঢাকা' },
-    { code: 'CGP', name: 'Chittagong', name_bn: 'চট্টগ্রাম' },
-    { code: 'SPD', name: 'Sylhet', name_bn: 'সিলেট' },
+    { code: 'DAC', name: 'Dhaka', name_bn: 'ঢাকা', country: 'Bangladesh' },
+    { code: 'CGP', name: 'Chittagong', name_bn: 'চট্টগ্রাম', country: 'Bangladesh' },
+    { code: 'ZYL', name: 'Sylhet', name_bn: 'সিলেট', country: 'Bangladesh' },
+    { code: 'JSR', name: 'Jessore', name_bn: 'যশোর', country: 'Bangladesh' },
+    { code: 'CXB', name: "Cox's Bazar", name_bn: 'কক্সবাজার', country: 'Bangladesh' },
+    { code: 'RJH', name: 'Rajshahi', name_bn: 'রাজশাহী', country: 'Bangladesh' },
   ];
 
   const popularDestinations = [
-    { code: 'DXB', name: 'Dubai', name_bn: 'দুবাই' },
-    { code: 'SIN', name: 'Singapore', name_bn: 'সিঙ্গাপুর' },
-    { code: 'BKK', name: 'Bangkok', name_bn: 'ব্যাংকক' },
-    { code: 'KUL', name: 'Kuala Lumpur', name_bn: 'কুয়ালালামপুর' },
-    { code: 'MLE', name: 'Maldives', name_bn: 'মালদ্বীপ' },
+    { code: 'DXB', name: 'Dubai', name_bn: 'দুবাই', country: 'UAE' },
+    { code: 'SIN', name: 'Singapore', name_bn: 'সিঙ্গাপুর', country: 'Singapore' },
+    { code: 'BKK', name: 'Bangkok', name_bn: 'ব্যাংকক', country: 'Thailand' },
+    { code: 'KUL', name: 'Kuala Lumpur', name_bn: 'কুয়ালালামপুর', country: 'Malaysia' },
+    { code: 'MLE', name: 'Maldives', name_bn: 'মালদ্বীপ', country: 'Maldives' },
+    { code: 'DOH', name: 'Doha', name_bn: 'দোহা', country: 'Qatar' },
+    { code: 'JED', name: 'Jeddah', name_bn: 'জেদ্দা', country: 'Saudi Arabia' },
+    { code: 'RUH', name: 'Riyadh', name_bn: 'রিয়াদ', country: 'Saudi Arabia' },
+    { code: 'CCU', name: 'Kolkata', name_bn: 'কলকাতা', country: 'India' },
+    { code: 'DEL', name: 'Delhi', name_bn: 'দিল্লি', country: 'India' },
+    { code: 'BOM', name: 'Mumbai', name_bn: 'মুম্বাই', country: 'India' },
+    { code: 'LHR', name: 'London', name_bn: 'লন্ডন', country: 'UK' },
+    { code: 'IST', name: 'Istanbul', name_bn: 'ইস্তাম্বুল', country: 'Turkey' },
+    { code: 'CMB', name: 'Colombo', name_bn: 'কলম্বো', country: 'Sri Lanka' },
+    { code: 'HKG', name: 'Hong Kong', name_bn: 'হংকং', country: 'Hong Kong' },
   ];
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log({ origin, destination, departDate, returnDate, passengers });
+    if (!origin || !destination) {
+      alert(language === 'bn' ? 'অনুগ্রহ করে উৎপত্তি এবং গন্তব্য নির্বাচন করুন' : 'Please select origin and destination');
+      return;
+    }
+    const searchParams = new URLSearchParams({
+      origin,
+      destination,
+      departDate: departDate ? departDate.toISOString() : '',
+      returnDate: returnDate ? returnDate.toISOString() : '',
+      adults: passengers.adults,
+      children: passengers.children
+    });
+    navigate(`/flights/search?${searchParams.toString()}`);
   };
 
   const swapLocations = () => {

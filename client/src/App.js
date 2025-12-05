@@ -28,6 +28,7 @@ import PackageDetailPage from './pages/PackageDetailPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import VisaApplicationPage from './pages/VisaApplicationPage';
+import FlightSearchResults from './pages/FlightSearchResults';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -64,6 +65,7 @@ function App() {
               {/* Public Routes */}
               <Route path="/" element={<HomePage />} />
               <Route path="/flights" element={<FlightsPage />} />
+              <Route path="/flights/search" element={<FlightSearchResults />} />
               <Route path="/holidays" element={<HolidaysPage />} />
               <Route path="/visas" element={<VisasPage />} />
               <Route path="/visa-apply/:country" element={<VisaApplicationPage />} />
