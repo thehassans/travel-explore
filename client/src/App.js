@@ -29,6 +29,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import VisaApplicationPage from './pages/VisaApplicationPage';
 import FlightSearchResults from './pages/FlightSearchResults';
+import FlightBooking from './pages/FlightBooking';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -41,6 +42,7 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminHolidays from './pages/admin/AdminHolidays';
 import AdminVisas from './pages/admin/AdminVisas';
 import AdminVisaQueries from './pages/admin/AdminVisaQueries';
+import AdminFlightBookings from './pages/admin/AdminFlightBookings';
 
 function App() {
   const { isDark } = useTheme();
@@ -66,6 +68,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/flights" element={<FlightsPage />} />
               <Route path="/flights/search" element={<FlightSearchResults />} />
+              <Route path="/flights/book/:id" element={<FlightBooking />} />
               <Route path="/holidays" element={<HolidaysPage />} />
               <Route path="/visas" element={<VisasPage />} />
               <Route path="/visa-apply/:country" element={<VisaApplicationPage />} />
@@ -95,6 +98,7 @@ function App() {
               <Route path="/admin/holidays" element={<AdminHolidays />} />
               <Route path="/admin/visas" element={<AdminVisas />} />
               <Route path="/admin/visa-queries" element={<AdminVisaQueries />} />
+              <Route path="/admin/flight-bookings" element={<AdminFlightBookings />} />
             </Routes>
           </main>
           

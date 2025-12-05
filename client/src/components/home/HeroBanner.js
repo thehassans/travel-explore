@@ -345,8 +345,8 @@ const HeroBanner = () => {
 
               {/* Passengers */}
               <div className="lg:col-span-2 xl:col-span-1 relative">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <Users className="w-4 h-4 inline mr-1 text-primary-500" />
+                <label className={`block text-sm font-medium mb-2 flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <Users className="w-4 h-4 mr-1.5 text-cyan-500" />
                   {t('banner.passengers')}
                 </label>
                 <button
