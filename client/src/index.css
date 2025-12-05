@@ -281,57 +281,24 @@ body.dark .card-premium:hover {
   background: var(--primary) !important;
 }
 
-/* No Gradients Mode - Override all gradients with solid colors */
-body.no-gradients .bg-gradient-to-r,
-body.no-gradients .bg-gradient-to-l,
-body.no-gradients .bg-gradient-to-t,
-body.no-gradients .bg-gradient-to-b,
-body.no-gradients .bg-gradient-to-br,
-body.no-gradients .bg-gradient-to-bl,
-body.no-gradients .bg-gradient-to-tr,
-body.no-gradients .bg-gradient-to-tl {
-  background: var(--primary) !important;
-  background-image: none !important;
-}
-
+/* No Gradients Mode - Minimal changes for clean look */
 body.no-gradients .gradient-primary,
 body.no-gradients .gradient-warm,
 body.no-gradients .gradient-hero {
-  background: var(--primary) !important;
-  background-image: none !important;
+  background: #0ea5e9 !important;
 }
 
-body.no-gradients .btn-primary {
-  background: var(--primary) !important;
-  background-image: none !important;
+/* Only affect buttons with gradient backgrounds */
+body.no-gradients button.bg-gradient-to-r,
+body.no-gradients a.bg-gradient-to-r {
+  background: #6366f1 !important;
 }
 
+/* Badges keep their distinct colors */
 body.no-gradients .badge-popular {
   background: #f97316 !important;
-  background-image: none !important;
 }
 
 body.no-gradients .badge-featured {
   background: #8b5cf6 !important;
-  background-image: none !important;
-}
-
-body.no-gradients .price-tag {
-  background: #22c55e !important;
-  background-image: none !important;
-}
-
-/* Override Tailwind gradient utilities */
-body.no-gradients [class*="from-"][class*="to-"] {
-  --tw-gradient-from: var(--primary) !important;
-  --tw-gradient-to: var(--primary) !important;
-  background: var(--primary) !important;
-}
-
-/* Keep text gradients working */
-body.no-gradients .bg-clip-text {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-  color: var(--primary) !important;
 }
