@@ -34,6 +34,10 @@ import FlightBooking from './pages/FlightBooking';
 import CareersPage from './pages/CareersPage';
 import PrivacyPage from './pages/PrivacyPage';
 import MyBookingsPage from './pages/MyBookingsPage';
+import HotelBookingPage from './pages/HotelBookingPage';
+import TravelInsurancePage from './pages/TravelInsurancePage';
+import CarRentalPage from './pages/CarRentalPage';
+import TourGuidePage from './pages/TourGuidePage';
 
 // Auth Components
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -86,6 +90,10 @@ function App() {
               <Route path="/land-packages" element={<LandPackagesPage />} />
               <Route path="/group-tours" element={<GroupToursPage />} />
               <Route path="/services" element={<ServicesPage />} />
+              <Route path="/services/hotels" element={<HotelBookingPage />} />
+              <Route path="/services/insurance" element={<TravelInsurancePage />} />
+              <Route path="/services/car-rental" element={<CarRentalPage />} />
+              <Route path="/services/tour-guide" element={<TourGuidePage />} />
               <Route path="/partners" element={<PartnersPage />} />
               <Route path="/careers" element={<CareersPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />

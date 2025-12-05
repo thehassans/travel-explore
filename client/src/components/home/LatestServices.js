@@ -9,6 +9,7 @@ import {
   Building2, 
   Users, 
   Shield,
+  Car,
   ArrowRight,
   Sparkles,
   Star
@@ -24,7 +25,8 @@ const iconMap = {
   FileCheck: FileCheck,
   Building2: Building2,
   Users: Users,
-  Shield: Shield
+  Shield: Shield,
+  Car: Car
 };
 
 const LatestServices = () => {
@@ -79,25 +81,34 @@ const LatestServices = () => {
             description: "Premium hotels and resorts worldwide",
             description_bn: "বিশ্বব্যাপী প্রিমিয়াম হোটেল এবং রিসোর্ট",
             icon: "Building2",
-            path: "/services"
+            path: "/services/hotels"
           },
           {
             id: 5,
-            title: "Group Tours",
-            title_bn: "গ্রুপ ট্যুর",
-            description: "Exciting group tour packages with experienced guides",
-            description_bn: "অভিজ্ঞ গাইড সহ উত্তেজনাপূর্ণ গ্রুপ ট্যুর প্যাকেজ",
-            icon: "Users",
-            path: "/group-tours"
-          },
-          {
-            id: 6,
             title: "Travel Insurance",
             title_bn: "ভ্রমণ বীমা",
             description: "Comprehensive travel insurance coverage",
             description_bn: "ব্যাপক ভ্রমণ বীমা কভারেজ",
             icon: "Shield",
-            path: "/services"
+            path: "/services/insurance"
+          },
+          {
+            id: 6,
+            title: "Car Rental",
+            title_bn: "গাড়ি ভাড়া",
+            description: "Comfortable transportation options",
+            description_bn: "আরামদায়ক পরিবহন অপশন",
+            icon: "Car",
+            path: "/services/car-rental"
+          },
+          {
+            id: 7,
+            title: "Tour Guide",
+            title_bn: "ট্যুর গাইড",
+            description: "Expert local guides for memorable trips",
+            description_bn: "স্মরণীয় ট্রিপের জন্য বিশেষজ্ঞ স্থানীয় গাইড",
+            icon: "Users",
+            path: "/services/tour-guide"
           }
         ]);
       } finally {
