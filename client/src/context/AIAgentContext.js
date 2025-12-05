@@ -78,7 +78,9 @@ export const AIAgentProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : {
       queueAssignTime: 12,      // Time before agent is assigned (seconds)
       typingStartDelay: 8,      // Delay before typing indicator starts (seconds)
-      replyTimePerWord: 2.5     // Seconds per word for typing reply
+      replyTimePerWord: 2.5,    // Seconds per word for typing reply
+      followUpTimeout: 60,      // Seconds before asking if user needs more help
+      endChatTimeout: 30        // Seconds after follow-up before ending chat
     };
   });
 

@@ -41,9 +41,9 @@ const AIChatWidget = () => {
   const endChatTimerRef = useRef(null);
   const queueTimerRef = useRef(null);
 
-  // Inactivity timeouts
-  const FOLLOW_UP_TIMEOUT = 60000;  // 1 minute
-  const END_CHAT_TIMEOUT = 30000;   // 30 seconds after follow-up
+  // Get timeout values from settings (convert seconds to ms)
+  const FOLLOW_UP_TIMEOUT = (chatSettings?.followUpTimeout || 60) * 1000;
+  const END_CHAT_TIMEOUT = (chatSettings?.endChatTimeout || 30) * 1000;
 
   // Start follow-up timer (asks if user needs more help)
   const startFollowUpTimer = useCallback(() => {
@@ -78,7 +78,7 @@ const AIChatWidget = () => {
         
       }, FOLLOW_UP_TIMEOUT);
     }
-  }, [agentAssigned, chatEnded, askedFollowUp, language]);
+  }, [agentAssigned, chatEnded, askedFollowUp, language, FOLLOW_UP_TIMEOUT, END_CHAT_TIMEOUT]);
 
   // End chat due to inactivity
   const endChatDueToInactivity = useCallback(() => {
@@ -270,8 +270,14 @@ const AIChatWidget = () => {
     }
   };
 
+  // Just close the chat window (don't reset)
   const handleClose = () => {
-    // Save chat if there are messages and agent was assigned
+    setIsOpen(false);
+  };
+
+  // Reset chat and start new conversation
+  const handleNewChat = () => {
+    // Save existing chat if there are messages
     if (messages.length > 0 && agentAssigned && !chatEnded) {
       saveChat({
         chatId,
@@ -283,9 +289,7 @@ const AIChatWidget = () => {
       });
     }
     
-    setIsOpen(false);
-    setIsMinimized(false);
-    // Reset all states for next time
+    // Reset all states
     setAgentAssigned(false);
     setIsFirstMessage(true);
     setChatEnded(false);
@@ -374,23 +378,24 @@ const AIChatWidget = () => {
                   <div className="relative">
                     <img 
                       src={currentAgent.avatar} 
-                      alt={currentAgent.name}
+                      alt={language === 'bn' ? currentAgent.name : currentAgent.name_en}
                       className="w-12 h-12 rounded-full border-2 border-white/20 object-cover shadow-lg"
                     />
                     <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-bold text-base truncate">{currentAgent.name}</h3>
+                    <h3 className="text-white font-bold text-base truncate">
+                      {language === 'bn' ? currentAgent.name : currentAgent.name_en}
+                    </h3>
                     <p className="text-white/80 text-sm flex items-center gap-1.5">
-                      {(isTyping || isAgentTyping) && (
-                        <>
-                          <span className="flex gap-0.5">
-                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                          </span>
-                          <span className="ml-1 text-xs">{language === 'bn' ? 'টাইপ করছে...' : 'typing...'}</span>
-                        </>
+                      {(isTyping || isAgentTyping) ? (
+                        <span className="flex gap-0.5">
+                          <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        </span>
+                      ) : (
+                        <span className="text-xs text-white/60">{language === 'bn' ? 'অনলাইন' : 'Online'}</span>
                       )}
                     </p>
                   </div>
@@ -545,7 +550,7 @@ const AIChatWidget = () => {
                 </div>
 
                 {/* Input Area - Always shown unless chat ended */}
-                {!chatEnded && (
+                {!chatEnded ? (
                   <div className={`p-4 ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
                     <div className={`flex items-center gap-3 p-3 rounded-2xl border ${
                       isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-gray-50 border-gray-200'
@@ -580,6 +585,21 @@ const AIChatWidget = () => {
                         <Send className="w-5 h-5" />
                       </motion.button>
                     </div>
+                  </div>
+                ) : (
+                  <div className={`p-4 ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleNewChat}
+                      className={`w-full py-3 rounded-xl font-medium transition-all ${
+                        useGradients
+                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                          : 'bg-slate-700 text-white'
+                      }`}
+                    >
+                      {language === 'bn' ? 'নতুন চ্যাট শুরু করুন' : 'Start New Chat'}
+                    </motion.button>
                   </div>
                 )}
               </>

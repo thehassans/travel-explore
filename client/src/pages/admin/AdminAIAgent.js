@@ -50,12 +50,16 @@ const AdminAIAgent = () => {
   const [queueTime, setQueueTime] = useState(chatSettings?.queueAssignTime || 12);
   const [typingDelay, setTypingDelay] = useState(chatSettings?.typingStartDelay || 8);
   const [replySpeed, setReplySpeed] = useState(chatSettings?.replyTimePerWord || 2.5);
+  const [followUpTime, setFollowUpTime] = useState(chatSettings?.followUpTimeout || 60);
+  const [endChatTime, setEndChatTime] = useState(chatSettings?.endChatTimeout || 30);
 
   const handleSaveSettings = () => {
     updateChatSettings({
       queueAssignTime: queueTime,
       typingStartDelay: typingDelay,
-      replyTimePerWord: replySpeed
+      replyTimePerWord: replySpeed,
+      followUpTimeout: followUpTime,
+      endChatTimeout: endChatTime
     });
     setTrainingResult({ success: true, message: 'Chat settings saved!' });
   };
@@ -412,6 +416,54 @@ const AdminAIAgent = () => {
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Time per word for typing the reply
+                  </p>
+                </div>
+
+                {/* Follow-up Timeout */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Follow-up Wait Time (seconds)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="30"
+                      max="180"
+                      step="10"
+                      value={followUpTime}
+                      onChange={(e) => setFollowUpTime(Number(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="w-16 text-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-bold">
+                      {followUpTime}s
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Time before agent asks if user needs more help
+                  </p>
+                </div>
+
+                {/* End Chat Timeout */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    End Chat Wait Time (seconds)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="15"
+                      max="120"
+                      step="5"
+                      value={endChatTime}
+                      onChange={(e) => setEndChatTime(Number(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="w-16 text-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-bold">
+                      {endChatTime}s
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Time after follow-up before ending chat automatically
                   </p>
                 </div>
 
