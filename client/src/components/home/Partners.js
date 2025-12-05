@@ -8,23 +8,23 @@ const Partners = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
 
-  // Using reliable CDN-hosted brand logos
+  // Using local SVG logos (always works)
   const bankPartners = [
-    { name: 'BRAC Bank', logo: 'https://companieslogo.com/img/orig/BRAC.NS-d0daef8c.png?t=1660580539', color: '#00529b' },
-    { name: 'Dutch Bangla Bank', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Dutch-Bangla_Bank_logo.svg/1200px-Dutch-Bangla_Bank_logo.svg.png', color: '#004d2b' },
-    { name: 'City Bank', logo: 'https://companieslogo.com/img/orig/CITYBANK.NS-f3e20a11.png?t=1709709844', color: '#003366' },
-    { name: 'Eastern Bank', logo: 'https://companieslogo.com/img/orig/EBL.NS-f5c5c8ec.png?t=1720244492', color: '#f47920' },
-    { name: 'bKash', logo: 'https://freepnglogo.com/images/all_img/bkash-icon.png', color: '#e2136e' },
-    { name: 'Nagad', logo: 'https://freepnglogo.com/images/all_img/nagad-apps-logo.png', color: '#ee7023' },
+    { name: 'BRAC Bank', logo: '/logos/brac-bank.svg', color: '#00529b' },
+    { name: 'Dutch Bangla', logo: '/logos/dbbl.svg', color: '#004d2b' },
+    { name: 'City Bank', logo: '/logos/city-bank.svg', color: '#003366' },
+    { name: 'Eastern Bank', logo: '/logos/ebl.svg', color: '#f47920' },
+    { name: 'bKash', logo: '/logos/bkash.svg', color: '#e2136e' },
+    { name: 'Nagad', logo: '/logos/nagad.svg', color: '#ee7023' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman', logo: 'https://companieslogo.com/img/orig/BIMAN.NS_BIG.D-a83eb9b0.png?t=1720244491', color: '#006747' },
-    { name: 'Emirates', logo: 'https://companieslogo.com/img/orig/EMIRATES.NS_BIG-dd28eb03.png?t=1664877105', color: '#d71921' },
-    { name: 'Singapore Air', logo: 'https://companieslogo.com/img/orig/C6L.SI-3f351bf4.png?t=1720244491', color: '#1a3b73' },
-    { name: 'Qatar Airways', logo: 'https://companieslogo.com/img/orig/QGMD.NS_BIG-f45ff9d9.png?t=1720244493', color: '#5c0931' },
-    { name: 'Thai Airways', logo: 'https://companieslogo.com/img/orig/THAI.BK_BIG-56e23987.png?t=1720244494', color: '#4b2d84' },
-    { name: 'Malaysia Air', logo: 'https://companieslogo.com/img/orig/MH.NS_BIG-2fc8e29f.png?t=1720244492', color: '#c5112e' },
+    { name: 'Biman', logo: '/logos/biman.svg', color: '#006747' },
+    { name: 'Emirates', logo: '/logos/emirates.svg', color: '#d71921' },
+    { name: 'Singapore', logo: '/logos/singapore.svg', color: '#1a3b73' },
+    { name: 'Qatar', logo: '/logos/qatar.svg', color: '#5c0931' },
+    { name: 'Thai', logo: '/logos/thai.svg', color: '#4b2d84' },
+    { name: 'Malaysia', logo: '/logos/malaysia.svg', color: '#c5112e' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
