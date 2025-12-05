@@ -355,7 +355,65 @@ const AdminHolidays = () => {
     }));
   };
 
-  const addGalleryImage = () => {
+  // Convert file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // Handle main image upload
+  const handleMainImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        alert('Image size should be less than 2MB');
+        return;
+      }
+      try {
+        const base64 = await fileToBase64(file);
+        setEditingPackage(prev => ({ ...prev, image: base64 }));
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Failed to upload image');
+      }
+    }
+  };
+
+  // Handle gallery image upload
+  const handleGalleryUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (editingPackage.gallery.length + files.length > 5) {
+      alert('Maximum 5 gallery images allowed');
+      return;
+    }
+    
+    try {
+      const base64Images = await Promise.all(
+        files.map(async (file) => {
+          if (file.size > 2 * 1024 * 1024) {
+            throw new Error(`${file.name} is larger than 2MB`);
+          }
+          return await fileToBase64(file);
+        })
+      );
+      setEditingPackage(prev => ({
+        ...prev,
+        gallery: [...prev.gallery, ...base64Images].slice(0, 5)
+      }));
+    } catch (error) {
+      alert(error.message || 'Failed to upload images');
+    }
+  };
+
+  const addGalleryImageUrl = () => {
+    if (editingPackage.gallery.length >= 5) {
+      alert('Maximum 5 gallery images allowed');
+      return;
+    }
     const url = prompt('Enter image URL:');
     if (url) {
       setEditingPackage(prev => ({
@@ -664,16 +722,49 @@ const AdminHolidays = () => {
                           />
                         </div>
                       </div>
+                      {/* Main Image Upload */}
                       <div>
-                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Main Image URL</label>
-                        <input
-                          type="text"
-                          value={editingPackage.image}
-                          onChange={(e) => setEditingPackage(prev => ({ ...prev, image: e.target.value }))}
-                          className={`w-full px-4 py-3 rounded-xl border ${
-                            isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
-                          }`}
-                        />
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Main Image</label>
+                        <div className="flex gap-4">
+                          {/* Image Preview */}
+                          <div className={`w-32 h-32 rounded-xl overflow-hidden border-2 border-dashed flex items-center justify-center ${
+                            isDark ? 'border-slate-600 bg-slate-700' : 'border-gray-300 bg-gray-100'
+                          }`}>
+                            {editingPackage.image ? (
+                              <img src={editingPackage.image} alt="Main" className="w-full h-full object-cover" />
+                            ) : (
+                              <Upload className={`w-8 h-8 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+                            )}
+                          </div>
+                          <div className="flex-1 space-y-2">
+                            {/* Upload Button */}
+                            <label className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${
+                              isDark 
+                                ? 'bg-primary-500/20 text-primary-400 hover:bg-primary-500/30' 
+                                : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                            }`}>
+                              <Upload className="w-4 h-4" />
+                              <span className="font-medium">Upload Image</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleMainImageUpload}
+                                className="hidden"
+                              />
+                            </label>
+                            {/* URL Input */}
+                            <input
+                              type="text"
+                              value={editingPackage.image}
+                              onChange={(e) => setEditingPackage(prev => ({ ...prev, image: e.target.value }))}
+                              placeholder="Or paste image URL..."
+                              className={`w-full px-3 py-2 rounded-lg border text-sm ${
+                                isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                              }`}
+                            />
+                            <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Max 2MB • JPG, PNG, WebP</p>
+                          </div>
+                        </div>
                       </div>
                       <div className="flex gap-6">
                         <label className="flex items-center gap-2">
@@ -748,29 +839,80 @@ const AdminHolidays = () => {
                   {/* Gallery Tab */}
                   {activeEditorTab === 'gallery' && (
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-semibold text-white">Gallery Images</h3>
-                        <button
-                          onClick={addGalleryImage}
-                          className="px-4 py-2 bg-primary-500 text-white rounded-lg flex items-center gap-2"
-                        >
-                          <Plus className="w-4 h-4" />
-                          Add Image
-                        </button>
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                          <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Gallery Images</h3>
+                          <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {editingPackage.gallery.length}/5 images • Max 2MB each
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          {/* Upload Button */}
+                          <label className={`px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer transition-colors ${
+                            editingPackage.gallery.length >= 5
+                              ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                              : 'bg-primary-500 text-white hover:bg-primary-600'
+                          }`}>
+                            <Upload className="w-4 h-4" />
+                            Upload
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={handleGalleryUpload}
+                              disabled={editingPackage.gallery.length >= 5}
+                              className="hidden"
+                            />
+                          </label>
+                          {/* Add URL Button */}
+                          <button
+                            onClick={addGalleryImageUrl}
+                            disabled={editingPackage.gallery.length >= 5}
+                            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
+                              editingPackage.gallery.length >= 5
+                                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                                : isDark 
+                                  ? 'bg-slate-700 text-gray-300 hover:bg-slate-600' 
+                                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                          >
+                            <Plus className="w-4 h-4" />
+                            Add URL
+                          </button>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {editingPackage.gallery.map((img, index) => (
-                          <div key={index} className="relative group">
-                            <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-32 object-cover rounded-xl" />
-                            <button
-                              onClick={() => removeGalleryImage(index)}
-                              className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
+                      
+                      {/* Gallery Grid */}
+                      {editingPackage.gallery.length > 0 ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                          {editingPackage.gallery.map((img, index) => (
+                            <div key={index} className={`relative group aspect-square rounded-xl overflow-hidden border-2 ${
+                              isDark ? 'border-slate-600' : 'border-gray-200'
+                            }`}>
+                              <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                  onClick={() => removeGalleryImage(index)}
+                                  className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                >
+                                  <Trash2 className="w-5 h-5" />
+                                </button>
+                              </div>
+                              <span className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/60 text-white text-xs rounded-full">
+                                {index + 1}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className={`border-2 border-dashed rounded-xl p-8 text-center ${
+                          isDark ? 'border-slate-600' : 'border-gray-300'
+                        }`}>
+                          <Image className={`w-12 h-12 mx-auto mb-3 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+                          <p className={`font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No gallery images yet</p>
+                          <p className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Upload up to 5 images to showcase this package</p>
+                        </div>
+                      )}
                     </div>
                   )}
 
