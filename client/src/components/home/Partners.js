@@ -9,21 +9,21 @@ const Partners = () => {
   const { language } = useLanguage();
 
   const bankPartners = [
-    { name: 'BRAC Bank', logo: 'https://via.placeholder.com/150x60/0ea5e9/ffffff?text=BRAC+Bank' },
-    { name: 'Dutch Bangla Bank', logo: 'https://via.placeholder.com/150x60/22c55e/ffffff?text=DBBL' },
-    { name: 'City Bank', logo: 'https://via.placeholder.com/150x60/8b5cf6/ffffff?text=City+Bank' },
-    { name: 'Eastern Bank', logo: 'https://via.placeholder.com/150x60/f97316/ffffff?text=EBL' },
-    { name: 'BRAC Bank', logo: 'https://via.placeholder.com/150x60/ec4899/ffffff?text=bKash' },
-    { name: 'Nagad', logo: 'https://via.placeholder.com/150x60/ef4444/ffffff?text=Nagad' },
+    { name: 'BRAC Bank', logo: 'https://placehold.co/150x60/0ea5e9/ffffff?text=BRAC+Bank&font=roboto' },
+    { name: 'Dutch Bangla Bank', logo: 'https://placehold.co/150x60/22c55e/ffffff?text=DBBL&font=roboto' },
+    { name: 'City Bank', logo: 'https://placehold.co/150x60/8b5cf6/ffffff?text=City+Bank&font=roboto' },
+    { name: 'Eastern Bank', logo: 'https://placehold.co/150x60/f97316/ffffff?text=EBL&font=roboto' },
+    { name: 'bKash', logo: 'https://placehold.co/150x60/e2136e/ffffff?text=bKash&font=roboto' },
+    { name: 'Nagad', logo: 'https://placehold.co/150x60/f26522/ffffff?text=Nagad&font=roboto' },
   ];
 
   const airlinePartners = [
-    { name: 'Biman Bangladesh', logo: 'https://via.placeholder.com/150x60/16a34a/ffffff?text=Biman' },
-    { name: 'Emirates', logo: 'https://via.placeholder.com/150x60/b91c1c/ffffff?text=Emirates' },
-    { name: 'Singapore Airlines', logo: 'https://via.placeholder.com/150x60/0369a1/ffffff?text=SQ' },
-    { name: 'Qatar Airways', logo: 'https://via.placeholder.com/150x60/7c2d12/ffffff?text=Qatar' },
-    { name: 'Thai Airways', logo: 'https://via.placeholder.com/150x60/7c3aed/ffffff?text=Thai' },
-    { name: 'Malaysia Airlines', logo: 'https://via.placeholder.com/150x60/0284c7/ffffff?text=MAS' },
+    { name: 'Biman Bangladesh', logo: 'https://placehold.co/150x60/006747/ffffff?text=Biman&font=roboto' },
+    { name: 'Emirates', logo: 'https://placehold.co/150x60/d71921/ffffff?text=Emirates&font=roboto' },
+    { name: 'Singapore Airlines', logo: 'https://placehold.co/150x60/0b2545/ffffff?text=Singapore&font=roboto' },
+    { name: 'Qatar Airways', logo: 'https://placehold.co/150x60/5c0931/ffffff?text=Qatar&font=roboto' },
+    { name: 'Thai Airways', logo: 'https://placehold.co/150x60/6b21a8/ffffff?text=Thai&font=roboto' },
+    { name: 'Malaysia Airlines', logo: 'https://placehold.co/150x60/01295f/ffffff?text=Malaysia&font=roboto' },
   ];
 
   const PartnerSlider = ({ partners, direction = 'left' }) => (
