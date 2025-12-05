@@ -75,12 +75,14 @@ const Testimonials = () => {
   };
 
   return (
-    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-gradient-to-b from-slate-800 to-slate-900' : 'bg-gradient-to-b from-white to-gray-50'}`}>
+    <section className={`py-24 relative overflow-hidden ${isDark ? useGradients ? 'bg-gradient-to-b from-slate-800 to-slate-900' : 'bg-slate-900' : useGradients ? 'bg-gradient-to-b from-white to-gray-50' : 'bg-slate-50'}`}>
       {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl" />
-      </div>
+      {useGradients && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl" />
+        </div>
+      )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Ultra Premium Section Header */}
@@ -93,7 +95,7 @@ const Testimonials = () => {
           <motion.span 
             initial={{ scale: 0.9 }}
             whileInView={{ scale: 1 }}
-            className="inline-flex items-center px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-amber-500 text-sm font-semibold mb-6"
+            className={`inline-flex items-center px-6 py-2.5 rounded-full text-sm font-semibold mb-6 ${useGradients ? 'bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-amber-500' : 'bg-slate-900 text-white border-0'}`}
           >
             <Star className="w-4 h-4 mr-2 fill-current" />
             {language === 'bn' ? 'গ্রাহক পর্যালোচনা' : 'Customer Reviews'}
@@ -123,7 +125,7 @@ const Testimonials = () => {
               } shadow-2xl border ${isDark ? 'border-slate-700/50' : 'border-gray-100'}`}
             >
               {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
+              {useGradients && <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />}
               
               {/* Quote Icon */}
               <div className="absolute top-8 right-8 opacity-10">
@@ -134,13 +136,13 @@ const Testimonials = () => {
                 {/* Image */}
                 <div className="flex-shrink-0">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-3xl blur-lg opacity-30" />
+                    {useGradients && <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-3xl blur-lg opacity-30" />}
                     <img
                       src={testimonials[currentIndex].image}
                       alt={language === 'bn' ? testimonials[currentIndex].name_bn : testimonials[currentIndex].name}
                       className="relative w-28 h-28 lg:w-36 lg:h-36 rounded-3xl object-cover shadow-2xl ring-4 ring-white/20"
                     />
-                    <div className="absolute -bottom-3 -right-3 w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <div className={`absolute -bottom-3 -right-3 w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl ${useGradients ? 'bg-gradient-to-br from-amber-500 to-orange-500' : 'bg-slate-900'}`}>
                       <Quote className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -198,7 +200,7 @@ const Testimonials = () => {
                   onClick={() => setCurrentIndex(index)}
                   className={`h-3 rounded-full transition-all duration-500 ${
                     index === currentIndex
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 w-10 shadow-lg'
+                      ? useGradients ? 'bg-gradient-to-r from-amber-500 to-orange-500 w-10 shadow-lg' : 'bg-slate-900 w-10 shadow-lg'
                       : isDark
                         ? 'bg-slate-600 hover:bg-slate-500 w-3'
                         : 'bg-gray-300 hover:bg-gray-400 w-3'

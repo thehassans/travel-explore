@@ -131,12 +131,14 @@ const LatestServices = () => {
   ];
 
   return (
-    <section className={`py-24 relative overflow-hidden ${isDark ? 'bg-gradient-to-b from-slate-800 to-slate-900' : 'bg-gradient-to-b from-white to-gray-50'}`}>
+    <section className={`py-24 relative overflow-hidden ${isDark ? useGradients ? 'bg-gradient-to-b from-slate-800 to-slate-900' : 'bg-slate-900' : useGradients ? 'bg-gradient-to-b from-white to-gray-50' : 'bg-slate-50'}`}>
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
-      </div>
+      {useGradients && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
+        </div>
+      )}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Ultra Premium Section Header */}
@@ -149,7 +151,7 @@ const LatestServices = () => {
           <motion.span 
             initial={{ scale: 0.9 }}
             whileInView={{ scale: 1 }}
-            className="inline-flex items-center px-6 py-2.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-500 text-sm font-semibold mb-6"
+            className={`inline-flex items-center px-6 py-2.5 rounded-full text-sm font-semibold mb-6 ${useGradients ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-500' : 'bg-slate-900 text-white border-0'}`}
           >
             <Sparkles className="w-4 h-4 mr-2" />
             {language === 'bn' ? 'আমাদের সেবা' : 'Our Services'}
