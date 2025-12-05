@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -21,6 +22,7 @@ const FlightsPage = () => {
   const { isDark } = useTheme();
   const { language, formatCurrency } = useLanguage();
   const { useGradients, getButtonClass } = useGradient();
+  const navigate = useNavigate();
   
   const [searchParams, setSearchParams] = useState({
     origin: '',
@@ -31,14 +33,48 @@ const FlightsPage = () => {
     tripType: 'roundtrip'
   });
 
+  // Airline logos
+  const airlineLogos = {
+    'Emirates': 'https://logos-world.net/wp-content/uploads/2020/03/Emirates-Logo.png',
+    'Singapore Airlines': 'https://logos-world.net/wp-content/uploads/2023/01/Singapore-Airlines-Logo.png',
+    'Thai Airways': 'https://logos-world.net/wp-content/uploads/2023/01/Thai-Airways-Logo.png',
+    'Malaysia Airlines': 'https://logos-world.net/wp-content/uploads/2023/01/Malaysia-Airlines-Logo.png',
+    'Biman': 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a1/Biman_Bangladesh_Airlines_Logo.svg/1200px-Biman_Bangladesh_Airlines_Logo.svg.png',
+    'IndiGo': 'https://logos-world.net/wp-content/uploads/2023/01/IndiGo-Logo.png',
+  };
+
   const popularFlights = [
-    { from: 'Dhaka', to: 'Dubai', price: 45000, airline: 'Emirates', duration: '5h 30m' },
-    { from: 'Dhaka', to: 'Singapore', price: 38000, airline: 'Singapore Airlines', duration: '4h 15m' },
-    { from: 'Dhaka', to: 'Bangkok', price: 28000, airline: 'Thai Airways', duration: '2h 45m' },
-    { from: 'Dhaka', to: 'Kuala Lumpur', price: 32000, airline: 'Malaysia Airlines', duration: '3h 30m' },
-    { from: 'Dhaka', to: 'Kolkata', price: 15000, airline: 'Biman', duration: '1h 15m' },
-    { from: 'Dhaka', to: 'Delhi', price: 22000, airline: 'IndiGo', duration: '2h 30m' },
+    { id: 1, from: 'Dhaka', to: 'Dubai', price: 45000, airline: 'Emirates', duration: '5h 30m', flightNo: 'EK-585' },
+    { id: 2, from: 'Dhaka', to: 'Singapore', price: 38000, airline: 'Singapore Airlines', duration: '4h 15m', flightNo: 'SQ-447' },
+    { id: 3, from: 'Dhaka', to: 'Bangkok', price: 28000, airline: 'Thai Airways', duration: '2h 45m', flightNo: 'TG-322' },
+    { id: 4, from: 'Dhaka', to: 'Kuala Lumpur', price: 32000, airline: 'Malaysia Airlines', duration: '3h 30m', flightNo: 'MH-195' },
+    { id: 5, from: 'Dhaka', to: 'Kolkata', price: 15000, airline: 'Biman', duration: '1h 15m', flightNo: 'BG-401' },
+    { id: 6, from: 'Dhaka', to: 'Delhi', price: 22000, airline: 'IndiGo', duration: '2h 30m', flightNo: '6E-234' },
   ];
+
+  const handleBookFlight = (flight) => {
+    // Create flight data for booking
+    const flightData = {
+      id: flight.id,
+      airline: flight.airline,
+      flightNumber: flight.flightNo,
+      origin: flight.from,
+      destination: flight.to,
+      departureTime: '10:00',
+      arrivalTime: '15:30',
+      duration: flight.duration,
+      price: flight.price,
+      class: 'Economy',
+      stops: 0,
+      departDate: new Date().toISOString(),
+    };
+    
+    // Store flight in localStorage
+    localStorage.setItem('selectedFlight', JSON.stringify(flightData));
+    
+    // Navigate to booking page
+    navigate(`/flights/book/${flight.id}`);
+  };
 
   return (
     <>
@@ -216,8 +252,21 @@ const FlightsPage = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-primary-500/10 flex items-center justify-center">
-                      <Plane className="w-5 h-5 text-primary-500" />
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-sm">
+                      {airlineLogos[flight.airline] ? (
+                        <img 
+                          src={airlineLogos[flight.airline]} 
+                          alt={flight.airline}
+                          className="w-8 h-8 object-contain"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div className={`w-8 h-8 rounded-full bg-primary-500/10 items-center justify-center ${airlineLogos[flight.airline] ? 'hidden' : 'flex'}`}>
+                        <Plane className="w-4 h-4 text-primary-500" />
+                      </div>
                     </div>
                     <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       {flight.airline}
@@ -253,6 +302,7 @@ const FlightsPage = () => {
                     </p>
                   </div>
                   <motion.button
+                    onClick={() => handleBookFlight(flight)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-6 py-2 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors"

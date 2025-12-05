@@ -7,6 +7,20 @@ import {
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminVisas = () => {
+  // Theme state
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('adminTheme');
+    return saved ? saved === 'dark' : false;
+  });
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const saved = localStorage.getItem('adminTheme');
+      setIsDark(saved === 'dark');
+    };
+    const interval = setInterval(checkTheme, 500);
+    return () => clearInterval(interval);
+  }, []);
   const [visas, setVisas] = useState(() => {
     const saved = localStorage.getItem('visaPricing');
     return saved ? JSON.parse(saved) : [
@@ -168,8 +182,8 @@ const AdminVisas = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Visa Pricing</h1>
-            <p className="text-gray-400 mt-1">Manage visa services and pricing for different countries</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Visa Pricing</h1>
+            <p className={`mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Manage visa services and pricing for different countries</p>
           </div>
           <button
             onClick={() => { setEditingVisa(emptyVisa); setShowEditor(true); }}
@@ -182,13 +196,13 @@ const AdminVisas = () => {
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by country or visa type..."
-            className="w-full pl-12 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white"
+            className={`w-full pl-12 pr-4 py-3 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-gray-200 text-gray-900'}`}
           />
         </div>
 
@@ -200,14 +214,14 @@ const AdminVisas = () => {
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`bg-slate-800 rounded-2xl border border-slate-700 p-5 ${!visa.active ? 'opacity-60' : ''}`}
+              className={`rounded-2xl border p-5 ${!visa.active ? 'opacity-60' : ''} ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="text-4xl">{visa.flag}</span>
                   <div>
-                    <h3 className="font-bold text-white">{visa.country}</h3>
-                    <p className="text-sm text-gray-400">{visa.type}</p>
+                    <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{visa.country}</h3>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{visa.type}</p>
                   </div>
                 </div>
                 {!visa.active && (

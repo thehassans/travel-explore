@@ -197,6 +197,7 @@ const AdminLayout = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => isMobile && setSidebarOpen(false)}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
                   isActive
                     ? 'bg-primary-500 text-white'

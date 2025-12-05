@@ -243,9 +243,23 @@ const Footer = () => {
             <p className="text-gray-500 text-sm">
               © {new Date().getFullYear()} Explore Holidays. {t('footer.rights')}.
             </p>
-            <p className="text-gray-500 text-sm flex items-center">
-              {t('footer.madeWith')} <Heart className="w-4 h-4 mx-1 text-red-500 fill-current" /> {t('footer.inBangladesh')}
-            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <p className="text-gray-500 text-sm flex items-center">
+                {t('footer.madeWith')} <Heart className="w-4 h-4 mx-1 text-red-500 fill-current" /> {t('footer.inBangladesh')}
+              </p>
+              <span className="hidden sm:block text-gray-700">|</span>
+              <p className="text-gray-500 text-sm">
+                Powered by{' '}
+                <a 
+                  href="https://magnetic-clouds.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary-400 hover:text-primary-300 transition-colors font-medium"
+                >
+                  Magnetic Clouds
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

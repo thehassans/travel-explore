@@ -8,6 +8,21 @@ import {
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminSettings = () => {
+  // Theme state
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('adminTheme');
+    return saved ? saved === 'dark' : false;
+  });
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const saved = localStorage.getItem('adminTheme');
+      setIsDark(saved === 'dark');
+    };
+    const interval = setInterval(checkTheme, 500);
+    return () => clearInterval(interval);
+  }, []);
+
   const [activeTab, setActiveTab] = useState('general');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -135,10 +150,10 @@ const AdminSettings = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Site Settings</h1>
-            <p className="text-gray-400 mt-1">Manage website configuration, branding, and theme</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Site Settings</h1>
+            <p className={`mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Manage website configuration, branding, and theme</p>
           </div>
           <div className="flex items-center gap-3">
             {saved && (
@@ -165,7 +180,7 @@ const AdminSettings = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-2 p-2 bg-slate-800 rounded-2xl">
+        <div className={`flex flex-wrap gap-2 p-2 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -173,7 +188,7 @@ const AdminSettings = () => {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-primary-500 text-white'
-                  : 'text-gray-400 hover:text-white hover:bg-slate-700'
+                  : isDark ? 'text-gray-400 hover:text-white hover:bg-slate-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -193,37 +208,37 @@ const AdminSettings = () => {
           >
             {/* General Tab */}
             {activeTab === 'general' && (
-              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <div className={`rounded-2xl p-6 border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                <h2 className={`text-xl font-bold mb-6 flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   <Globe className="w-5 h-5 text-primary-500" />
                   General Settings
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Site Name</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Site Name</label>
                     <input
                       type="text"
                       value={settings.siteName}
                       onChange={(e) => setSettings(prev => ({ ...prev, siteName: e.target.value }))}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                      className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Tagline</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Tagline</label>
                     <input
                       type="text"
                       value={settings.tagline}
                       onChange={(e) => setSettings(prev => ({ ...prev, tagline: e.target.value }))}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                      className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">SEO Title</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>SEO Title</label>
                     <input
                       type="text"
                       value={settings.siteTitle}
                       onChange={(e) => setSettings(prev => ({ ...prev, siteTitle: e.target.value }))}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                      className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                     />
                   </div>
                 </div>
