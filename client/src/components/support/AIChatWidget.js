@@ -7,9 +7,8 @@ import {
   Minimize2,
   Check,
   CheckCheck,
-  Phone,
-  Video,
-  MoreVertical
+  Users,
+  Headphones
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -20,56 +19,107 @@ const AIChatWidget = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const { useGradients } = useGradient();
-  const { isEnabled, currentAgent, sendMessage, isTyping, clearHistory } = useAIAgent();
+  const { isEnabled, currentAgent, sendMessage, isTyping, clearHistory, chatSettings } = useAIAgent();
   
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isAgentTyping, setIsAgentTyping] = useState(false);
-  const [pendingResponse, setPendingResponse] = useState(null);
+  
+  // Queue system states
+  const [isInQueue, setIsInQueue] = useState(true);
+  const [queueNumber, setQueueNumber] = useState(0);
+  const [agentAssigned, setAgentAssigned] = useState(false);
+  const [queueCountdown, setQueueCountdown] = useState(0);
+  
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Initial greeting
+  // Generate queue number when chat opens
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      const greeting = language === 'bn'
-        ? `আসসালামু আলাইকুম! আমি ${currentAgent.name}। Explore Holidays-এ আপনাকে স্বাগতম। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?`
-        : `Hello! I'm ${currentAgent.name_en}. Welcome to Explore Holidays. How can I help you today?`;
+    if (isOpen && isInQueue && !agentAssigned) {
+      const randomQueue = Math.floor(Math.random() * 5) + 1; // Queue 1-5
+      setQueueNumber(randomQueue);
+      setQueueCountdown(chatSettings.queueAssignTime);
       
-      setMessages([{
-        id: Date.now(),
-        type: 'agent',
-        text: greeting,
-        timestamp: new Date(),
-        status: 'delivered'
-      }]);
+      // Countdown timer
+      const countdownInterval = setInterval(() => {
+        setQueueCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      // Assign agent after queue time
+      const assignTimer = setTimeout(() => {
+        setIsInQueue(false);
+        setAgentAssigned(true);
+        
+        // Show assignment message
+        const assignMsg = language === 'bn'
+          ? `আপনাকে আমাদের সাপোর্ট এজেন্ট ${currentAgent.name} এর সাথে সংযুক্ত করা হয়েছে।`
+          : `You have been connected with our support agent ${currentAgent.name_en}.`;
+        
+        setMessages([{
+          id: Date.now(),
+          type: 'system',
+          text: assignMsg,
+          timestamp: new Date()
+        }]);
+        
+        // Agent greeting after short delay
+        setTimeout(() => {
+          const greeting = language === 'bn'
+            ? `আসসালামু আলাইকুম! আমি ${currentAgent.name}। কিভাবে সাহায্য করতে পারি?`
+            : `Hello! I'm ${currentAgent.name_en}. How can I help you?`;
+          
+          setMessages(prev => [...prev, {
+            id: Date.now(),
+            type: 'agent',
+            text: greeting,
+            timestamp: new Date(),
+            status: 'delivered'
+          }]);
+        }, 2000);
+        
+      }, chatSettings.queueAssignTime * 1000);
+
+      return () => {
+        clearInterval(countdownInterval);
+        clearTimeout(assignTimer);
+      };
     }
-  }, [isOpen, currentAgent, language, messages.length]);
+  }, [isOpen, isInQueue, agentAssigned, chatSettings.queueAssignTime, currentAgent, language]);
 
   // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isAgentTyping]);
 
-  // Focus input when opened
+  // Focus input when agent assigned
   useEffect(() => {
-    if (isOpen && !isMinimized) {
+    if (isOpen && !isMinimized && agentAssigned) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [isOpen, isMinimized]);
+  }, [isOpen, isMinimized, agentAssigned]);
 
   // Simulate human-like delay before showing response
   const simulateHumanTyping = async (responseText) => {
+    // Wait for typing start delay
+    await new Promise(resolve => setTimeout(resolve, chatSettings.typingStartDelay * 1000));
+    
     setIsAgentTyping(true);
     
-    // Calculate typing time based on word count (~2.5 seconds per word)
+    // Calculate typing time based on word count
     const wordCount = responseText.split(/\s+/).length;
-    const typingTime = Math.min(Math.max(wordCount * 2500, 4000), 20000); // Min 4s, max 20s
+    const typingTime = Math.min(Math.max(wordCount * chatSettings.replyTimePerWord * 1000, 4000), 25000);
     
     // Add random variation for human-like feel
-    const randomDelay = typingTime + (Math.random() * 3000);
+    const randomDelay = typingTime + (Math.random() * 2000);
     
     await new Promise(resolve => setTimeout(resolve, randomDelay));
     
@@ -132,22 +182,11 @@ const AIChatWidget = () => {
   const handleClose = () => {
     setIsOpen(false);
     setIsMinimized(false);
-  };
-
-  const handleNewChat = () => {
-    clearHistory();
+    // Reset queue states for next time
+    setIsInQueue(true);
+    setAgentAssigned(false);
+    setQueueNumber(0);
     setMessages([]);
-    const greeting = language === 'bn'
-      ? `আসসালামু আলাইকুম! আমি ${currentAgent.name}। Explore Holidays-এ আপনাকে স্বাগতম। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?`
-      : `Hello! I'm ${currentAgent.name_en}. Welcome to Explore Holidays. How can I help you today?`;
-    
-    setMessages([{
-      id: Date.now(),
-      type: 'agent',
-      text: greeting,
-      timestamp: new Date(),
-      status: 'delivered'
-    }]);
   };
 
   // Message status indicator
@@ -213,35 +252,55 @@ const AIChatWidget = () => {
               backdropFilter: 'blur(20px)'
             }}
           >
-            {/* Header - Premium WhatsApp-like */}
+            {/* Header */}
             <div className={`px-4 py-4 flex items-center gap-3 ${
               useGradients 
                 ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500'
                 : 'bg-slate-800'
             }`}>
-              <div className="relative">
-                <img 
-                  src={currentAgent.avatar} 
-                  alt={currentAgent.name}
-                  className="w-12 h-12 rounded-full border-2 border-white/20 object-cover shadow-lg"
-                />
-                <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-bold text-base truncate">{currentAgent.name}</h3>
-                <p className="text-white/80 text-sm flex items-center gap-1.5">
-                  {(isTyping || isAgentTyping) && (
-                    <>
-                      <span className="flex gap-0.5">
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                      </span>
-                      <span className="ml-1 text-xs">{language === 'bn' ? 'টাইপ করছে...' : 'typing...'}</span>
-                    </>
-                  )}
-                </p>
-              </div>
+              {isInQueue ? (
+                // Queue Header
+                <>
+                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <Headphones className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-white font-bold text-base">
+                      {language === 'bn' ? 'সাপোর্ট' : 'Support'}
+                    </h3>
+                    <p className="text-white/80 text-xs">
+                      {language === 'bn' ? 'এজেন্ট খোঁজা হচ্ছে...' : 'Finding an agent...'}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                // Agent Header
+                <>
+                  <div className="relative">
+                    <img 
+                      src={currentAgent.avatar} 
+                      alt={currentAgent.name}
+                      className="w-12 h-12 rounded-full border-2 border-white/20 object-cover shadow-lg"
+                    />
+                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-white font-bold text-base truncate">{currentAgent.name}</h3>
+                    <p className="text-white/80 text-sm flex items-center gap-1.5">
+                      {(isTyping || isAgentTyping) && (
+                        <>
+                          <span className="flex gap-0.5">
+                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          </span>
+                          <span className="ml-1 text-xs">{language === 'bn' ? 'টাইপ করছে...' : 'typing...'}</span>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                </>
+              )}
               <div className="flex items-center gap-0.5">
                 <button 
                   onClick={() => setIsMinimized(!isMinimized)}
@@ -258,64 +317,120 @@ const AIChatWidget = () => {
               </div>
             </div>
 
-            {/* Messages Area */}
+            {/* Content Area */}
             {!isMinimized && (
               <>
-                <div 
-                  className={`flex-1 overflow-y-auto p-4 space-y-3 ${
-                    isDark 
-                      ? 'bg-slate-900' 
-                      : 'bg-gradient-to-b from-slate-50 to-slate-100'
-                  }`}
-                  style={{ 
-                    backgroundImage: isDark 
-                      ? 'none' 
-                      : 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
-                  }}
-                >
+                {isInQueue ? (
+                  // Queue Screen
+                  <div className={`flex-1 flex flex-col items-center justify-center p-8 ${
+                    isDark ? 'bg-slate-900' : 'bg-gradient-to-b from-slate-50 to-slate-100'
+                  }`}>
+                    <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${
+                      useGradients 
+                        ? 'bg-gradient-to-br from-indigo-500 to-purple-600' 
+                        : 'bg-slate-700'
+                    }`}>
+                      <Users className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {language === 'bn' ? 'কিউতে আছেন' : "You're in queue"}
+                    </h3>
+                    <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {language === 'bn' 
+                        ? `কিউ নম্বর: #${queueNumber}` 
+                        : `Queue number: #${queueNumber}`}
+                    </p>
+                    <div className={`text-4xl font-bold mb-2 ${
+                      useGradients 
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent' 
+                        : isDark ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {queueCountdown}s
+                    </div>
+                    <p className={`text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                      {language === 'bn' 
+                        ? 'এজেন্ট শীঘ্রই আপনার সাথে যোগাযোগ করবে' 
+                        : 'An agent will be with you shortly'}
+                    </p>
+                    <div className="mt-6 flex gap-2">
+                      <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                ) : (
+                  // Messages Area
+                  <div 
+                    className={`flex-1 overflow-y-auto p-4 space-y-3 ${
+                      isDark 
+                        ? 'bg-slate-900' 
+                        : 'bg-gradient-to-b from-slate-50 to-slate-100'
+                    }`}
+                    style={{ 
+                      backgroundImage: isDark 
+                        ? 'none' 
+                        : 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
+                    }}
+                  >
                   {messages.map((message) => (
                     <motion.div
                       key={message.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${
+                        message.type === 'system' ? 'justify-center' : 
+                        message.type === 'user' ? 'justify-end' : 'justify-start'
+                      }`}
                     >
-                      {message.type === 'agent' && (
-                        <img 
-                          src={currentAgent.avatar} 
-                          alt=""
-                          className="w-8 h-8 rounded-full mr-2 mt-auto shadow-md flex-shrink-0"
-                        />
-                      )}
-                      <div className={`max-w-[75%] relative group ${
-                        message.type === 'user' ? 'order-1' : ''
-                      }`}>
-                        <div className={`px-4 py-3 rounded-2xl shadow-sm ${
-                          message.type === 'user'
-                            ? useGradients
-                              ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-br-md'
-                              : 'bg-slate-800 text-white rounded-br-md'
-                            : isDark
-                              ? 'bg-slate-800 text-white rounded-bl-md border border-slate-700'
-                              : 'bg-white text-gray-800 rounded-bl-md shadow-md'
+                      {message.type === 'system' ? (
+                        // System message (agent assigned notification)
+                        <div className={`px-4 py-2 rounded-full text-xs ${
+                          isDark 
+                            ? 'bg-slate-800 text-gray-400 border border-slate-700' 
+                            : 'bg-gray-100 text-gray-600'
                         }`}>
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                            {message.text}
-                          </p>
+                          {message.text}
                         </div>
-                        <div className={`flex items-center gap-1 mt-1 ${
-                          message.type === 'user' ? 'justify-end pr-1' : 'justify-start pl-1'
-                        }`}>
-                          <span className={`text-[10px] ${
-                            isDark ? 'text-gray-500' : 'text-gray-400'
-                          }`}>
-                            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                          {message.type === 'user' && (
-                            <MessageStatus status={message.status} />
+                      ) : (
+                        <>
+                          {message.type === 'agent' && (
+                            <img 
+                              src={currentAgent.avatar} 
+                              alt=""
+                              className="w-8 h-8 rounded-full mr-2 mt-auto shadow-md flex-shrink-0"
+                            />
                           )}
-                        </div>
-                      </div>
+                          <div className={`max-w-[75%] relative group ${
+                            message.type === 'user' ? 'order-1' : ''
+                          }`}>
+                            <div className={`px-4 py-3 rounded-2xl shadow-sm ${
+                              message.type === 'user'
+                                ? useGradients
+                                  ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-br-md'
+                                  : 'bg-slate-800 text-white rounded-br-md'
+                                : isDark
+                                  ? 'bg-slate-800 text-white rounded-bl-md border border-slate-700'
+                                  : 'bg-white text-gray-800 rounded-bl-md shadow-md'
+                            }`}>
+                              <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                                {message.text}
+                              </p>
+                            </div>
+                            <div className={`flex items-center gap-1 mt-1 ${
+                              message.type === 'user' ? 'justify-end pr-1' : 'justify-start pl-1'
+                            }`}>
+                              <span className={`text-[10px] ${
+                                isDark ? 'text-gray-500' : 'text-gray-400'
+                              }`}>
+                                {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {message.type === 'user' && (
+                                <MessageStatus status={message.status} />
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </motion.div>
                   ))}
                   
@@ -345,9 +460,11 @@ const AIChatWidget = () => {
                     </motion.div>
                   )}
                   <div ref={messagesEndRef} />
-                </div>
+                  </div>
+                )}
 
                 {/* Input Area - Ultra Premium Design */}
+                {!isInQueue && (
                 <div className={`p-4 ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
                   <div className={`flex items-center gap-3 p-3 rounded-2xl border ${
                     isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-gray-50 border-gray-200'
@@ -383,6 +500,7 @@ const AIChatWidget = () => {
                     </motion.button>
                   </div>
                 </div>
+                )}
               </>
             )}
           </motion.div>

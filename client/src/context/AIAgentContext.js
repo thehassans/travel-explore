@@ -57,6 +57,16 @@ export const AIAgentProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Configurable timing settings (in seconds)
+  const [chatSettings, setChatSettings] = useState(() => {
+    const saved = localStorage.getItem('aiChatSettings');
+    return saved ? JSON.parse(saved) : {
+      queueAssignTime: 12,      // Time before agent is assigned (seconds)
+      typingStartDelay: 8,      // Delay before typing indicator starts (seconds)
+      replyTimePerWord: 2.5     // Seconds per word for typing reply
+    };
+  });
+
   // Rotate agent randomly
   const rotateAgent = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * agents.length);
@@ -77,6 +87,20 @@ export const AIAgentProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('aiTrainingLogs', JSON.stringify(trainingLogs));
   }, [trainingLogs]);
+
+  useEffect(() => {
+    localStorage.setItem('aiChatSettings', JSON.stringify(chatSettings));
+  }, [chatSettings]);
+
+  // Update chat settings
+  const updateChatSettings = useCallback((newSettings) => {
+    setChatSettings(prev => ({ ...prev, ...newSettings }));
+    addTrainingLog({
+      type: 'info',
+      message: 'Chat settings updated',
+      details: JSON.stringify(newSettings)
+    });
+  }, []);
 
   // Add training log
   const addTrainingLog = useCallback((log) => {
@@ -273,7 +297,9 @@ export const AIAgentProvider = ({ children }) => {
     clearLogs,
     saveApiKey,
     checkConnection,
-    agents
+    agents,
+    chatSettings,
+    updateChatSettings
   };
 
   return (

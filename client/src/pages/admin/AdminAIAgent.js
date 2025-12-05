@@ -33,7 +33,9 @@ const AdminAIAgent = () => {
     currentAgent,
     clearLogs,
     saveApiKey,
-    checkConnection
+    checkConnection,
+    chatSettings,
+    updateChatSettings
   } = useAIAgent();
   
   const [newApiKey, setNewApiKey] = useState(apiKey);
@@ -42,6 +44,20 @@ const AdminAIAgent = () => {
   const [isChecking, setIsChecking] = useState(false);
   const [trainingResult, setTrainingResult] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(null);
+  
+  // Chat timing settings
+  const [queueTime, setQueueTime] = useState(chatSettings?.queueAssignTime || 12);
+  const [typingDelay, setTypingDelay] = useState(chatSettings?.typingStartDelay || 8);
+  const [replySpeed, setReplySpeed] = useState(chatSettings?.replyTimePerWord || 2.5);
+
+  const handleSaveSettings = () => {
+    updateChatSettings({
+      queueAssignTime: queueTime,
+      typingStartDelay: typingDelay,
+      replyTimePerWord: replySpeed
+    });
+    setTrainingResult({ success: true, message: 'Chat settings saved!' });
+  };
 
   const handleTrain = async () => {
     if (!newApiKey.trim()) return;
@@ -307,11 +323,113 @@ const AdminAIAgent = () => {
               </div>
             </motion.div>
 
-            {/* Training Logs */}
+            {/* Chat Timing Settings */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
+              className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Chat Timing Settings</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Configure queue and typing delays</p>
+                </div>
+              </div>
+
+              <div className="space-y-5">
+                {/* Queue Assign Time */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Queue Assign Time (seconds)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="5"
+                      max="30"
+                      step="1"
+                      value={queueTime}
+                      onChange={(e) => setQueueTime(Number(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="w-16 text-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-bold">
+                      {queueTime}s
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Time before agent is assigned to user
+                  </p>
+                </div>
+
+                {/* Typing Start Delay */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Typing Start Delay (seconds)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="3"
+                      max="20"
+                      step="1"
+                      value={typingDelay}
+                      onChange={(e) => setTypingDelay(Number(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="w-16 text-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-bold">
+                      {typingDelay}s
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Delay before typing indicator appears after user message
+                  </p>
+                </div>
+
+                {/* Reply Speed Per Word */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Reply Speed (seconds per word)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
+                      step="0.5"
+                      value={replySpeed}
+                      onChange={(e) => setReplySpeed(Number(e.target.value))}
+                      className="flex-1 h-2 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <span className="w-16 text-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-bold">
+                      {replySpeed}s
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Time per word for typing the reply
+                  </p>
+                </div>
+
+                {/* Save Button */}
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleSaveSettings}
+                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/30"
+                >
+                  Save Settings
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* Training Logs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
               className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl"
             >
               <div className="flex items-center justify-between mb-6">
