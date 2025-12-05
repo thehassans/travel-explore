@@ -329,7 +329,7 @@ const HeroBanner = () => {
                       : 'bg-white border-gray-200 text-gray-900 focus:border-primary-500'
                   } focus:outline-none transition-colors text-left flex items-center justify-between`}
                 >
-                  <span className="font-medium">{passengers.adults + passengers.children} Pax</span>
+                  <span className="font-medium">{passengers.adults + passengers.children}</span>
                   <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showPassengers ? 'rotate-180' : ''}`} />
                 </button>
 

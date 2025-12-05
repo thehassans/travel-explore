@@ -8,23 +8,23 @@ const Partners = () => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
 
-  // Default partners with gradients for fallback
+  // Default partners with real logo URLs from Clearbit (free API)
   const defaultBanks = [
-    { id: 1, name: 'BRAC Bank', logo: '', initials: 'BB', gradient: 'from-blue-600 to-blue-800', active: true },
-    { id: 2, name: 'Dutch Bangla', logo: '', initials: 'DBBL', gradient: 'from-green-700 to-green-900', active: true },
-    { id: 3, name: 'City Bank', logo: '', initials: 'CB', gradient: 'from-indigo-600 to-indigo-800', active: true },
-    { id: 4, name: 'Eastern Bank', logo: '', initials: 'EBL', gradient: 'from-orange-500 to-orange-700', active: true },
-    { id: 5, name: 'bKash', logo: '', initials: 'bK', gradient: 'from-pink-500 to-pink-700', active: true },
-    { id: 6, name: 'Nagad', logo: '', initials: 'N', gradient: 'from-orange-400 to-red-500', active: true },
+    { id: 1, name: 'BRAC Bank', logo: 'https://logo.clearbit.com/bracbank.com', initials: 'BB', gradient: 'from-blue-600 to-blue-800', active: true },
+    { id: 2, name: 'Dutch Bangla', logo: 'https://logo.clearbit.com/dutchbanglabank.com', initials: 'DBBL', gradient: 'from-green-700 to-green-900', active: true },
+    { id: 3, name: 'City Bank', logo: 'https://logo.clearbit.com/thecitybank.com', initials: 'CB', gradient: 'from-indigo-600 to-indigo-800', active: true },
+    { id: 4, name: 'Eastern Bank', logo: 'https://logo.clearbit.com/ebl.com.bd', initials: 'EBL', gradient: 'from-orange-500 to-orange-700', active: true },
+    { id: 5, name: 'bKash', logo: 'https://logo.clearbit.com/bkash.com', initials: 'bK', gradient: 'from-pink-500 to-pink-700', active: true },
+    { id: 6, name: 'Nagad', logo: 'https://logo.clearbit.com/nagad.com.bd', initials: 'N', gradient: 'from-orange-400 to-red-500', active: true },
   ];
 
   const defaultAirlines = [
-    { id: 1, name: 'Biman Bangladesh', logo: '', initials: 'BG', gradient: 'from-emerald-600 to-emerald-800', active: true },
-    { id: 2, name: 'Emirates', logo: '', initials: 'EK', gradient: 'from-red-500 to-red-700', active: true },
-    { id: 3, name: 'Singapore Airlines', logo: '', initials: 'SQ', gradient: 'from-blue-700 to-blue-900', active: true },
-    { id: 4, name: 'Qatar Airways', logo: '', initials: 'QR', gradient: 'from-purple-800 to-purple-950', active: true },
-    { id: 5, name: 'Thai Airways', logo: '', initials: 'TG', gradient: 'from-violet-600 to-violet-800', active: true },
-    { id: 6, name: 'Malaysia Airlines', logo: '', initials: 'MH', gradient: 'from-red-600 to-red-800', active: true },
+    { id: 1, name: 'Biman Bangladesh', logo: 'https://logo.clearbit.com/bfrmnl.biman-airlines.com', initials: 'BG', gradient: 'from-emerald-600 to-emerald-800', active: true },
+    { id: 2, name: 'Emirates', logo: 'https://logo.clearbit.com/emirates.com', initials: 'EK', gradient: 'from-red-500 to-red-700', active: true },
+    { id: 3, name: 'Singapore Airlines', logo: 'https://logo.clearbit.com/singaporeair.com', initials: 'SQ', gradient: 'from-blue-700 to-blue-900', active: true },
+    { id: 4, name: 'Qatar Airways', logo: 'https://logo.clearbit.com/qatarairways.com', initials: 'QR', gradient: 'from-purple-800 to-purple-950', active: true },
+    { id: 5, name: 'Thai Airways', logo: 'https://logo.clearbit.com/thaiairways.com', initials: 'TG', gradient: 'from-violet-600 to-violet-800', active: true },
+    { id: 6, name: 'Malaysia Airlines', logo: 'https://logo.clearbit.com/malaysiaairlines.com', initials: 'MH', gradient: 'from-red-600 to-red-800', active: true },
   ];
 
   const [partners, setPartners] = useState({ banks: defaultBanks, airlines: defaultAirlines });
