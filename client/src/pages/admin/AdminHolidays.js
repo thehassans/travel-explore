@@ -3,11 +3,30 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Package, Plus, Edit, Trash2, Save, X, Image, MapPin, Clock, 
   DollarSign, Users, Star, Calendar, Check, ChevronDown, Eye,
-  Upload, GripVertical, List, Grid, Search, Filter
+  Upload, GripVertical, List, Grid, Search, Filter, RotateCcw
 } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminHolidays = () => {
+  // Get theme from localStorage
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('adminTheme');
+    return saved ? saved === 'dark' : false;
+  });
+
+  // Listen for theme changes
+  useEffect(() => {
+    const checkTheme = () => {
+      const saved = localStorage.getItem('adminTheme');
+      setIsDark(saved === 'dark');
+    };
+    window.addEventListener('storage', checkTheme);
+    const interval = setInterval(checkTheme, 500);
+    return () => {
+      window.removeEventListener('storage', checkTheme);
+      clearInterval(interval);
+    };
+  }, []);
   const [packages, setPackages] = useState(() => {
     const saved = localStorage.getItem('holidayPackages');
     return saved ? JSON.parse(saved) : [
@@ -389,25 +408,29 @@ const AdminHolidays = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Holiday Packages</h1>
-            <p className="text-gray-400 mt-1">Manage your travel packages and destinations ({packages.length} packages)</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Holiday Packages</h1>
+            <p className={`mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Manage your travel packages and destinations ({packages.length} packages)</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={() => {
-                if (window.confirm('Reset to default packages? This will add all 10 destinations.')) {
+                if (window.confirm('Reset to default packages? This will load all 10+ destinations.')) {
                   localStorage.removeItem('holidayPackages');
                   window.location.reload();
                 }
               }}
-              className="px-4 py-3 bg-slate-700 text-gray-300 font-medium rounded-xl flex items-center gap-2 hover:bg-slate-600"
+              className={`px-4 py-2.5 font-medium rounded-xl flex items-center gap-2 transition-colors ${
+                isDark 
+                  ? 'bg-slate-700 text-gray-300 hover:bg-slate-600' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
             >
-              <Filter className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4" />
               Reset Defaults
             </button>
             <button
               onClick={() => { setEditingPackage(emptyPackage); setShowEditor(true); setActiveEditorTab('basic'); }}
-              className="px-6 py-3 bg-gradient-to-r from-primary-500 to-purple-500 text-white font-semibold rounded-xl flex items-center gap-2"
+              className="px-5 py-2.5 bg-gradient-to-r from-primary-500 to-purple-500 text-white font-semibold rounded-xl flex items-center gap-2 hover:shadow-lg transition-shadow"
             >
               <Plus className="w-5 h-5" />
               Add Package
@@ -424,19 +447,31 @@ const AdminHolidays = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search packages..."
-              className="w-full pl-12 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white"
+              className={`w-full pl-12 pr-4 py-3 rounded-xl border ${
+                isDark 
+                  ? 'bg-slate-800 border-slate-700 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-200 text-gray-900 placeholder-gray-500'
+              }`}
             />
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-3 rounded-xl ${viewMode === 'grid' ? 'bg-primary-500 text-white' : 'bg-slate-800 text-gray-400'}`}
+              className={`p-3 rounded-xl transition-colors ${
+                viewMode === 'grid' 
+                  ? 'bg-primary-500 text-white' 
+                  : isDark ? 'bg-slate-800 text-gray-400 hover:bg-slate-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
             >
               <Grid className="w-5 h-5" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-3 rounded-xl ${viewMode === 'list' ? 'bg-primary-500 text-white' : 'bg-slate-800 text-gray-400'}`}
+              className={`p-3 rounded-xl transition-colors ${
+                viewMode === 'list' 
+                  ? 'bg-primary-500 text-white' 
+                  : isDark ? 'bg-slate-800 text-gray-400 hover:bg-slate-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
             >
               <List className="w-5 h-5" />
             </button>
@@ -451,9 +486,9 @@ const AdminHolidays = () => {
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden ${
-                viewMode === 'list' ? 'flex' : ''
-              }`}
+              className={`rounded-2xl border overflow-hidden shadow-lg ${
+                isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
+              } ${viewMode === 'list' ? 'flex' : ''}`}
             >
               <div className={`relative ${viewMode === 'list' ? 'w-48 h-32' : 'h-48'}`}>
                 <img
@@ -463,10 +498,10 @@ const AdminHolidays = () => {
                 />
                 <div className="absolute top-3 left-3 flex gap-2">
                   {pkg.featured && (
-                    <span className="px-2 py-1 bg-purple-500 text-white text-xs rounded-full">Featured</span>
+                    <span className="px-2 py-1 bg-purple-500 text-white text-xs rounded-full font-medium">Featured</span>
                   )}
                   {pkg.popular && (
-                    <span className="px-2 py-1 bg-amber-500 text-white text-xs rounded-full">Popular</span>
+                    <span className="px-2 py-1 bg-amber-500 text-white text-xs rounded-full font-medium">Popular</span>
                   )}
                 </div>
                 {!pkg.active && (
@@ -476,8 +511,8 @@ const AdminHolidays = () => {
                 )}
               </div>
               <div className="p-4 flex-1">
-                <h3 className="text-lg font-bold text-white mb-1">{pkg.title}</h3>
-                <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                <h3 className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{pkg.title}</h3>
+                <div className={`flex items-center gap-2 text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                   <MapPin className="w-4 h-4" />
                   {pkg.destination}
                   <span className="mx-1">•</span>
@@ -486,27 +521,35 @@ const AdminHolidays = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-primary-400 font-bold text-lg">৳{pkg.discountPrice?.toLocaleString()}</span>
+                    <span className="text-primary-500 font-bold text-lg">৳{pkg.discountPrice?.toLocaleString()}</span>
                     {pkg.price !== pkg.discountPrice && (
-                      <span className="text-gray-500 line-through text-sm ml-2">৳{pkg.price?.toLocaleString()}</span>
+                      <span className={`line-through text-sm ml-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>৳{pkg.price?.toLocaleString()}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span className="text-white">{pkg.rating}</span>
+                    <span className={isDark ? 'text-white' : 'text-gray-700'}>{pkg.rating}</span>
                   </div>
                 </div>
                 <div className="flex gap-2 mt-4">
                   <button
                     onClick={() => { setEditingPackage(pkg); setShowEditor(true); setActiveEditorTab('basic'); }}
-                    className="flex-1 py-2 bg-primary-500/20 text-primary-400 rounded-lg flex items-center justify-center gap-1"
+                    className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors ${
+                      isDark 
+                        ? 'bg-primary-500/20 text-primary-400 hover:bg-primary-500/30' 
+                        : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                    }`}
                   >
                     <Edit className="w-4 h-4" />
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeletePackage(pkg.id)}
-                    className="py-2 px-3 bg-red-500/20 text-red-400 rounded-lg"
+                    className={`py-2 px-3 rounded-lg transition-colors ${
+                      isDark 
+                        ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' 
+                        : 'bg-red-50 text-red-600 hover:bg-red-100'
+                    }`}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -523,36 +566,45 @@ const AdminHolidays = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
               onClick={() => setShowEditor(false)}
             >
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+                className={`rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl ${
+                  isDark ? 'bg-slate-800' : 'bg-white'
+                }`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Editor Header */}
-                <div className="p-6 border-b border-slate-700 flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-white">
+                <div className={`p-6 border-b flex items-center justify-between ${
+                  isDark ? 'border-slate-700' : 'border-gray-200'
+                }`}>
+                  <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {editingPackage.id ? 'Edit Package' : 'Add New Package'}
                   </h2>
-                  <button onClick={() => setShowEditor(false)} className="text-gray-400 hover:text-white">
+                  <button 
+                    onClick={() => setShowEditor(false)} 
+                    className={`p-2 rounded-lg transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white hover:bg-slate-700' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                  >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
 
                 {/* Editor Tabs */}
-                <div className="flex border-b border-slate-700 px-6">
+                <div className={`flex border-b px-6 overflow-x-auto ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
                   {editorTabs.map(tab => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveEditorTab(tab.id)}
-                      className={`px-4 py-3 font-medium transition-colors ${
+                      className={`px-4 py-3 font-medium transition-colors whitespace-nowrap ${
                         activeEditorTab === tab.id
-                          ? 'text-primary-400 border-b-2 border-primary-400'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'text-primary-500 border-b-2 border-primary-500'
+                          : isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'
                       }`}
                     >
                       {tab.label}
@@ -567,50 +619,60 @@ const AdminHolidays = () => {
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Package Title</label>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Package Title</label>
                           <input
                             type="text"
                             value={editingPackage.title}
                             onChange={(e) => setEditingPackage(prev => ({ ...prev, title: e.target.value }))}
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                            className={`w-full px-4 py-3 rounded-xl border ${
+                              isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
+                            }`}
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Destination</label>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Destination</label>
                           <input
                             type="text"
                             value={editingPackage.destination}
                             onChange={(e) => setEditingPackage(prev => ({ ...prev, destination: e.target.value }))}
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                            className={`w-full px-4 py-3 rounded-xl border ${
+                              isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
+                            }`}
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Duration</label>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Duration</label>
                           <input
                             type="text"
                             value={editingPackage.duration}
                             onChange={(e) => setEditingPackage(prev => ({ ...prev, duration: e.target.value }))}
                             placeholder="e.g., 3 Days / 2 Nights"
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                            className={`w-full px-4 py-3 rounded-xl border ${
+                              isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
+                            }`}
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Max People</label>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Max People</label>
                           <input
                             type="number"
                             value={editingPackage.maxPeople}
                             onChange={(e) => setEditingPackage(prev => ({ ...prev, maxPeople: parseInt(e.target.value) }))}
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                            className={`w-full px-4 py-3 rounded-xl border ${
+                              isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
+                            }`}
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Main Image URL</label>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Main Image URL</label>
                         <input
                           type="text"
                           value={editingPackage.image}
                           onChange={(e) => setEditingPackage(prev => ({ ...prev, image: e.target.value }))}
-                          className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white"
+                          className={`w-full px-4 py-3 rounded-xl border ${
+                            isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
+                          }`}
                         />
                       </div>
                       <div className="flex gap-6">

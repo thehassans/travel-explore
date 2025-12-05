@@ -39,7 +39,6 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminQueries from './pages/admin/AdminQueries';
 import AdminBookings from './pages/admin/AdminBookings';
-import AdminPricing from './pages/admin/AdminPricing';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminHolidays from './pages/admin/AdminHolidays';
@@ -95,7 +94,6 @@ function App() {
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/queries" element={<AdminQueries />} />
               <Route path="/admin/bookings" element={<AdminBookings />} />
-              <Route path="/admin/pricing" element={<AdminPricing />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/holidays" element={<AdminHolidays />} />

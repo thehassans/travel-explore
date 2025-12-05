@@ -105,7 +105,6 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/visas', label: t.visas, icon: FileCheck },
     { path: '/admin/visa-queries', label: t.visaQueries, icon: ClipboardList },
     { path: '/admin/users', label: t.users, icon: Users },
-    { path: '/admin/pricing', label: t.pricing, icon: Package },
     { path: '/admin/settings', label: t.settings, icon: Settings },
   ];
 
