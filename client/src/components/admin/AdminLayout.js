@@ -18,7 +18,8 @@ import {
   Sun,
   Moon,
   Globe,
-  ClipboardList
+  ClipboardList,
+  Bot
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -71,6 +72,7 @@ const AdminLayout = ({ children }) => {
       users: 'Users',
       pricing: 'Pricing',
       settings: 'Settings',
+      aiAgent: 'AI Agent',
       logout: 'Logout',
       viewSite: 'View Site',
       admin: 'Admin',
@@ -87,6 +89,7 @@ const AdminLayout = ({ children }) => {
       users: 'ব্যবহারকারী',
       pricing: 'মূল্য',
       settings: 'সেটিংস',
+      aiAgent: 'এআই এজেন্ট',
       logout: 'লগআউট',
       viewSite: 'সাইট দেখুন',
       admin: 'অ্যাডমিন',
@@ -105,6 +108,7 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/visas', label: t.visas, icon: FileCheck },
     { path: '/admin/visa-queries', label: t.visaQueries, icon: ClipboardList },
     { path: '/admin/users', label: t.users, icon: Users },
+    { path: '/admin/ai-agent', label: t.aiAgent, icon: Bot },
     { path: '/admin/settings', label: t.settings, icon: Settings },
   ];
 

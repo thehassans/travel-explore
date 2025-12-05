@@ -6,11 +6,13 @@ import { AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
 import { GradientProvider } from './context/GradientContext';
 import { BookingProvider } from './context/BookingContext';
+import { AIAgentProvider } from './context/AIAgentContext';
 
 // Layout Components
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/layout/ScrollToTop';
+import AIChatWidget from './components/support/AIChatWidget';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -53,6 +55,7 @@ import AdminHolidays from './pages/admin/AdminHolidays';
 import AdminVisas from './pages/admin/AdminVisas';
 import AdminVisaQueries from './pages/admin/AdminVisaQueries';
 import AdminFlightBookings from './pages/admin/AdminFlightBookings';
+import AdminAIAgent from './pages/admin/AdminAIAgent';
 
 function App() {
   const { isDark } = useTheme();
@@ -64,7 +67,8 @@ function App() {
       <BookingProvider>
         <AdminProvider>
           <GradientProvider>
-          <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
+            <AIAgentProvider>
+            <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
             <ScrollToTop />
             <Helmet>
             <title>Explore Holidays | Premium Travel Booking from Bangladesh</title>
@@ -116,11 +120,14 @@ function App() {
               <Route path="/admin/visas" element={<AdminVisas />} />
               <Route path="/admin/visa-queries" element={<AdminVisaQueries />} />
               <Route path="/admin/flight-bookings" element={<AdminFlightBookings />} />
+              <Route path="/admin/ai-agent" element={<AdminAIAgent />} />
             </Routes>
           </main>
           
             {!isAdminRoute && <Footer />}
-          </div>
+            {!isAdminRoute && <AIChatWidget />}
+            </div>
+            </AIAgentProvider>
           </GradientProvider>
         </AdminProvider>
       </BookingProvider>
