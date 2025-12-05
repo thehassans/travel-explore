@@ -45,6 +45,12 @@ const PackageDetailPage = () => {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  // Check if package is wishlisted on load
+  useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    setIsWishlisted(wishlist.some(item => item.id === id));
+  }, [id]);
+
   // Sample package data - in real app, fetch from API based on id
   const packageData = {
     1: {
@@ -413,34 +419,11 @@ const PackageDetailPage = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           
-          {/* Removed thumbnail gallery from here - moved to content section */}
-
-          {/* Action Buttons */}
-          <div className="absolute top-24 right-6 flex gap-3">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className={`p-3 rounded-full backdrop-blur-md transition-colors ${
-                isWishlisted ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30"
-            >
-              <Share2 className="w-5 h-5" />
-            </motion.button>
-          </div>
-
-          {/* Title Overlay with Badges */}
-          <div className="absolute bottom-24 left-0 right-0 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              {/* Badges - Aligned with content */}
-              <div className="flex gap-2 mb-4">
+          {/* Top Bar with Badges and Action Buttons - Aligned with Navbar */}
+          <div className="absolute top-20 left-0 right-0 px-4 sm:px-6 lg:px-8 z-10">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              {/* Badges - Left aligned with logo */}
+              <div className="flex gap-2">
                 {pkg.popular && (
                   <span className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1 shadow-lg">
                     <Star className="w-4 h-4 fill-current" /> Popular
@@ -452,6 +435,58 @@ const PackageDetailPage = () => {
                   </span>
                 )}
               </div>
+              
+              {/* Action Buttons - Right aligned with user area */}
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => {
+                    setIsWishlisted(!isWishlisted);
+                    // Save to localStorage wishlist
+                    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                    if (!isWishlisted) {
+                      wishlist.push({ id, title: pkg.title, image: pkg.images[0], price: pkg.price });
+                      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                    } else {
+                      const filtered = wishlist.filter(item => item.id !== id);
+                      localStorage.setItem('wishlist', JSON.stringify(filtered));
+                    }
+                  }}
+                  className={`p-3 rounded-full backdrop-blur-md transition-colors ${
+                    isWishlisted ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => {
+                    // Share functionality
+                    if (navigator.share) {
+                      navigator.share({
+                        title: pkg.title,
+                        text: `Check out this amazing package: ${pkg.title}`,
+                        url: window.location.href,
+                      });
+                    } else {
+                      // Fallback: copy to clipboard
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                  className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30"
+                >
+                  <Share2 className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+
+          {/* Title Overlay */}
+          <div className="absolute bottom-24 left-0 right-0 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
